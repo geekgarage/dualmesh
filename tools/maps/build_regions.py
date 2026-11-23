@@ -44,6 +44,7 @@ def main():
     ap.add_argument("--cache", required=True)
     ap.add_argument("--max-mb", type=float, default=1850)
     ap.add_argument("--factor", type=float, default=30.0)
+    ap.add_argument("--max-tiles", type=float, default=8e6, help="højst så mange fliser pr. pakke (RAM)")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     bbox = [float(v) for v in a.bbox.split(",")]
@@ -54,7 +55,8 @@ def main():
         log(a.out, "zoom 12 af hele området ...")
         make(bbox, "0-12", a.prefix + " z12", z12, a.cache, a.out)
     r = subprocess.run([PY, os.path.join(HERE, "plan_regions.py"), z12, "--max-mb", str(a.max_mb),
-                        "--factor", str(a.factor)], capture_output=True, text=True, encoding="utf-8")
+                        "--factor", str(a.factor), "--max-tiles", str(a.max_tiles)],
+                       capture_output=True, text=True, encoding="utf-8")
     log(a.out, "plan:\n" + r.stdout)
     queue = []
     for line in r.stdout.splitlines():
