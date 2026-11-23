@@ -33,6 +33,7 @@
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
 Omkring DualMesh	About DualMesh
 DualMesh %s	
 MeshCore v1.18.0 + Meshtastic 2.x (komp.)	MeshCore v1.18.0 + Meshtastic 2.x (compat.)
@@ -502,7 +503,7 @@ Importér profil	Import profile
 # --- src/ui/report_ui.h
 Fejlrapport	Error report
 Scan med telefonen. Åbner et udfyldt GitHub-issue.	Scan with your phone. Opens a filled-in GitHub issue.
-Åbner GitHub-appen: tryk på Fejlrapport	Opens the GitHub app: tap Fejlrapport
+Åbner GitHub-appen: tryk på Bug report	Opens the GitHub app: tap Bug report
 DualMesh %s (%.16s)	
 Denne opstart: %.45s	This start: %s
 Seneste gemte nedbrud	Latest saved crash

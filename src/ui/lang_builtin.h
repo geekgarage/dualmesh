@@ -412,7 +412,7 @@ Eksporteret og kontrolleret	Exported and checked
 Importér profil	Import profile
 Fejlrapport	Error report
 Scan med telefonen. Åbner et udfyldt GitHub-issue.	Scan with your phone. Opens a filled-in GitHub issue.
-Åbner GitHub-appen: tryk på Fejlrapport	Opens the GitHub app: tap Fejlrapport
+Åbner GitHub-appen: tryk på Bug report	Opens the GitHub app: tap Bug report
 DualMesh %s (%.16s)	DualMesh %s (%.16s)
 Denne opstart: %.45s	This start: %s
 Seneste gemte nedbrud	Latest saved crash

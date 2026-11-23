@@ -911,7 +911,8 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   gav ved næste opstart `[CRASH]`-linjer (PANIC, backtrace med samme PC'er, "samme build") og
   nedbruddet i rapport-hovedet. Menupunktet og QR-koden set og godkendt samme dag: GitHub-appen
   viser skabelonvalget, og "Fejlrapport" åbner browseren med version, opstart og nedbrud udfyldt
-  (derfor siger QR-siden "Åbner GitHub-appen: tryk på Fejlrapport").
+  (derfor siger QR-siden "Åbner GitHub-appen: tryk på Bug report"; skabelonen hedder "Bug report"
+  og er på engelsk siden 23. nov 2026, filnavn, felt-id'er og labelen `fejlrapport` er uændrede).
 
 ## Faseplan
 

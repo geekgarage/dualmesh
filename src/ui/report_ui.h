@@ -43,7 +43,7 @@ class ReportUi : public Panel {
     if (page_ == 1) {
       // Ved siden af den store kode: forklaring (hvid), advarsel (note, gul) og hjælp (grå).
       snprintf(v.side, sizeof(v.side), "Scan med telefonen. Åbner et udfyldt GitHub-issue.");
-      snprintf(v.note, sizeof(v.note), "Åbner GitHub-appen: tryk på Fejlrapport");  // appen viser skabelonvalget først
+      snprintf(v.note, sizeof(v.note), "Åbner GitHub-appen: tryk på Bug report");  // appen viser skabelonvalget først
       v.note_fg = color::Yellow;
       snprintf(v.hint, sizeof(v.hint), "Backspace: tilbage");
       return;

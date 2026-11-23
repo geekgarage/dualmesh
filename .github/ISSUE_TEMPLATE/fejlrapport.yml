@@ -1,55 +1,58 @@
 # SPDX-License-Identifier: MIT
-# Fejlrapport-skabelonen. Felternes id'er (version, opstart, nedbrud) udfyldes fra T-Deck'ens
-# QR-kode (lib/dualmesh/src/diag_report.cpp) og fra fejlrapport-siden (docs/rapport/index.html).
-name: Fejlrapport
-description: Nedbrud eller fejl i DualMesh-firmwaren
-title: "Fejlrapport: "
+# Fejlrapport-skabelonen (engelsk, dansk er velkommen). Filnavnet og felternes id'er (version,
+# opstart, nedbrud) må ikke ændres: de udfyldes fra T-Deck'ens QR-kode
+# (lib/dualmesh/src/diag_report.cpp) og fra fejlrapport-siden (docs/rapport/index.html).
+name: Bug report
+description: Crash or bug in the DualMesh firmware
+title: "Bug report: "
 labels: ["fejlrapport"]
 body:
   - type: markdown
     attributes:
       value: |
-        Tak, fordi du melder fejlen! Den fulde log laver du på
-        [fejlrapport-siden](https://geekgarage.github.io/dualmesh/rapport/): den henter loggen fra
-        T-Deck'en over USB og renser den på din egen computer for navne, beskeder, positioner,
-        nøgler og adresser. Træk den rensede .txt-fil ind i feltet **Log** herunder.
+        Thank you for reporting the bug! Make the full log on the
+        [bug report page](https://geekgarage.github.io/dualmesh/rapport/): it fetches the log from
+        the T-Deck over USB (or from the SD card) and removes names, messages, positions, keys and
+        addresses on your own computer. Drag the cleaned .txt file into the **Log** field below.
 
-        **Del aldrig en urenset log.** Issues er offentlige, og loggen kan indeholde din position,
-        dine beskeder og dit WiFi-navn.
+        **Never share an uncleaned log.** Issues are public, and the log can contain your position,
+        your messages and your WiFi name.
+
+        You are welcome to write in Danish (dansk er velkommen).
   - type: input
     id: version
     attributes:
-      label: Firmwareversion
-      description: Står i Indst. > System > Omkring (udfyldes automatisk fra QR-koden/siden).
+      label: Firmware version
+      description: Shown under Settings > System > Error report (filled in automatically from the QR code or the page).
       placeholder: "0.1.0 (c48036d) T-Deck Plus"
     validations:
       required: true
   - type: input
     id: opstart
     attributes:
-      label: Opstartsårsag
-      description: Hvorfor T-Deck'en sidst startede, fx PANIC, TASK_WDT eller BROWNOUT.
+      label: Boot reason
+      description: Why the T-Deck last started, e.g. PANIC, TASK_WDT or BROWNOUT.
   - type: textarea
     id: nedbrud
     attributes:
-      label: Nedbrud
-      description: Udfyldes automatisk (fejltype, opgave, adresser og ELF-hash). Ret det ikke.
+      label: Crash
+      description: Filled in automatically (error type, task, addresses and ELF hash). Do not change it.
       render: text
   - type: textarea
     id: beskrivelse
     attributes:
-      label: Hvad skete der?
-      description: Hvad lavede du, hvad forventede du, og hvad skete der i stedet?
+      label: What happened?
+      description: What were you doing, what did you expect, and what happened instead?
     validations:
       required: true
   - type: textarea
     id: log
     attributes:
       label: Log
-      description: Træk den rensede rapport (.txt) fra fejlrapport-siden herind.
+      description: Drag the cleaned report (.txt) from the bug report page in here.
   - type: checkboxes
     id: privatliv
     attributes:
-      label: Privatliv
+      label: Privacy
       options:
-        - label: Loggen er renset på fejlrapport-siden, og jeg har læst den igennem.
+        - label: The log has been cleaned on the bug report page, and I have read it through.
