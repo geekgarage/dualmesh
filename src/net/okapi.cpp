@@ -30,10 +30,10 @@ volatile State g_state = State::Idle;
 char g_msg[64] = "";
 char g_url[1024];
 
-// mbedtls' store blokke i PSRAM (som MQTT-broen; intern RAM er knap under TLS).
+// Alle mbedtls-blokke i PSRAM (som net/dl): intern RAM er knap, og hardware-AES/SHA skal kunne
+// få sine DMA-buffere dér.
 void* tlsCalloc(size_t n, size_t size) {
-  if (n * size >= 2048)
-    if (void* p = heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)) return p;
+  if (void* p = heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)) return p;
   return heap_caps_calloc(n, size, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
 }
 void tlsFree(void* p) { heap_caps_free(p); }

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 #include "net/dl.h"
 
+#include "net/gh_roots.h"
+
 #include <WiFi.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -47,10 +49,11 @@ size_t g_text_len = 0;
 volatile uint64_t g_done = 0, g_total = 0;
 volatile uint32_t g_bps = 0;
 
-// mbedtls' store blokke i PSRAM (som MQTT-broen og OKAPI; intern RAM er knap under TLS).
+// Alle mbedtls-blokke i PSRAM (også de små: rodcertifikaterne parses til mange blokke under 2 KB,
+// ca. 10 KB i alt). Intern RAM er knap (35-40 KB fri med BLE+WiFi+MQTT), og hardware-AES/SHA skal
+// kunne få sine DMA-buffere dér; ellers fejler TLS ("ctr_drbg_seed -1"), og andre tasks får NULL.
 void* tlsCalloc(size_t n, size_t size) {
-  if (n * size >= 2048)
-    if (void* p = heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)) return p;
+  if (void* p = heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)) return p;
   return heap_caps_calloc(n, size, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
 }
 void tlsFree(void* p) { heap_caps_free(p); }
@@ -104,10 +107,16 @@ void task(void*) {
 
   esp_http_client_config_t cfg = {};
   cfg.url = g_url;
-  cfg.crt_bundle_attach = esp_crt_bundle_attach;
+  // GitHubs egne rødder med mbedtls' almindelige kædetjek: IDF 4.4's certifikatbundt fejler på
+  // krydssignerede kæder (Let's Encrypt "Root YR" -> ISRG Root X1), se tools/gen_gh_roots.py.
+  // Andre værter (ikke GitHub) bruger bundtet.
+  if (std::strstr(g_url, "github.com/") || std::strstr(g_url, "githubusercontent.com/")) cfg.cert_pem = kGithubRoots;
+  else cfg.crt_bundle_attach = esp_crt_bundle_attach;
   cfg.timeout_ms = 20000;
-  cfg.buffer_size = 4096;
-  cfg.buffer_size_tx = 2048;  // GitHubs viderestillinger har lange, signerede adresser
+  // Over 4 KB, så malloc lægger bufferne i PSRAM (CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL = 4096).
+  // tx skal også rumme GitHubs viderestillinger med lange, signerede adresser.
+  cfg.buffer_size = 8192;
+  cfg.buffer_size_tx = 4352;
   cfg.user_agent = "DualMesh/" DM_FW_VERSION;
   cfg.disable_auto_redirect = true;  // vi følger selv (open/read gør det ikke automatisk)
   esp_http_client_handle_t c = buf ? esp_http_client_init(&cfg) : nullptr;
@@ -310,6 +319,13 @@ bool launch(Sink s, const char* url) {
   g_done = g_total = 0;
   g_bps = 0;
   g_msg[0] = 0;
+  // Mindst 24 KB intern RAM: stakken (10 KB) + hardware-AES/SHA's DMA-buffere + resten af systemet.
+  const size_t fri = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+  if (fri < 24 * 1024) {
+    DLOG.printf("[HENT] for lidt intern RAM (%u KB fri)\n", unsigned(fri / 1024));
+    finish(State::Failed, "For lidt hukommelse lige nu; prøv igen");
+    return false;
+  }
   mbedtls_platform_set_calloc_free(tlsCalloc, tlsFree);
   g_state = State::Busy;
   DLOG.printf("[HENT] %s\n", url);

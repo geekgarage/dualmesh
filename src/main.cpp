@@ -132,6 +132,7 @@ static dm::MapsUi g_maps_ui;        // kortets menu > Kortpakker
 // Hent fra GitHub (Indst.): tastaturlayouts, sprog, kortpakker og firmwareopdateringer.
 static dm::DownloadsUi g_dl_kbd, g_dl_lang, g_dl_maps;
 static dm::OtaUi g_ota_ui;
+static int g_dl_test = 0;  // monitor G: 1 = katalog, 2 = version.txt
 // Meshtastic-afsendelse (indtil videre kun SOS): loop -> kø -> radio-task.
 struct MtTxFrame {
   uint8_t len;
@@ -2859,6 +2860,14 @@ void loop() {
       if (ok && c == 'w') last_id = 0;
       dm::DLOG.printf("[MT] testwaypoint %s %s (id %lu)\n", c == 'w' ? "sletning" : "", ok ? "sendt" : "IKKE sendt (DMtest?)",
                       (unsigned long)id);
+    } else if (c == 'G') {  // test af hentning fra GitHub (katalog + version.txt), resultat i loggen
+      g_dl_test = 1;
+      char url[160];
+      snprintf(url, sizeof(url), "%skeyboards/index.txt", dm::dl::kRaw);
+      if (!dm::dl::startText(url)) {
+        g_dl_test = 0;
+        dm::DLOG.println("[HENT] test: kunne ikke starte (WiFi? anden hentning?)");
+      }
     } else if (c == 'J') {  // gemte spor (som listen i kortets menu)
       static char names[40][28];
       const int n = g_track.list(names, 40);
@@ -2982,6 +2991,21 @@ void loop() {
   }
   if (g_disp_ok) g_ui.tick();  // tegner kun ændrede linjer
   dm::DLOG.flush();             // højst hvert 30. s (eller ved 16 KB)
+  if (g_dl_test) {  // monitor G
+    char m[80];
+    const dm::dl::State s = dm::dl::poll(m, sizeof(m));
+    if (s == dm::dl::State::Done || s == dm::dl::State::Failed) {
+      const char* t = dm::dl::text();
+      dm::DLOG.printf("[HENT] test %d: %s, %u tegn: %.120s\n", g_dl_test, m, unsigned(strlen(t)), t);
+      if (g_dl_test == 1) {
+        char url[160];
+        snprintf(url, sizeof(url), "%sversion.txt", dm::dl::kLatest);
+        g_dl_test = dm::dl::startText(url) ? 2 : 0;
+      } else {
+        g_dl_test = 0;
+      }
+    }
+  }
   g_dl_kbd.tick();
   g_dl_lang.tick();
   g_dl_maps.tick();
