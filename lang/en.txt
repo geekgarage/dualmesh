@@ -48,6 +48,8 @@
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
 Omkring DualMesh	About DualMesh
 DualMesh %s	
 MeshCore v1.18.0 + Meshtastic 2.x (komp.)	MeshCore v1.18.0 + Meshtastic 2.x (compat.)
@@ -505,7 +507,6 @@ Intern NVS	Internal NVS
 Opdatér firmware	Update firmware
 Ingen udgivelse fundet: %.50s	No release found: %s
 version.txt er ugyldig	version.txt is invalid
-Gemt: installér /dualmesh/firmware/%.30s fra launcheren	Saved: install /dualmesh/firmware/%s from the launcher
 Denne: %s (%s)	This one: %s (%s)
 Søger efter den nyeste udgivelse ...	Looking for the newest release ...
 %s %s: %u %%  %lu KB/s	
@@ -515,6 +516,14 @@ Afbryd	Cancel
 Sluk ikke T-Deck'en under opdateringen	Do not switch off the T-Deck during the update
 Klik: afbryd	Click: cancel
 Version %s er installeret. Genstarter ...	Version %s is installed. Restarting ...
+Version %s er gemt på SD-kortet	Version %s is saved on the SD card
+Installér den sådan i launcheren:	Install it from the launcher like this:
+1. Genstart, og åbn launcheren	1. Restart and open the launcher
+2. Vælg SD > dualmesh > firmware	2. Choose SD > dualmesh > firmware
+3. Vælg filen, og installér den:	3. Choose this file and install it:
+Genstart nu	Restart now
+Åbn launcheren, som da du installerede DualMesh	Open the launcher the way you did to install DualMesh
+Klik: genstart   Backspace: tilbage	Click: restart   Backspace: back
 På GitHub: %s (%s), %lu KB	On GitHub: %s (%s), %lu KB
 Hent %s til SD-kortet	Save %s to the SD card
 Opdatér til %s	Update to %s

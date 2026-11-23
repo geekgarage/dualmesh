@@ -30,6 +30,7 @@ class OtaUi : public Panel {
   void onOpen() override {
     armed_ = false;
     sel_ = 0;
+    if (saved_) return;  // vejledningen bliver stående, til T-Deck'en genstarter
     if (dl::busy()) {
       if (!mine_) snprintf(msg_, sizeof(msg_), "En anden hentning kører; prøv igen bagefter");
       return;
@@ -54,7 +55,8 @@ class OtaUi : public Panel {
       installed_ = true;
       if (restart_) restart_();
     } else if (s == dl::State::Done) {
-      snprintf(msg_, sizeof(msg_), "Gemt: installér /dualmesh/firmware/%.30s fra launcheren", file_);
+      saved_ = true;  // vis vejledningen til launcheren
+      msg_[0] = 0;
     }
   }
 
@@ -81,6 +83,20 @@ class OtaUi : public Panel {
     }
     if (installed_) {
       snprintf(v.status2, sizeof(v.status2), "Version %s er installeret. Genstarter ...", ver_);
+      return;
+    }
+    if (saved_) {  // under en launcher: filen ligger på SD-kortet, launcheren installerer den
+      snprintf(v.status2, sizeof(v.status2), "Version %s er gemt på SD-kortet", ver_);
+      v.status_fg = color::Green;
+      v.add(PanelRow::Info, color::White, "Installér den sådan i launcheren:");
+      v.add(PanelRow::Info, color::Gray, "1. Genstart, og åbn launcheren");
+      v.add(PanelRow::Info, color::Gray, "2. Vælg SD > dualmesh > firmware");
+      v.add(PanelRow::Info, color::Gray, "3. Vælg filen, og installér den:");
+      v.add(PanelRow::Info, color::Yellow, file_);
+      PanelRow* r = v.add(PanelRow::Item, color::White, "Genstart nu");
+      if (r) r->sel = true;
+      snprintf(v.note, sizeof(v.note), "Åbn launcheren, som da du installerede DualMesh");
+      snprintf(v.hint, sizeof(v.hint), "Klik: genstart   Backspace: tilbage");
       return;
     }
     if (ver_[0]) {
@@ -110,8 +126,8 @@ class OtaUi : public Panel {
   }
 
   void tapRow(int i) override {
-    if (busy()) {
-      click();
+    if (busy() || saved_) {
+      if (!saved_ || i == 5) click();  // under en launcher: kun "Genstart nu" (række 5)
       return;
     }
     if (!ver_[0]) {
@@ -133,6 +149,10 @@ class OtaUi : public Panel {
   void click() override {
     if (busy()) {
       dl::cancel();
+      return;
+    }
+    if (saved_) {  // "Genstart nu": så kan launcheren åbnes og installere filen
+      if (restart_) restart_();
       return;
     }
     if (phase_ != Phase::Ready || installed_) return;
@@ -223,6 +243,7 @@ class OtaUi : public Panel {
   RestartFn restart_ = nullptr;
   Phase phase_ = Phase::Ready;
   bool mine_ = false, armed_ = false, installed_ = false;
+  bool saved_ = false;  // under en launcher: firmwaren er gemt på SD (vejledningen vises)
   int sel_ = 0;
   char ver_[24] = "", rev_[16] = "", file_[64] = "", sha_[72] = "";
   uint64_t size_ = 0;
