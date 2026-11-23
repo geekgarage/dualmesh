@@ -6,8 +6,8 @@
 Danmark.pmtiles 1654414029 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-1/Danmark.pmtiles Danmark
 Island.pmtiles 671529955 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Island.pmtiles Island
 Faeroeerne.pmtiles 26260433 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Faeroeerne.pmtiles Færøerne
-Groenland-Disko-01.pmtiles 151108635 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Groenland-Disko-01.pmtiles Grønland Disko 01 (67.2-71.5N 55.6W-49.5W)
 Groenland-Upernavik-01.pmtiles 40467027 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Groenland-Upernavik-01.pmtiles Grønland Upernavik 01 (71.5-74.0N 57.5W-54.0W)
 Greenland-overview.pmtiles 449623485 0-12 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-overview.pmtiles Greenland overview
 Greenland-South-01.pmtiles 133487459 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-South-01.pmtiles Greenland South 01 (59.7-62.5N 50.0W-42.0W)
 Greenland-Nuuk-01.pmtiles 173153818 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Nuuk-01.pmtiles Greenland Nuuk 01 (62.5-67.2N 54.1W-49.0W)
+Greenland-Disko-01.pmtiles 151108635 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Disko-01.pmtiles Greenland Disko 01 (67.2-71.5N 55.6W-49.5W)
