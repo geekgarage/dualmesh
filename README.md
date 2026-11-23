@@ -5,7 +5,7 @@
 [![Latest release](https://img.shields.io/github/v/release/geekgarage/dualmesh?label=release)](https://github.com/geekgarage/dualmesh/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-![DualMesh](assets/logo/png/tdeck-splash-320x240.png)
+![DualMesh](assets/social/dualmesh-github-preview.png)
 
 **DualMesh turns a LilyGo T-Deck Plus into a stand-alone off-grid communicator that talks
 MeshCore *and* Meshtastic at the same time** – with a real keyboard, offline maps and GPS, and no
