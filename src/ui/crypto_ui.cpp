@@ -8,11 +8,20 @@
 
 #include <lvgl.h>  // LV_SYMBOL_OK
 
+#include "i18n.h"
 #include "ui/status_display.h"
 
 namespace dm {
 
 namespace {
+// Bekræftelsesordet i det valgte sprog (BRUG EFUSE / USE EFUSE). Det danske ord virker altid også.
+bool confirmed(const char* typed) {
+  static const char* const kWord = "BRUG EFUSE";  // oversættes i lang/*.txt (en: USE EFUSE)
+  char w[24];
+  const char* t = i18n::tr(kWord, w, sizeof(w));
+  return strcmp(typed, kWord) == 0 || strcmp(typed, t) == 0;
+}
+
 struct Opt {
   const char* line;
   const char* d1;
@@ -231,7 +240,7 @@ void CryptoUi::key(char c) {
       break;
     case Burn:
       input_ = None;
-      if (strcmp(buf_, "BRUG EFUSE") != 0) {
+      if (!confirmed(buf_)) {
         note("Fortrudt (ikke BRUG EFUSE)");
       } else if (sdcrypt::efuseBurnNew() < 0) {
         note("eFuse-brænding fejlede");

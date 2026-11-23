@@ -37,6 +37,10 @@
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
 Omkring DualMesh	About DualMesh
 DualMesh %s	
 MeshCore v1.18.0 + Meshtastic 2.x (komp.)	MeshCore v1.18.0 + Meshtastic 2.x (compat.)
@@ -309,6 +313,7 @@ hvid	white
 ; DualMesh kontaktfarver: noegle (6 byte hex)<TAB>farvenummer 0-%d\n	
 %02x%02x%02x%02x%02x%02x\t%d\n	
 # --- src/ui/crypto_ui.cpp
+BRUG EFUSE	USE EFUSE
 fra      almindelig tekst	off      plain text
 Filerne gemmes ukrypteret.	The files are stored unencrypted.
 Alle med SD-kortet kan læse koderne.	Anyone with the SD card can read the passwords.
@@ -346,7 +351,7 @@ Klik igen for at skifte	Click again to switch
 Kode:	Password:
 Ny kode (mindst 4 tegn):	New password (at least 4 chars):
 Gentag koden:	Repeat the password:
-UOMVENDELIGT! Skriv BRUG EFUSE og tryk Enter:	IRREVERSIBLE! Type BRUG EFUSE and press Enter:
+UOMVENDELIGT! Skriv BRUG EFUSE og tryk Enter:	IRREVERSIBLE! Type USE EFUSE and press Enter:
  = nuværende	 = current
 %s_	
 Op/ned: vælg   Klik: skift   Backspace: tilbage	Up/down: choose   Click: switch   Backspace: back
@@ -356,7 +361,7 @@ Ingen fri eFuse-plads	No free eFuse slot
 Låst op	Unlocked
 Forkert kode	Wrong password
 Mindst 4 tegn	At least 4 characters
-Fortrudt (ikke BRUG EFUSE)	Cancelled (not BRUG EFUSE)
+Fortrudt (ikke BRUG EFUSE)	Cancelled (not USE EFUSE)
 eFuse-brænding fejlede	eFuse burning failed
 # --- src/ui/crypto_ui.h
 SD-kryptering	SD encryption
@@ -461,6 +466,7 @@ Svar	Reply
 Kanalnavne URL-kodes: #test = %%23test	Channel names are URL-encoded: #test = %%23test
 Egen CA: /dualmesh/mqtt_ca.pem    Backspace: tilbage	Own CA: /dualmesh/mqtt_ca.pem    Backspace: back
 # --- src/ui/nvs_ui.cpp
+SLET ALT	ERASE ALL
 NVS: %lu af %lu poster brugt, %lu fri	NVS: %lu of %lu entries used, %lu free
 Startet fra launcher: %.30s	Started from launcher: %s
 Ingen launcher (kører fra %.8s). DualMesh bruger SD.	No launcher (running from %s). DualMesh uses SD.
@@ -469,7 +475,7 @@ Ryd WiFi- og radiodata (ESP-IDF)	Clear WiFi and radio data (ESP-IDF)
 Ryd HELE NVS ...	Clear ALL of NVS ...
 %u poster, %s	%u entries, %s
 Klik igen for at rydde	Click again to clear
-Skriv SLET ALT og tryk Enter:	Type SLET ALT and press Enter:
+Skriv SLET ALT og tryk Enter:	Type ERASE ALL and press Enter:
 Telefoner skal parres igen. Genstarter.	Phones must pair again. Restarting.
 WiFi-kalibrering laves igen. Genstarter.	WiFi calibration is redone. Restarting.
 Sletter OGSÅ launcherens indstillinger!	ALSO deletes the launcher's settings!
@@ -485,7 +491,7 @@ Ryddet: %s	Cleared: %s
 Kunne ikke rydde	Could not clear
 hele NVS ryddet	all of NVS cleared
 Rydning fejlede	Clearing failed
-Fortrudt (ikke SLET ALT)	Cancelled (not SLET ALT)
+Fortrudt (ikke SLET ALT)	Cancelled (not ERASE ALL)
 # --- src/ui/nvs_ui.h
 Intern NVS	Internal NVS
 # --- src/ui/ota_ui.h
@@ -587,8 +593,9 @@ Gemt nedbrud slettet	Saved crash deleted
 Kunne ikke slette nedbruddet	Could not delete the crash
 T-Deck Plus	
 # --- src/ui/reset_ui.cpp
+NULSTIL	RESET
 Nulstil DualMesh	Reset DualMesh
-Bevares: eksporterede profiler, launcher og NVS	Kept: exported profiles, launcher and NVS
+Bevares: eksporterede profiler, kortpakker, launcher og NVS	Kept: exported profiles, map packs, launcher and NVS
 Sletter indstillinger, identitet,	Deletes settings, identity,
 kontakter, kanaler, beskeder, WiFi-net,	contacts, channels, messages, WiFi networks,
 logs og lærte radioværdier.	logs and learned radio values.
@@ -596,7 +603,7 @@ Eksportér profil og nulstil	Export profile and reset
 Nulstil uden eksport	Reset without export
 Eksporteret	Exported
 Ingen eksport: identiteten forsvinder.	No export: the identity disappears.
-Skriv NULSTIL og tryk Enter	Type NULSTIL and press Enter
+Skriv NULSTIL og tryk Enter	Type RESET and press Enter
 Adgangskode til profil-filen	Password for the profile file
 (mindst 6 tegn; bruges ved import).	(at least 6 chars; used for import).
 Profilen kan importeres igen bagefter.	The profile can be imported again afterwards.
@@ -605,7 +612,7 @@ Ny adgangskode:	New password:
 Bekræft:	Confirm:
 Op/ned: vælg   Klik: OK   Backspace: tilbage	Up/down: choose   Click: OK   Backspace: back
 Eksport fejlede - intet slettet	Export failed - nothing deleted
-Fortrudt (ikke NULSTIL)	Cancelled (not NULSTIL)
+Fortrudt (ikke NULSTIL)	Cancelled (not RESET)
 Nulstillet - genstarter	Reset - restarting
 Nulstilling fejlede delvist	Reset partly failed
 # --- src/ui/settings_ui.cpp
@@ -733,7 +740,7 @@ Chippens interne lager, som deles med launcher og andre firmwares. Se forbrug og
 >crypto	
 Kryptering af koder og nøgler på SD: fra, chip-ID, kode ved opstart eller eFuse (nøgle i chippen).	Encryption of passwords and keys on SD: off, chip ID, password at start or eFuse (key in the chip).
 >reset	
-Sletter alle DualMesh-data på SD. Eksporterede profiler bevares, og du kan eksportere først. Bekræftes med NULSTIL.	Deletes all DualMesh data on SD. Exported profiles are kept, and you can export first. Confirmed with NULSTIL.
+Sletter alle DualMesh-data på SD. Eksporterede profiler og kortpakker bevares; du kan eksportere først.	Deletes all DualMesh data on SD. Exported profiles and map packs are kept; you can export first.
 !clear_log	
 Sletter alle logfiler på SD-kortet og starter en ny log. Klik 2 gange.	Deletes all log files on the SD card and starts a new log. Click twice.
 !usb_disk	
@@ -1079,6 +1086,7 @@ ingen	none
 DMtest	
 DualMesh test-wp	
 test fra monitoren	
+%skeyboards/index.txt	
 forkert-kode	
 DualMesh	
 # --- src/net/wifi_mgr.cpp
@@ -1240,6 +1248,7 @@ Kontrolsummen passer ikke: opdateringen er ikke installeret	Checksum mismatch: t
 Firmwaren er ugyldig (%s)	The firmware is invalid (%s)
 Kunne ikke vælge den nye firmware (%s)	Could not select the new firmware (%s)
 Firmwaren er installeret; genstarter	The firmware is installed; restarting
+For lidt hukommelse lige nu; prøv igen	
 dl	
 Ugyldig version.txt (størrelse/SHA-256)	Invalid version.txt (size/SHA-256)
 %d:	

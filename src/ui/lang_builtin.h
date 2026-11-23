@@ -243,6 +243,7 @@ himmelblå	sky blue
 hvid	white
 ; DualMesh kontaktfarver: noegle (6 byte hex)<TAB>farvenummer 0-%d\n	; DualMesh kontaktfarver: noegle (6 byte hex)<TAB>farvenummer 0-%d\n
 %02x%02x%02x%02x%02x%02x\t%d\n	%02x%02x%02x%02x%02x%02x\t%d\n
+BRUG EFUSE	USE EFUSE
 fra      almindelig tekst	off      plain text
 Filerne gemmes ukrypteret.	The files are stored unencrypted.
 Alle med SD-kortet kan læse koderne.	Anyone with the SD card can read the passwords.
@@ -279,7 +280,7 @@ Klik igen for at skifte	Click again to switch
 Kode:	Password:
 Ny kode (mindst 4 tegn):	New password (at least 4 chars):
 Gentag koden:	Repeat the password:
-UOMVENDELIGT! Skriv BRUG EFUSE og tryk Enter:	IRREVERSIBLE! Type BRUG EFUSE and press Enter:
+UOMVENDELIGT! Skriv BRUG EFUSE og tryk Enter:	IRREVERSIBLE! Type USE EFUSE and press Enter:
  = nuværende	 = current
 %s_	%s_
 Op/ned: vælg   Klik: skift   Backspace: tilbage	Up/down: choose   Click: switch   Backspace: back
@@ -289,7 +290,7 @@ Ingen fri eFuse-plads	No free eFuse slot
 Låst op	Unlocked
 Forkert kode	Wrong password
 Mindst 4 tegn	At least 4 characters
-Fortrudt (ikke BRUG EFUSE)	Cancelled (not BRUG EFUSE)
+Fortrudt (ikke BRUG EFUSE)	Cancelled (not USE EFUSE)
 eFuse-brænding fejlede	eFuse burning failed
 SD-kryptering	SD encryption
 Hent tastaturlayouts	Get keyboard layouts
@@ -372,6 +373,7 @@ Modtaget	Received
 Svar	Reply
 Kanalnavne URL-kodes: #test = %%23test	Channel names are URL-encoded: #test = %%23test
 Egen CA: /dualmesh/mqtt_ca.pem    Backspace: tilbage	Own CA: /dualmesh/mqtt_ca.pem    Backspace: back
+SLET ALT	ERASE ALL
 NVS: %lu af %lu poster brugt, %lu fri	NVS: %lu of %lu entries used, %lu free
 Startet fra launcher: %.30s	Started from launcher: %s
 Ingen launcher (kører fra %.8s). DualMesh bruger SD.	No launcher (running from %s). DualMesh uses SD.
@@ -380,7 +382,7 @@ Ryd WiFi- og radiodata (ESP-IDF)	Clear WiFi and radio data (ESP-IDF)
 Ryd HELE NVS ...	Clear ALL of NVS ...
 %u poster, %s	%u entries, %s
 Klik igen for at rydde	Click again to clear
-Skriv SLET ALT og tryk Enter:	Type SLET ALT and press Enter:
+Skriv SLET ALT og tryk Enter:	Type ERASE ALL and press Enter:
 Telefoner skal parres igen. Genstarter.	Phones must pair again. Restarting.
 WiFi-kalibrering laves igen. Genstarter.	WiFi calibration is redone. Restarting.
 Sletter OGSÅ launcherens indstillinger!	ALSO deletes the launcher's settings!
@@ -396,7 +398,7 @@ Ryddet: %s	Cleared: %s
 Kunne ikke rydde	Could not clear
 hele NVS ryddet	all of NVS cleared
 Rydning fejlede	Clearing failed
-Fortrudt (ikke SLET ALT)	Cancelled (not SLET ALT)
+Fortrudt (ikke SLET ALT)	Cancelled (not ERASE ALL)
 Intern NVS	Internal NVS
 Opdatér firmware	Update firmware
 Ingen udgivelse fundet: %.50s	No release found: %s
@@ -486,8 +488,9 @@ Loggen renses på din PC, før noget sendes.	The log is cleaned on your PC befor
 x x: slet gemt nedbrud   Backspace: tilbage	x x: delete saved crash   Backspace: back
 Gemt nedbrud slettet	Saved crash deleted
 Kunne ikke slette nedbruddet	Could not delete the crash
+NULSTIL	RESET
 Nulstil DualMesh	Reset DualMesh
-Bevares: eksporterede profiler, launcher og NVS	Kept: exported profiles, launcher and NVS
+Bevares: eksporterede profiler, kortpakker, launcher og NVS	Kept: exported profiles, map packs, launcher and NVS
 Sletter indstillinger, identitet,	Deletes settings, identity,
 kontakter, kanaler, beskeder, WiFi-net,	contacts, channels, messages, WiFi networks,
 logs og lærte radioværdier.	logs and learned radio values.
@@ -495,7 +498,7 @@ Eksportér profil og nulstil	Export profile and reset
 Nulstil uden eksport	Reset without export
 Eksporteret	Exported
 Ingen eksport: identiteten forsvinder.	No export: the identity disappears.
-Skriv NULSTIL og tryk Enter	Type NULSTIL and press Enter
+Skriv NULSTIL og tryk Enter	Type RESET and press Enter
 Adgangskode til profil-filen	Password for the profile file
 (mindst 6 tegn; bruges ved import).	(at least 6 chars; used for import).
 Profilen kan importeres igen bagefter.	The profile can be imported again afterwards.
@@ -504,7 +507,7 @@ Ny adgangskode:	New password:
 Bekræft:	Confirm:
 Op/ned: vælg   Klik: OK   Backspace: tilbage	Up/down: choose   Click: OK   Backspace: back
 Eksport fejlede - intet slettet	Export failed - nothing deleted
-Fortrudt (ikke NULSTIL)	Cancelled (not NULSTIL)
+Fortrudt (ikke NULSTIL)	Cancelled (not RESET)
 Nulstillet - genstarter	Reset - restarting
 Nulstilling fejlede delvist	Reset partly failed
 nej	no
@@ -607,7 +610,7 @@ GPS til/fra. Fra sparer strøm. SOS tænder den selv ved behov.	GPS on/off. Off 
 Sæt uret fra GPS. Det er den mest præcise kilde og går forud for NTP og mesh.	Set the clock from GPS. It is the most precise source and takes precedence over NTP and mesh.
 Chippens interne lager, som deles med launcher og andre firmwares. Se forbrug og ryd Bluetooth/WiFi-data.	The chip's internal storage, shared with the launcher and other firmwares. See usage and clear Bluetooth/WiFi data.
 Kryptering af koder og nøgler på SD: fra, chip-ID, kode ved opstart eller eFuse (nøgle i chippen).	Encryption of passwords and keys on SD: off, chip ID, password at start or eFuse (key in the chip).
-Sletter alle DualMesh-data på SD. Eksporterede profiler bevares, og du kan eksportere først. Bekræftes med NULSTIL.	Deletes all DualMesh data on SD. Exported profiles are kept, and you can export first. Confirmed with NULSTIL.
+Sletter alle DualMesh-data på SD. Eksporterede profiler og kortpakker bevares; du kan eksportere først.	Deletes all DualMesh data on SD. Exported profiles and map packs are kept; you can export first.
 Sletter alle logfiler på SD-kortet og starter en ny log. Klik 2 gange.	Deletes all log files on the SD card and starts a new log. Click twice.
 Genstarter, så SD-kortet vises som et drev på PC'en (radioen er slukket imens). Skub drevet ud for at vende tilbage.	Restarts so the SD card shows up as a drive on the PC (the radio is off meanwhile). Eject the drive to return.
 Profil	Profile
@@ -865,6 +868,7 @@ pass=%s\n	pass=%s\n
 fundet (GT911)	found (GT911)
 IKKE fundet	NOT found
 ingen	none
+%skeyboards/index.txt	%skeyboards/index.txt
 %s\t%s\t%d\n	%s\t%s\t%d\n
 Forkert kode (godkendelse fejlede)	Wrong password (authentication failed)
 Netværket blev ikke fundet	The network was not found

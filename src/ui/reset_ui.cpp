@@ -4,12 +4,20 @@
 #include <cstdio>
 #include <cstring>
 
+#include "i18n.h"
 #include "storage/profile_io.h"
 #include "storage/sd_log.h"
 
 namespace dm {
 
 namespace {
+// Bekræftelsesordet i det valgte sprog (NULSTIL / RESET). Det danske ord virker altid også.
+bool confirmed(const char* typed) {
+  static const char* const kWord = "NULSTIL";  // oversættes i lang/*.txt (en: RESET)
+  char w[24];
+  const char* t = i18n::tr(kWord, w, sizeof(w));
+  return strcmp(typed, kWord) == 0 || strcmp(typed, t) == 0;
+}
 void wipe(char* p, size_t n) {
   volatile char* v = p;
   while (n--) *v++ = 0;
@@ -39,7 +47,7 @@ void ResetUi::view(PanelView& v, int) {
   v.clear();
   snprintf(v.status, sizeof(v.status), "Nulstil DualMesh");
   v.status_fg = color::Red;
-  snprintf(v.status2, sizeof(v.status2), "Bevares: eksporterede profiler, launcher og NVS");
+  snprintf(v.status2, sizeof(v.status2), "Bevares: eksporterede profiler, kortpakker, launcher og NVS");
   v.add(PanelRow::Info, color::White, "Sletter indstillinger, identitet,");
   v.add(PanelRow::Info, color::White, "kontakter, kanaler, beskeder, WiFi-net,");
   v.add(PanelRow::Info, color::White, "logs og lærte radioværdier.");
@@ -129,7 +137,7 @@ void ResetUi::enter() {
       wipe(pass_, sizeof(pass_));
       break;
     case Confirm:
-      if (strcmp(buf_, "NULSTIL") != 0) {
+      if (!confirmed(buf_)) {
         note("Fortrudt (ikke NULSTIL)");
         step_ = Choose;
       } else {

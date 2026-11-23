@@ -6,9 +6,20 @@
 #include <cstdio>
 #include <cstring>
 
+#include "i18n.h"
 #include "ui/status_display.h"
 
 namespace dm {
+
+namespace {
+// Bekræftelsesordet i det valgte sprog (SLET ALT / ERASE ALL). Det danske ord virker altid også.
+bool confirmed(const char* typed) {
+  static const char* const kWord = "SLET ALT";  // oversættes i lang/*.txt (en: ERASE ALL)
+  char w[24];
+  const char* t = i18n::tr(kWord, w, sizeof(w));
+  return strcmp(typed, kWord) == 0 || strcmp(typed, t) == 0;
+}
+}  // namespace
 
 void NvsUi::refresh() {
   nvstool::stats(st_);
@@ -166,7 +177,7 @@ void NvsUi::key(char c) {
     else typing_ = false;
   } else if (enter) {
     typing_ = false;
-    if (strcmp(buf_, "SLET ALT") == 0) {
+    if (confirmed(buf_)) {
       if (nvstool::eraseAll() && restart_) restart_("hele NVS ryddet");
       else note("Rydning fejlede");
     } else {

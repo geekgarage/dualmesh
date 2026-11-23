@@ -155,7 +155,7 @@ const HelpText kHelp[] = {
     {"gps_time", "Sæt uret fra GPS. Det er den mest præcise kilde og går forud for NTP og mesh."},
     {">nvs", "Chippens interne lager, som deles med launcher og andre firmwares. Se forbrug og ryd Bluetooth/WiFi-data."},
     {">crypto", "Kryptering af koder og nøgler på SD: fra, chip-ID, kode ved opstart eller eFuse (nøgle i chippen)."},
-    {">reset", "Sletter alle DualMesh-data på SD. Eksporterede profiler bevares, og du kan eksportere først. Bekræftes med NULSTIL."},
+    {">reset", "Sletter alle DualMesh-data på SD. Eksporterede profiler og kortpakker bevares; du kan eksportere først."},
     {"!clear_log", "Sletter alle logfiler på SD-kortet og starter en ny log. Klik 2 gange."},
     {"!usb_disk", "Genstarter, så SD-kortet vises som et drev på PC'en (radioen er slukket imens). Skub drevet ud for at vende tilbage."},
 };

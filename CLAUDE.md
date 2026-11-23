@@ -155,7 +155,10 @@ anden app-partition), "Ryd Bluetooth-parringer", "Ryd WiFi- og radiodata" (nvs.n
 advarer om launcherens indstillinger). Genstart efter rydning af Bluetooth/WiFi/hele NVS.
 
 **SD-kort og launcher-kompatibilitet:** alle DualMesh-filer ligger i `/dualmesh/` på kortet.
-"Nulstil DualMesh" (`SdStore::resetDualMesh`) sletter kun den mappe; en launchers firmwarefiler og
+"Nulstil DualMesh" (`SdStore::resetDualMesh`) sletter kun den mappe, men bevarer `eksport/` og
+kortpakkerne `maps/*.pmtiles` + `*.pmtiles.part` (ønske 23. nov 2026; prikker i maps/ slettes).
+Bekræftelsesordene (NULSTIL, SLET ALT, BRUG EFUSE) oversættes (en: RESET, ERASE ALL, USE EFUSE);
+det danske ord virker altid. En launchers firmwarefiler og
 andre mapper røres aldrig, og intern NVS/flash røres heller ikke. Brug ikke en egen
 partitionstabel til data: under en launcher bestemmer den layoutet. Formatering
 (`SdStore::formatCard`) sletter hele kortet: et helt tomt kort (ingen boot-signatur) formateres

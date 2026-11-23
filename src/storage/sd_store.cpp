@@ -3,6 +3,7 @@
 
 #include <dirent.h>
 #include <errno.h>
+#include <strings.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -194,12 +195,41 @@ static bool removeTree(const char* path) {
   return ok && rmdir(path) == 0;
 }
 
+static bool endsWith(const char* s, const char* suf) {
+  const size_t a = std::strlen(s), b = std::strlen(suf);
+  return a >= b && strcasecmp(s + a - b, suf) == 0;
+}
+
+// /dualmesh/maps/: kortpakkerne (*.pmtiles og halvt hentede *.pmtiles.part) bliver; de er store,
+// skrives aldrig af DualMesh og indeholder ingen personlige data. Alt andet (gemte prikker,
+// installed.txt, undermapper) slettes.
+static bool clearMapsKeepPacks(const char* dir) {
+  DIR* d = opendir(dir);
+  if (!d) return true;
+  char names[64][64];
+  int n = 0;
+  while (struct dirent* e = readdir(d)) {
+    if (!std::strcmp(e->d_name, ".") || !std::strcmp(e->d_name, "..")) continue;
+    if (endsWith(e->d_name, ".pmtiles") || endsWith(e->d_name, ".pmtiles.part")) continue;
+    if (n < 64) std::snprintf(names[n++], sizeof(names[0]), "%s", e->d_name);
+  }
+  closedir(d);
+  bool ok = true;
+  for (int i = 0; i < n; ++i) {
+    char child[160];
+    std::snprintf(child, sizeof(child), "%s/%s", dir, names[i]);
+    ok &= removeTree(child);
+  }
+  return ok;
+}
+
 bool SdStore::resetDualMesh() {
   n_ = 0;
   dirty_ = false;
   if (!mounted()) return true;  // intet gemt, intet at slette
   // Alt i /dualmesh/ slettes UNDTAGEN eksporterede profiler (/dualmesh/eksport/), så en
-  // profil, der er eksporteret lige før nulstillingen, kan importeres igen.
+  // profil, der er eksporteret lige før nulstillingen, kan importeres igen, og kortpakkerne i
+  // /dualmesh/maps/ (store filer, man ikke selv skriver; ønske 23. nov 2026).
   bool ok = true;
   DIR* d = opendir(kDir);
   if (d) {
@@ -213,7 +243,8 @@ bool SdStore::resetDualMesh() {
     for (int i = 0; i < n; ++i) {
       char child[128];
       std::snprintf(child, sizeof(child), "%s/%s", kDir, names[i]);
-      ok &= removeTree(child);
+      if (!std::strcmp(names[i], "maps")) ok &= clearMapsKeepPacks(child);
+      else ok &= removeTree(child);
     }
   }
   mkdir(kDir, 0775);
