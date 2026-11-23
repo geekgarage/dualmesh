@@ -1021,3 +1021,9 @@ klik-forsinkelse 150 ms, vend akser; gemmes og virker med det samme. Se spec.
   med dansk besked), og **push ved større ændringer** som nye funktioner, uden at spørge. Commit
   aldrig ikke-fungerende kode uden at sige det i beskeden. `logs/` committes ikke.
 - Lav små, testbare skridt: byg → flash → læs log → justér.
+- **Offentlige sider er på engelsk med dansk som valg (krav 23. nov 2026):** `README.md` (engelsk)
+  og `README.da.md` (dansk) holdes ens; fejlrapport-siden (`docs/rapport/index.html`) har begge
+  sprog i `TEXT` (standard engelsk, `?lang=da` eller sprogknappen). Nye tekster skal med i begge.
+- Repoet er offentligt (23. nov 2026, ny historik): commit aldrig navne, node-id'er, positioner,
+  WiFi-navne, IP'er eller nøgler fra rigtige enheder; brug opdigtede testværdier. Forfatter-e-mail
+  er GitHubs noreply-adresse (repoets git-config).
