@@ -157,27 +157,39 @@ def source_ranges(bbox, z0, z1):
 
 
 def prefetch(url, bbox, z0, z1, d, threads=16):
-    """Henter alle kildefliser for området ÉN gang til en lokal mappe, i store sammenlagte
-    HTTP-range-bidder (fliserne ligger i Hilbert-orden, så et område ligger tæt i filen)."""
+    """Henter kildefliserne for området til en lokal mappe, i store sammenlagte HTTP-range-
+    bidder (fliserne ligger i Hilbert-orden, så et område ligger tæt i filen). Findes mappen
+    allerede (fx fra en kørsel til zoom 12), hentes kun de fliser, der mangler, og de lægges til.
+    Fliser, kilden ikke har (hav uden data), huskes i absent.pkl, så de ikke slås op igen.
+    (Fejl rettet 23. nov 2026: før blev en eksisterende cache brugt, som den var, og zoom 13-15
+    blev tegnet tomme, når cachen kun dækkede zoom 0-12.)"""
     import pickle
     import threading
     from concurrent.futures import ThreadPoolExecutor
     from pmtiles.tile import deserialize_directory, deserialize_header, find_tile
 
-    if os.path.exists(os.path.join(d, "index.pkl")):
-        log(f"Kildedata findes allerede lokalt: {d}")
-        return
     os.makedirs(d, exist_ok=True)
+    idx_path, absent_path = os.path.join(d, "index.pkl"), os.path.join(d, "absent.pkl")
+    old_idx, absent = {}, set()
+    if os.path.exists(idx_path):
+        with open(idx_path, "rb") as f:
+            old_idx = pickle.load(f)
+    if os.path.exists(absent_path):
+        with open(absent_path, "rb") as f:
+            absent = pickle.load(f)
     t0 = time.time()
-    h = deserialize_header(http_range(url, 0, 127))
-    root = deserialize_directory(http_range(url, h["root_offset"], h["root_length"]))
     ids = set()
     for sz, x0, y0, x1, y1 in source_ranges(bbox, z0, z1):
         for x in range(x0, x1 + 1):
             for y in range(y0, y1 + 1):
                 ids.add(zxy_to_tileid(sz, x, y))
-    ids = sorted(ids)
-    log(f"Kildedata: {len(ids)} vektorfliser skal slås op")
+    ids = sorted(ids - old_idx.keys() - absent)
+    if not ids:
+        log(f"Kildedata findes allerede lokalt: {d}")
+        return
+    log(f"Kildedata: {len(ids)} vektorfliser skal slås op" + (f" (cachen har {len(old_idx)})" if old_idx else ""))
+    h = deserialize_header(http_range(url, 0, 127))
+    root = deserialize_directory(http_range(url, h["root_offset"], h["root_length"]))
 
     leaves, lock = {}, threading.Lock()
 
@@ -218,8 +230,9 @@ def prefetch(url, bbox, z0, z1, d, threads=16):
     log(f"  henter {total / 1e6:.0f} MB i {len(groups)} bidder")
 
     pos_of = {}
-    data = open(os.path.join(d, "data.bin"), "wb")
-    wpos = [0]
+    data_path = os.path.join(d, "data.bin")
+    data = open(data_path, "ab")  # nye fliser lægges efter de gamle
+    wpos = [os.path.getsize(data_path)]
     done = [0, 0]
 
     def fetch(g):
@@ -238,10 +251,14 @@ def prefetch(url, bbox, z0, z1, d, threads=16):
     with ThreadPoolExecutor(threads) as ex:
         list(ex.map(fetch, groups))
     data.close()
-    idx = {tid: pos_of[(o, l)] for tid, o, l in found}
-    with open(os.path.join(d, "index.pkl"), "wb") as f:
-        pickle.dump(idx, f)
-    log(f"Kildedata klar: {wpos[0] / 1e6:.0f} MB lokalt, {time.time() - t0:.0f} s")
+    idx = dict(old_idx)
+    idx.update({tid: pos_of[(o, l)] for tid, o, l in found})
+    absent |= set(ids) - {tid for tid, _, _ in found}
+    for path, obj in ((idx_path, idx), (absent_path, absent)):  # atomisk: tmp + omdøb
+        with open(path + ".tmp", "wb") as f:
+            pickle.dump(obj, f)
+        os.replace(path + ".tmp", path)
+    log(f"Kildedata klar: {wpos[0] / 1e6:.0f} MB lokalt ({len(found)} nye fliser), {time.time() - t0:.0f} s")
 
 
 def latest_build():
