@@ -15,3 +15,4 @@ Greenland-Qaanaaq-01.pmtiles 59351112 0-15 https://github.com/geekgarage/dualmes
 Greenland-Tasiilaq-01.pmtiles 41203711 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Tasiilaq-01.pmtiles Greenland Tasiilaq 01 (65.5-66.5N 39.0W-35.9W)
 Greenland-Scoresbysund-01.pmtiles 14371633 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Scoresbysund-01.pmtiles Greenland Scoresbysund 01 (70-71N 25W-21W)
 Svalbard-01.pmtiles 230494798 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Svalbard-01.pmtiles Svalbard 01 (76.4-80.8N 10.3E-33.6E)
+Nordics-01.pmtiles 1549197781 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-01.pmtiles Nordics 01 (54.9-57.5N 4.5E-16.7E)
