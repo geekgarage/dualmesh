@@ -922,7 +922,8 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   `version.txt` med size+sha256, `manifest.json`, `notes.md`) og laver releasen; derefter startes
   `pages.yml` på main (Pages-miljøet tillader kun main), der lægger `docs/` + seneste release på
   GitHub Pages (build_type = workflow). Intet samlet billede fra 0x0: det ville overskrive NVS.
-  **v0.1.0 udgivet 23. nov 2026** (rev 273b5df).
+  **v0.1.0 udgivet 23. nov 2026** (rev 273b5df; kan ikke selv hente – flash v0.1.1 over USB),
+  **v0.1.1** samme dag (a07ffda, hentning rettet).
 - **Flash-siden** `docs/flash/` (https://geekgarage.github.io/dualmesh/flash/): ESP Web Tools 10
   fra unpkg (Apache-2.0), engelsk/dansk; ikke afprøvet med en T-Deck endnu.
 - **`net/dl.*`:** én HTTPS-hentning ad gangen i egen task (følger viderestillinger selv,
@@ -937,7 +938,13 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   koerer fra <partition>` ved opstart.
 - **Kortpakker:** release `kort-1` (`--latest=false`, ellers finder OTA ikke firmwaren):
   Danmark.pmtiles 1,58 GB (Accept-Ranges virker). Udgiv aldrig pakker med brugerens hjemområde.
-- **Ikke afprøvet på T-Deck'en endnu:** panelerne, OTA over WiFi, kortpakke-hentning.
+- **Afprøvet 23. nov 2026:** OTA (0.1.0 skrevet i app1, SHA-256 OK, genstart), flash-siden i
+  browseren (v0.1.1) og OTA igen til v0.1.1 (a07ffda); monitor `G` henter katalog + version.txt.
+  **Lærdom:** IDF 4.4's certifikatbundt fejler på Let's Encrypts krydssignerede kæde ("PK verify
+  failed") → egne rødder (`src/net/gh_roots.h`, `tools/gen_gh_roots.py`); rødderne parset i intern
+  RAM tømte den (laveste 1 KB, "ctr_drbg_seed -1", nedbrud i radio-tasken) → alle mbedtls-blokke og
+  HTTP-buffere (> 4 KB, `SPIRAM_MALLOC_ALWAYSINTERNAL` = 4096) i PSRAM, start kræver 24 KB fri.
+- **Ikke set på skærmen endnu:** Hent layouts/sprog/kortpakker (kortpakken kun på rigtigt WiFi).
 - **Senere (ønske):** DualMesh i T-Deck Launcherens firmwarekatalog (testliste b18).
 
 ## Faseplan
