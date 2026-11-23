@@ -427,7 +427,7 @@ Klik: afbryd	Click: cancel
 Version %s er installeret. Genstarter ...	Version %s is installed. Restarting ...
 Version %s er gemt på SD-kortet	Version %s is saved on the SD card
 Installér den sådan i launcheren:	Install it from the launcher like this:
-1. Genstart, og åbn launcheren	1. Restart and open the launcher
+1. Klik Genstart nu: launcheren starter	1. Click Restart now: Launcher starts
 2. Vælg SD > dualmesh > firmware	2. Choose SD > dualmesh > firmware
 3. Vælg filen, og installér den:	3. Choose this file and install it:
 Genstart nu	Restart now

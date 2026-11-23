@@ -22,9 +22,12 @@ namespace dm {
 class OtaUi : public Panel {
  public:
   using RestartFn = void (*)();
-  void begin(bool launcher, RestartFn restart) {
+  // to_launcher: genstart, der ender i launcheren (fx deep sleep; en almindelig genstart går
+  // direkte tilbage til DualMesh).
+  void begin(bool launcher, RestartFn restart, RestartFn to_launcher = nullptr) {
     launcher_ = launcher;
     restart_ = restart;
+    to_launcher_ = to_launcher;
   }
   const char* title() const override { return "Opdatér firmware"; }
   void onOpen() override {
@@ -89,7 +92,7 @@ class OtaUi : public Panel {
       snprintf(v.status2, sizeof(v.status2), "Version %s er gemt på SD-kortet", ver_);
       v.status_fg = color::Green;
       v.add(PanelRow::Info, color::White, "Installér den sådan i launcheren:");
-      v.add(PanelRow::Info, color::Gray, "1. Genstart, og åbn launcheren");
+      v.add(PanelRow::Info, color::Gray, "1. Klik Genstart nu: launcheren starter");
       v.add(PanelRow::Info, color::Gray, "2. Vælg SD > dualmesh > firmware");
       v.add(PanelRow::Info, color::Gray, "3. Vælg filen, og installér den:");
       v.add(PanelRow::Info, color::Yellow, file_);
@@ -151,8 +154,9 @@ class OtaUi : public Panel {
       dl::cancel();
       return;
     }
-    if (saved_) {  // "Genstart nu": så kan launcheren åbnes og installere filen
-      if (restart_) restart_();
+    if (saved_) {  // "Genstart nu": ind i launcheren, så den kan installere filen
+      if (to_launcher_) to_launcher_();
+      else if (restart_) restart_();
       return;
     }
     if (phase_ != Phase::Ready || installed_) return;
@@ -241,6 +245,7 @@ class OtaUi : public Panel {
 
   bool launcher_ = false;
   RestartFn restart_ = nullptr;
+  RestartFn to_launcher_ = nullptr;
   Phase phase_ = Phase::Ready;
   bool mine_ = false, armed_ = false, installed_ = false;
   bool saved_ = false;  // under en launcher: firmwaren er gemt på SD (vejledningen vises)

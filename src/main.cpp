@@ -10,6 +10,7 @@
 #include "storage/sd_log.h"
 #include "driver/spi_master.h"
 #include "esp_heap_caps.h"
+#include "esp_sleep.h"
 #include "esp_system.h"
 #include "nvs.h"
 #include "hal/gps.h"
@@ -102,6 +103,7 @@ static ChannelScan g_chan_scan;  // kanaler i nærheden (fra pakkeloggen)
 static dm::MtNode g_mt_node;     // Meshtastic: afkodning og nodedatabase (fase 3)
 static ChannelsUi g_chan_ui;     // fanen "Kanal"
 static uint32_t g_restart_at = 0;  // genstart efter Gem af radioindstillinger
+static bool g_restart_launcher = false;  // genstarten skal ende i launcheren (deep sleep)
 static BleSerial g_ble;           // Bluetooth til MeshCore-appen
 static McCompanion g_companion;   // MeshCores companion-protokol over BLE
 static dm::MtBle g_mt_ble;         // Bluetooth til Meshtastic-appen
@@ -2443,7 +2445,11 @@ static void startNets() {
   g_dl_kbd.begin(dm::DownloadsUi::Kind::Keyboards, dlChanged, dm::KeyMap::hasBuiltin);
   g_dl_lang.begin(dm::DownloadsUi::Kind::Languages, dlChanged, dm::lang::hasBuiltin);
   g_dl_maps.begin(dm::DownloadsUi::Kind::Maps, dlChanged);
-  g_ota_ui.begin(dm::nvstool::launcher().found, []() { g_restart_at = millis() + 3000; });
+  g_ota_ui.begin(dm::nvstool::launcher().found, []() { g_restart_at = millis() + 3000; },
+                 []() {  // firmwaren er gemt på SD: genstart ind i launcheren
+                   g_restart_launcher = true;
+                   g_restart_at = millis() + 500;
+                 });
   // Strømspar: CPU'en kører 80 MHz, mens skærmen er slukket (radio, SPI og WiFi klarer sig fint
   // med det; APB er 80 MHz uanset), og 240 MHz, når brugerfladen tegner.
   g_ui.setPowerFn([](bool screen_on) {
@@ -3062,6 +3068,16 @@ void loop() {
   g_ota_ui.tick();
   updateCheckTick();
   if (g_restart_at && int32_t(millis() - g_restart_at) >= 0) {
+    if (g_restart_launcher) {
+      // Launcheren starter kun ved strøm-til og efter deep sleep; en software-genstart går
+      // direkte tilbage til DualMesh. Et halvt sekunds deep sleep giver launcheren (partitionerne
+      // røres ikke), så den gemte firmware kan installeres.
+      dm::DLOG.println("[OTA] genstarter via deep sleep, saa launcheren starter");
+      dm::DLOG.flush(true);
+      delay(50);
+      esp_sleep_enable_timer_wakeup(500000);
+      esp_deep_sleep_start();
+    }
     dm::DLOG.println("[MENU] genstarter (radioindstillinger, import eller firmwareopdatering)");
     dm::DLOG.flush(true);
     delay(50);

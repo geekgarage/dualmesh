@@ -966,7 +966,10 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   **Launcher (bmorcelli):** installation fra SD laver altid en ny app-partition, så længe der er
   plads (`dualme`, `dualm1` …); først ved fuld flash tilbydes en eksisterende. Det er Launcherens
   design (issue bmorcelli/Launcher#492 foreslår "Update existing app"); firmwaren må ikke skrive i
-  launcherens partitioner (brugerens krav). Launcherens partition er kun ~12 KB større end appen.
+  launcherens partitioner (brugerens krav). Launcherens partition er kun ~12 KB større end appen
+  (24. nov 2026: 3,8 KB tilbage). Launcheren starter kun ved strøm-til og efter deep sleep; en
+  `esp_restart` går tilbage til DualMesh. Derfor går "Genstart nu" efter en firmware gemt på SD i
+  deep sleep i 0,5 s (`g_restart_launcher` i main.cpp); afprøvet og godkendt 24. nov 2026.
 - **Afprøvet 23. nov 2026:** OTA (0.1.0 skrevet i app1, SHA-256 OK, genstart), flash-siden i
   browseren (v0.1.1) og OTA igen til v0.1.1 (a07ffda); monitor `G` henter katalog + version.txt.
   **Lærdom:** IDF 4.4's certifikatbundt fejler på Let's Encrypts krydssignerede kæde ("PK verify
