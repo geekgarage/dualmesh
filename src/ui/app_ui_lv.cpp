@@ -1430,6 +1430,15 @@ void AppUi::lvDrawPanel() {
     }
     setText(c->plab[r], w.label);
     setText(c->pval[r], w.value);
+    // Værdien (højrestillet) får pladsen ved siden af etiketten, ikke en fast bredde: før blev
+    // fx GPS-status' "9 brugt, 12 set, HDOP 1.2" afkortet, selv om etiketten var kort.
+    {
+      lv_point_t ls;
+      lv_txt_get_size(&ls, lv_label_get_text(c->plab[r]), &dm_font_14, 0, 0, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
+      int maxv = roww - 10 /* pad */ - 6 /* mellemrum */ - ls.x;
+      if (maxv < 80) maxv = 80;  // etiketten afkortes så, ikke værdien
+      lv_obj_set_style_max_width(c->pval[r], maxv, 0);
+    }
     lv_obj_set_style_bg_color(row, c565(bg), 0);
     lv_obj_set_style_bg_opa(row, fill ? LV_OPA_COVER : LV_OPA_TRANSP, 0);
     lv_obj_set_style_radius(row, w.kind == PanelRow::Header ? 4 : 0, 0);
