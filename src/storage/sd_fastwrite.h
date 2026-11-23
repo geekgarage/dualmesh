@@ -23,6 +23,8 @@ bool install(void* card, spi_host_device_t host, int cs_pin, int khz);
 void uninstall();
 // Statistik til loggen: længste busy-ventetid (ms) og antal skrevne sektorer siden sidst.
 void takeStats(uint32_t& max_busy_ms, uint32_t& sectors, uint32_t& errors);
+// FatFs-drevnummeret for SD-kortet (-1 = ikke installeret), fx til f_getfree("0:").
+int pdrv();
 
 }  // namespace sdfw
 }  // namespace dm

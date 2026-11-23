@@ -1,0 +1,5 @@
+# DualMesh kortpakker til Indst. > Kort > Hent kortpakker.
+# Hver linje: <fil> <byte> <zoom> <url> <navn ...>
+# Filerne ligger som release-filer (tag kort-N, oprettet med --latest=false, så "Opdatér firmware"
+# stadig finder firmwaren under releases/latest). Lavet med tools/maps/make_map.py.
+# Kortdata © OpenStreetMap-bidragydere (ODbL) og Natural Earth (public domain).

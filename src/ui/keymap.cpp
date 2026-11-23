@@ -79,6 +79,12 @@ int KeyMap::begin(const char* active_csv, bool sd_ok) {
   return found;
 }
 
+bool KeyMap::hasBuiltin(const char* id) {
+  for (int i = 0; i < kbd::kBuiltinCount; ++i)
+    if (!strcmp(kbd::kBuiltin[i].id, id)) return true;
+  return false;
+}
+
 int KeyMap::variants(char key, const char* out[], int max) const {
   if (uint8_t(key) < 32 || uint8_t(key) >= 127) return 0;
   const int k = key - 32;

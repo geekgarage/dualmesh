@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<!-- Flash-siden: installerer DualMesh på en T-Deck Plus fra browseren (ESP Web Tools, Apache-2.0).
+     Firmwaren (firmware/manifest.json + .bin) lægges ind af .github/workflows/release.yml og pages.yml. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DualMesh – install</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+  :root {
+    --bg: #0f1214; --panel: #171b1e; --line: #2a3035; --text: #e6e8ea; --dim: #9aa3ab;
+    --accent: #3ddc84; --warn: #f2c14e; --bad: #ff6b6b; --link: #9cc8ff;
+    --mono: ui-monospace, "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 20px 64px; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h1 span { color: var(--accent); }
+  .lead { color: var(--dim); margin: 0 0 28px; max-width: 70ch; }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+            padding: 20px 22px; margin-bottom: 18px; }
+  h2 { font-size: 16px; margin: 0 0 12px; }
+  p, li { margin: 6px 0; }
+  ol, ul { padding-left: 22px; margin: 6px 0; }
+  .note { color: var(--dim); font-size: 13.5px; }
+  .warn { color: var(--warn); }
+  .ver { font-family: var(--mono); font-size: 13px; color: var(--dim); }
+  a { color: var(--link); }
+  code { font-family: var(--mono); font-size: 13px; }
+  button { font: inherit; border: 1px solid var(--line); background: #222a30; color: var(--text);
+           padding: 4px 10px; border-radius: 7px; cursor: pointer; font-size: 13px; }
+  button[aria-pressed=true] { border-color: var(--accent); color: var(--accent); }
+  .install { margin: 14px 0 6px; }
+  esp-web-install-button button[slot=activate] {
+    font: inherit; font-weight: 600; background: var(--accent); color: #062b16; border: 0;
+    padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 15px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <h1>DualMesh <span data-t="h1"></span></h1>
+    <div role="group" aria-label="Language / Sprog">
+      <button type="button" data-lang="en">English</button>
+      <button type="button" data-lang="da">Dansk</button>
+    </div>
+  </div>
+  <p class="lead" data-t="lead"></p>
+
+  <section>
+    <h2 data-t="s1"></h2>
+    <ol>
+      <li data-t="step1"></li>
+      <li data-t="step2"></li>
+      <li data-t="step3"></li>
+    </ol>
+    <div class="install">
+      <esp-web-install-button id="btn" manifest="firmware/manifest.json">
+        <button slot="activate" data-t="install"></button>
+        <span slot="unsupported" class="warn" data-t="unsupported"></span>
+        <span slot="not-allowed" class="warn" data-t="notallowed"></span>
+      </esp-web-install-button>
+    </div>
+    <p class="ver" id="ver"></p>
+    <p class="note" data-t="boot"></p>
+    <p class="note warn" data-t="erase"></p>
+  </section>
+
+  <section>
+    <h2 data-t="s2"></h2>
+    <ul>
+      <li data-t="ota"></li>
+      <li data-t="launcher"></li>
+      <li data-t="esptool"></li>
+    </ul>
+  </section>
+
+  <p class="note" data-t="foot"></p>
+</main>
+
+<script>
+'use strict';
+var REL = 'https://github.com/geekgarage/dualmesh/releases/latest';
+var TEXT = {
+  en: {
+    title: 'DualMesh – install', h1: 'install',
+    lead: 'Installs the DualMesh firmware on a LilyGo T-Deck Plus straight from your browser – no ' +
+          'build tools needed. DualMesh speaks MeshCore and Meshtastic with one radio.',
+    s1: 'Install in the browser',
+    step1: 'Use Chrome or Edge on a computer, and connect the T-Deck Plus with a USB cable.',
+    step2: 'Press <em>Install DualMesh</em>, pick the port (usually "USB JTAG/serial debug unit") and confirm.',
+    step3: 'Wait until it says it is done (about a minute). The T-Deck restarts with DualMesh.',
+    install: 'Install DualMesh',
+    unsupported: 'Your browser cannot talk to USB. Use Chrome or Edge on a computer.',
+    notallowed: 'The page must be opened over https.',
+    boot: 'Not found, or the install fails? Put the T-Deck in boot mode: hold the trackball down, ' +
+          'press reset, release the trackball, and try again.',
+    erase: 'You will be asked whether to erase the device. That is not needed: without erasing, the ' +
+           'settings of other firmware in the internal memory are kept. Your SD card is never touched.',
+    s2: 'Other ways',
+    ota: 'Already running DualMesh? Settings > System > <em>Update firmware</em> installs the newest ' +
+         'release over WiFi.',
+    launcher: 'Using a launcher? Download <code>dualmesh-tdeck_plus.bin</code> from the ' +
+              '<a href="' + REL + '">latest release</a>, put it on the SD card and install it from the launcher.',
+    esptool: 'With esptool: see the command in the <a href="' + REL + '">release notes</a>.',
+    foot: 'DualMesh is MIT licensed: <a href="https://github.com/geekgarage/dualmesh">github.com/geekgarage/dualmesh</a>. ' +
+          'The installer is <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a> (Apache-2.0).',
+    ver: 'Firmware on this page: ', nover: 'No firmware on this page yet.'
+  },
+  da: {
+    title: 'DualMesh – installér', h1: 'installér',
+    lead: 'Installerer DualMesh-firmwaren på en LilyGo T-Deck Plus direkte fra browseren – uden ' +
+          'byggeværktøjer. DualMesh taler MeshCore og Meshtastic med én radio.',
+    s1: 'Installér i browseren',
+    step1: 'Brug Chrome eller Edge på en computer, og forbind T-Deck Plus med et USB-kabel.',
+    step2: 'Tryk <em>Installér DualMesh</em>, vælg porten (typisk "USB JTAG/serial debug unit"), og bekræft.',
+    step3: 'Vent, til der står, at den er færdig (ca. et minut). T-Deck\'en genstarter med DualMesh.',
+    install: 'Installér DualMesh',
+    unsupported: 'Din browser kan ikke tale med USB. Brug Chrome eller Edge på en computer.',
+    notallowed: 'Siden skal åbnes over https.',
+    boot: 'Bliver den ikke fundet, eller fejler installationen? Sæt T-Deck\'en i boot-tilstand: hold ' +
+          'trackballen nede, tryk reset, slip trackballen, og prøv igen.',
+    erase: 'Du bliver spurgt, om enheden skal slettes. Det er ikke nødvendigt: uden sletning bevares ' +
+           'andre firmwares indstillinger i den interne hukommelse. SD-kortet røres aldrig.',
+    s2: 'Andre måder',
+    ota: 'Kører du allerede DualMesh? Indst. > System > <em>Opdatér firmware</em> installerer den nyeste ' +
+         'udgivelse over WiFi.',
+    launcher: 'Bruger du en launcher? Hent <code>dualmesh-tdeck_plus.bin</code> fra den ' +
+              '<a href="' + REL + '">seneste udgivelse</a>, læg den på SD-kortet, og installér den fra launcheren.',
+    esptool: 'Med esptool: se kommandoen i <a href="' + REL + '">udgivelsesnoterne</a>.',
+    foot: 'DualMesh er MIT-licenseret: <a href="https://github.com/geekgarage/dualmesh">github.com/geekgarage/dualmesh</a>. ' +
+          'Installationen bruger <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a> (Apache-2.0).',
+    ver: 'Firmware på denne side: ', nover: 'Der ligger endnu ingen firmware på siden.'
+  }
+};
+var LANG = 'en', VERSION = null;
+function setLang(l) {
+  LANG = TEXT[l] ? l : 'en';
+  try { localStorage.setItem('dm-lang', LANG); } catch (e) {}
+  document.documentElement.lang = LANG;
+  document.title = TEXT[LANG].title;
+  document.querySelectorAll('[data-t]').forEach(function (el) { el.innerHTML = TEXT[LANG][el.getAttribute('data-t')]; });
+  document.querySelectorAll('[data-lang]').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.getAttribute('data-lang') === LANG ? 'true' : 'false');
+  });
+  showVersion();
+}
+function showVersion() {
+  var el = document.getElementById('ver');
+  if (VERSION === null) { el.textContent = ''; return; }
+  el.textContent = VERSION ? TEXT[LANG].ver + VERSION : TEXT[LANG].nover;
+}
+document.querySelectorAll('[data-lang]').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); });
+});
+fetch('firmware/manifest.json', { cache: 'no-store' })
+  .then(function (r) { return r.ok ? r.json() : null; })
+  .then(function (m) { VERSION = m && m.version ? m.version : ''; showVersion(); })
+  .catch(function () { VERSION = ''; showVersion(); });
+(function () {
+  var q = /[?&]lang=(\w+)/.exec(location.search), saved = null;
+  try { saved = localStorage.getItem('dm-lang'); } catch (e) {}
+  setLang(q ? q[1] : (saved || 'en'));
+})();
+</script>
+</body>
+</html>

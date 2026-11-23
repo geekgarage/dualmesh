@@ -12,6 +12,8 @@ int count();                     // 0 = Dansk
 const char* nameAt(int i);       // visningsnavn ("Dansk", "English", ...)
 // Vælger sproget ud fra navn eller id (tom/ukendt = dansk). Gælder for al tegning herefter.
 void apply(const char* name_or_id);
+// Er sproget bygget ind i firmwaren (dansk eller lang/<id>.txt ved bygning)?
+bool hasBuiltin(const char* id);
 
 }  // namespace lang
 }  // namespace dm

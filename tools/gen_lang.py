@@ -12,6 +12,7 @@ Brug:  python tools/gen_lang.py           (alle sprog i lang/)
        python tools/gen_lang.py --check   (fejl, hvis en nøgle mangler en oversættelse)
 Formatet: "dansk<TAB>oversættelse" pr. linje, \\n = linjeskift, # = kommentar, se lib/dualmesh/src/i18n.h.
 """
+import hashlib
 import os
 import re
 import sys
@@ -22,7 +23,7 @@ OUT = os.path.join(ROOT, "src", "ui", "lang_builtin.h")
 # Filer med tekst, der vises på skærmen.
 SOURCES = ["src/ui", "src/main.cpp", "src/net/wifi_mgr.cpp", "src/storage/profile_io.cpp",
            "src/storage/sd_crypt.cpp", "src/storage/nvs_tool.cpp", "src/storage/usb_disk.cpp",
-           "src/map/caches.cpp", "src/net/okapi.cpp", "src/hal/gps.cpp"]
+           "src/map/caches.cpp", "src/net/okapi.cpp", "src/hal/gps.cpp", "src/net/dl.cpp"]
 SKIP_FILES = ("font8x16.h", "keyboards_builtin.h", "lang_builtin.h", "dualmesh_logo")
 LOG_CALL = re.compile(r"(DLOG\s*\.|Serial\s*\.|ESP_LOG|log_[ewidv]\s*\(|#\s*include|static_assert|"
                       r"\bset\s*\(\s*$|getInt\s*\(|get\s*\(\s*$|strcmp|strncmp|strstr|fopen|mkdir|"
@@ -199,7 +200,7 @@ def write_lang(path, head, tr, keys, where):
 def main():
     keys, where = collect()
     os.makedirs(LANG, exist_ok=True)
-    langs = sorted(f[:-4] for f in os.listdir(LANG) if f.endswith(".txt"))
+    langs = sorted(f[:-4] for f in os.listdir(LANG) if f.endswith(".txt") and f != "index.txt")
     missing = 0
     blobs = []
     for lid in langs:
@@ -234,6 +235,20 @@ def main():
             f.write(f'    {{"{lid}", kText_{lid}}},\n')
         f.write("};\n")
         f.write(f"constexpr int kBuiltinCount = {len(blobs)};\n}}  // namespace lang\n}}  // namespace dm\n")
+    # Katalog til "Hent sprog" på T-Deck'en: <id> <version> <navn>, version = de første 8 hex af
+    # SHA-1 over filen (skifter, når oversættelsen ændres).
+    idx = ["# DualMesh sprog til Indst. > System > Hent sprog. Hver linje: <id> <version> <navn>. "
+           "Filen er <id>.txt i samme mappe (lavet af tools/gen_lang.py)."]
+    for lid in langs:
+        raw = open(os.path.join(LANG, f"{lid}.txt"), "rb").read()
+        name = lid
+        for l in raw.decode("utf-8-sig").splitlines():
+            if l.startswith("#name:"):
+                name = l[6:].strip() or lid
+                break
+        idx.append(f"{lid} {hashlib.sha1(raw).hexdigest()[:8]} {name}")
+    with open(os.path.join(LANG, "index.txt"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(idx) + "\n")
     print(f"{len(keys)} UI-tekster; {OUT}")
     if "--check" in sys.argv and missing:
         sys.exit(f"{missing} mangler oversættelse")

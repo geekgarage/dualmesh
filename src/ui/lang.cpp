@@ -68,6 +68,7 @@ void begin(bool sd) {
   while (struct dirent* e = readdir(d)) {
     const size_t n = std::strlen(e->d_name);
     if (n < 5 || n > 15 || strcasecmp(e->d_name + n - 4, ".txt") != 0) continue;
+    if (!strcasecmp(e->d_name, "installed.txt") || !strcasecmp(e->d_name, "index.txt")) continue;  // "Hent sprog"
     char id[12];
     snprintf(id, sizeof(id), "%.*s", int(n - 4), e->d_name);
     Lang* l = add(id);
@@ -85,6 +86,13 @@ void begin(bool sd) {
 }
 
 int count() { return g_n ? g_n : 1; }
+
+bool hasBuiltin(const char* id) {
+  if (!strcasecmp(id, "da")) return true;
+  for (int i = 0; i < lang::kBuiltinCount; ++i)
+    if (!strcasecmp(lang::kBuiltin[i].id, id)) return true;
+  return false;
+}
 
 const char* nameAt(int i) { return (i >= 0 && i < g_n) ? g_langs[i].name : "Dansk"; }
 

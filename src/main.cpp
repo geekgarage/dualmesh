@@ -58,6 +58,11 @@
 #include "ui/tracks_ui.h"
 #include "ui/caches_ui.h"
 #include "ui/maps_ui.h"
+#include "ui/downloads_ui.h"
+#include "ui/ota_ui.h"
+#include "net/dl.h"
+#include "esp_ota_ops.h"
+#include <WiFi.h>
 #include "net/okapi.h"
 #include "ui/logo/dualmesh_logo_tdeck.h"  // kun her (static const-data)
 #include "util/wall_clock.h"
@@ -124,6 +129,9 @@ static dm::TracksUi g_tracks_ui;    // kortets menu > Gemte spor
 static dm::Caches g_caches;         // geocaches fra /dualmesh/caches/*.gpx
 static dm::CachesUi g_caches_ui;    // kortets menu > Geocaches
 static dm::MapsUi g_maps_ui;        // kortets menu > Kortpakker
+// Hent fra GitHub (Indst.): tastaturlayouts, sprog, kortpakker og firmwareopdateringer.
+static dm::DownloadsUi g_dl_kbd, g_dl_lang, g_dl_maps;
+static dm::OtaUi g_ota_ui;
 // Meshtastic-afsendelse (indtil videre kun SOS): loop -> kø -> radio-task.
 struct MtTxFrame {
   uint8_t len;
@@ -1980,6 +1988,15 @@ static const char* onMenuAction(const char* key) {
     g_ui.openPanel(&g_report_ui);
     return nullptr;
   }
+  if (strcmp(key, ">dl_keyboards") == 0 || strcmp(key, ">dl_lang") == 0 || strcmp(key, ">dl_maps") == 0 ||
+      strcmp(key, ">ota") == 0) {
+    if (WiFi.status() != WL_CONNECTED) return "Kræver WiFi (Indst. > WiFi)";
+    if (key[1] == 'o') g_ui.openPanel(&g_ota_ui);
+    else if (key[4] == 'k') g_ui.openPanel(&g_dl_kbd);
+    else if (key[4] == 'l') g_ui.openPanel(&g_dl_lang);
+    else g_ui.openPanel(&g_dl_maps);
+    return nullptr;
+  }
   if (strcmp(key, ">ble") == 0) {
     g_ui.openPanel(&g_ble_ui);
     return nullptr;
@@ -2394,6 +2411,38 @@ static void startNets() {
     g_ui.showOnMap(g_map.centerLat(), g_map.centerLon());
   });
   g_ui.setMapsPanel(&g_maps_ui);
+  // Hent fra GitHub: efter installation/sletning genindlæses layouts, sprog eller kortpakker.
+  auto dlChanged = [](dm::DownloadsUi::Kind k, const char* id, bool installed) {
+    if (k == dm::DownloadsUi::Kind::Keyboards) {
+      if (installed) {  // et nyt layout tages i brug med det samme (sidst i listen)
+        char cur[96];
+        snprintf(cur, sizeof(cur), "%s", setting("keyboard_layouts", "da,latin"));
+        bool have = false;
+        char tmp[96];
+        snprintf(tmp, sizeof(tmp), "%s", cur);
+        for (char* t = strtok(tmp, ", "); t; t = strtok(nullptr, ", ")) have |= !strcmp(t, id);
+        if (!have && strlen(cur) + strlen(id) + 2 < sizeof(cur)) {
+          strcat(cur, ",");
+          strcat(cur, id);
+          g_store.set("keyboard_layouts", cur);
+          g_store.save();
+        }
+      }
+      g_km.begin(setting("keyboard_layouts", "da,latin"), g_store.mounted());
+      dm::DLOG.printf("[HENT] tastaturlayout %s %s; aktive: %s\n", id, installed ? "installeret" : "slettet",
+                      g_km.loadedSummary());
+    } else if (k == dm::DownloadsUi::Kind::Languages) {
+      dm::lang::begin(g_store.mounted());  // vælges under Indst. > System > Sprog
+      dm::DLOG.printf("[HENT] sprog %s %s\n", id, installed ? "installeret" : "slettet");
+    } else {
+      g_map.scan(g_store.mounted());
+      dm::DLOG.printf("[HENT] kortpakke %s %s\n", id, installed ? "installeret" : "slettet");
+    }
+  };
+  g_dl_kbd.begin(dm::DownloadsUi::Kind::Keyboards, dlChanged, dm::KeyMap::hasBuiltin);
+  g_dl_lang.begin(dm::DownloadsUi::Kind::Languages, dlChanged, dm::lang::hasBuiltin);
+  g_dl_maps.begin(dm::DownloadsUi::Kind::Maps, dlChanged);
+  g_ota_ui.begin(dm::nvstool::launcher().found, []() { g_restart_at = millis() + 3000; });
   // Strømspar: CPU'en kører 80 MHz, mens skærmen er slukket (radio, SPI og WiFi klarer sig fint
   // med det; APB er 80 MHz uanset), og 240 MHz, når brugerfladen tegner.
   g_ui.setPowerFn([](bool screen_on) {
@@ -2623,6 +2672,12 @@ void setup() {
   }
   startSdLog();
   dm::crashinfo::logAtBoot(dm::DLOG);  // [CRASH]-resumé, hvis forrige kørsel gik ned
+  {  // Hvilken app-partition kører vi fra (OTA skriver i den anden)? Godkend den (rollback, hvis slået til).
+    const esp_partition_t* run = esp_ota_get_running_partition();
+    esp_ota_mark_app_valid_cancel_rollback();
+    dm::DLOG.printf("[OTA] koerer fra %s%s\n", run ? run->label : "?",
+                    dm::nvstool::launcher().found ? " (launcher fundet: opdateringer gemmes paa SD)" : "");
+  }
   {
     const char* tz = setting("timezone", "");
     setenv("TZ", *tz ? tz : "CET-1CEST,M3.5.0,M10.5.0/3", 1);
@@ -2927,8 +2982,12 @@ void loop() {
   }
   if (g_disp_ok) g_ui.tick();  // tegner kun ændrede linjer
   dm::DLOG.flush();             // højst hvert 30. s (eller ved 16 KB)
+  g_dl_kbd.tick();
+  g_dl_lang.tick();
+  g_dl_maps.tick();
+  g_ota_ui.tick();
   if (g_restart_at && int32_t(millis() - g_restart_at) >= 0) {
-    dm::DLOG.println("[MENU] radioindstillinger aendret - genstarter");
+    dm::DLOG.println("[MENU] genstarter (radioindstillinger, import eller firmwareopdatering)");
     dm::DLOG.flush(true);
     delay(50);
     esp_restart();

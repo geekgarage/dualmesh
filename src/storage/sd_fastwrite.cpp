@@ -209,5 +209,7 @@ void takeStats(uint32_t& max_busy_ms, uint32_t& sectors, uint32_t& errors) {
   g_max_busy_ms = g_sectors = g_errors = 0;
 }
 
+int pdrv() { return g_pdrv; }
+
 }  // namespace sdfw
 }  // namespace dm

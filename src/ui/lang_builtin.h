@@ -292,6 +292,43 @@ Mindst 4 tegn	At least 4 characters
 Fortrudt (ikke BRUG EFUSE)	Cancelled (not BRUG EFUSE)
 eFuse-brænding fejlede	eFuse burning failed
 SD-kryptering	SD encryption
+Hent tastaturlayouts	Get keyboard layouts
+Hent sprog	Get languages
+Hent kortpakker	Get map packs
+En anden hentning kører; prøv igen bagefter	Another download is running; try again later
+Kataloget kunne ikke hentes: %.40s	Could not get the catalogue: %s
+%.30s: %.40s	%.30s: %.40s
+Henter kataloget fra GitHub ...	Getting the catalogue from GitHub ...
+Henter %.40s	Downloading %s
+%u %%  %lu KB/s  ca. %lu min tilbage	%u %%  %lu KB/s  about %lu min left
+%u %%  %lu KB/s	%u %%  %lu KB/s
+Afbryd hentningen	Cancel the download
+Klik: afbryd   Backspace: tilbage (hentningen fortsætter)	Click: cancel   Backspace: back (keeps downloading)
+Hent igen	Download again
+Bekræft: slet	Confirm: delete
+Slet fra SD-kortet	Delete from SD card
+Klik: vælg   Backspace: tilbage	Click: choose   Backspace: back
+%d i kataloget på GitHub	%d in the catalogue on GitHub
+%lu MB fri på SD-kortet	%lu MB free on the SD card
+Kataloget er tomt.	The catalogue is empty.
+© OpenStreetMap-bidragydere (ODbL)	© OpenStreetMap contributors (ODbL)
+Klik igen: hent %lu MB (brug WiFi, ikke mobildata)	Click again: get %lu MB (use WiFi, not mobile data)
+Klik: hent   Backspace: tilbage	Click: download   Backspace: back
+En anden hentning kører allerede	Another download is already running
+%s%s/index.txt	%s%s/index.txt
+Kataloget kunne ikke hentes	Could not get the catalogue
+%31s %llu %7s %199s %n	%31s %llu %7s %199s %n
+%s%s/%s%s	%s%s/%s%s
+%s.part	%s.part
+installeret, %lu MB	installed, %lu MB
+%u %% hentet	%u %% downloaded
+installeret	installed
+indbygget	built-in
+kan hentes	available
+Kunne ikke starte hentningen	Could not start the fetch
+%.40s er slettet	%s is deleted
+%s.tmp	%s.tmp
+%s %s\n	%s %s\n
 GPS: %s	GPS: %s
 Modul: %lu baud, %lu sætninger	Module: %lu baud, %lu sentences
 Modul: leder efter baud og pinde ...	Module: searching for baud and pins ...
@@ -315,7 +352,6 @@ SOS: hold trackball-klik i 5 s	SOS: hold trackball click for 5 s
 Klik: GPS %s   Backspace: tilbage	Click: GPS %s   Backspace: back
 fra	off
 til	on
-indbygget	built-in
 %s%s(%s)	%s%s(%s)
 MANGLER	MISSING
 %s/%s	%s/%s
@@ -324,7 +360,6 @@ zoom %u-%u, %lu MB	zoom %u-%u, %lu MB
 Gå til	Go to
 Bekræft: slet pakken	Confirm: delete the pack
 Slet pakken	Delete the pack
-Klik: vælg   Backspace: tilbage	Click: choose   Backspace: back
 %d kortpakke(r) i /dualmesh/maps/	%d map pack(s) in /dualmesh/maps/
 Ingen kortpakker.	No map packs.
 Læg .pmtiles-filer på via USB-drevet	Add .pmtiles files via the USB drive
@@ -363,6 +398,29 @@ hele NVS ryddet	all of NVS cleared
 Rydning fejlede	Clearing failed
 Fortrudt (ikke SLET ALT)	Cancelled (not SLET ALT)
 Intern NVS	Internal NVS
+Opdatér firmware	Update firmware
+Ingen udgivelse fundet: %.50s	No release found: %s
+version.txt er ugyldig	version.txt is invalid
+Gemt: installér /dualmesh/firmware/%.30s fra launcheren	Saved: install /dualmesh/firmware/%s from the launcher
+Denne: %s (%s)	This one: %s (%s)
+Søger efter den nyeste udgivelse ...	Looking for the newest release ...
+%s %s: %u %%  %lu KB/s	%s %s: %u %%  %lu KB/s
+Henter	Downloading
+Installerer	Installing
+Afbryd	Cancel
+Sluk ikke T-Deck'en under opdateringen	Do not switch off the T-Deck during the update
+Klik: afbryd	Click: cancel
+Version %s er installeret. Genstarter ...	Version %s is installed. Restarting ...
+På GitHub: %s (%s), %lu KB	On GitHub: %s (%s), %lu KB
+Hent %s til SD-kortet	Save %s to the SD card
+Opdatér til %s	Update to %s
+Installér %s igen	Install %s again
+Installér ældre %s	Install older %s
+Klik igen for at starte	Click again to start
+Søg igen	Check again
+Launcher fundet: firmwaren gemmes på SD-kortet	Launcher found: the firmware is saved to the SD card
+Du har den nyeste version	You have the newest version
+%sversion.txt	%sversion.txt
 Telemetri-tilladelser pr. kontakt	Telemetry permissions per contact
 Bruges, når et valg i MeshCore står på "kontakter".	Used when a MeshCore choice is set to "contacts".
 < %s >	< %s >
@@ -517,6 +575,10 @@ Touch: spejl lodret, hvis tryk øverst rammer nederst.	Touch: mirror vertically 
 Tastaturlysets styrke ved tastetryk, 0-255. Eksempel: 127. 0 = aldrig tændt.	Keyboard light strength on key press, 0-255. Example: 127. 0 = never on.
 Sekunder før tastaturlyset slukker efter sidste tryk. Eksempel: 10.	Seconds before the keyboard light turns off after the last press. Example: 10.
 Layouts for specialtegn (fx a -> å æ á), adskilt af komma. Eksempel: da,latin.	Layouts for special characters (e.g. a -> å æ á), separated by commas. Example: da,latin.
+Henter nye tastaturlayouts fra GitHub over WiFi. Et hentet layout tages i brug med det samme.	Gets new keyboard layouts from GitHub over WiFi. A downloaded layout is used right away.
+Henter kortpakker fra GitHub over WiFi (store filer: brug WiFi, ikke mobildata). En afbrudt hentning genoptages.	Gets map packs from GitHub over WiFi (large files: use WiFi, not mobile data). An interrupted download resumes.
+Henter flere sprog fra GitHub over WiFi. Vælg dem bagefter under Sprog / Language.	Gets more languages from GitHub over WiFi. Choose them afterwards under Sprog / Language.
+Finder den nyeste firmware på GitHub og installerer den over WiFi. Med en launcher gemmes den på SD-kortet.	Finds the newest firmware on GitHub and installs it over WiFi. With a launcher it is saved to the SD card.
 Læs tastaturet direkte, så alle taster virker. Slå kun fra ved gammel tastaturfirmware. Kræver genstart.	Read the keyboard directly so all keys work. Only turn off with old keyboard firmware. Needs restart.
 Hvor følsom trackballen er, 1-10. 10 = et lille ryk flytter, 1 = skal rulles meget. Eksempel: 5.	How sensitive the trackball is, 1-10. 10 = a small nudge moves, 1 = needs a lot of rolling. Example: 5.
 Vend trackballens vandrette retning.	Reverse the trackball's horizontal direction.
@@ -604,6 +666,8 @@ Touch vend Y	Touch flip Y
 Tastaturlysstyrke	Keyboard light
 Tastaturlys, sek	Kbd light, sec
 Tastaturlayouts	Keyboard layouts
+Hent layouts	Get layouts
+(fra GitHub)	(from GitHub)
 Rå tastatur	Raw keyboard
 Trackball følsom	Trackball sens.
 Trackball vend X	Trackball flip X
@@ -788,6 +852,7 @@ Ingen åben chat	No open chat
 Ryddet: %.30s	Cleared: %s
 Alle kanal-chats ryddet (%d filer)	All channel chats cleared (%d files)
 !%08lx	!%08lx
+Kræver WiFi (Indst. > WiFi)	Needs WiFi (Settings > WiFi)
 Intet SD-kort	No SD card
 Henter caches fra Opencaching ...	Fetching caches from Opencaching ...
 Intet SD-kort: ingen log at rydde	No SD card: no log to clear
@@ -818,7 +883,6 @@ scan kunne ikke starte	scan could not start
 slået fra	turned off
 forbinder	connecting
 forbundet	connected
-%s.tmp	%s.tmp
 Kan ikke åbne filen	Cannot open the file
 Ikke en DualMesh-profil	Not a DualMesh profile
 Forkert adgangskode	Wrong password
@@ -872,10 +936,33 @@ Fejl fra Opencaching (HTTP %d)	Error from Opencaching (HTTP %d)
 Mangler Opencaching-nøgle (Indst. > Kort)	Missing Opencaching key (Settings > Map)
 WiFi er ikke forbundet	WiFi is not connected
 {"center":"%.6f|%.6f","radius":"%d","limit":"500"}	{"center":"%.6f|%.6f","radius":"%d","limit":"500"}
-Kunne ikke starte hentningen	Could not start the fetch
 dvale (strømspar)	asleep (power save)
 ingen data fra modulet	no data from the module
 søger satellitter	searching for satellites
+bytes=%llu-	bytes=%llu-
+Ingen forbindelse	No connection
+Findes ikke (HTTP 404)	Not found (HTTP 404)
+Fejl fra serveren (HTTP %d)	Error from the server (HTTP %d)
+For lidt plads på SD (%lu MB fri, %lu MB mangler)	Not enough space on SD (%lu MB free, %lu MB needed)
+Kan ikke skrive på SD-kortet	Cannot write to the SD card
+Filen er for stor	The file is too large
+Ingen ledig app-partition til opdateringen	No free app partition for the update
+Forkert størrelse (%lu i stedet for %lu)	Wrong size (%lu instead of %lu)
+OTA kunne ikke starte (%s)	OTA could not start (%s)
+Fejl ved skrivning til flash	Error writing to flash
+Fejl ved skrivning	Write error
+Afbrudt (kan genoptages)	Cancelled (can be resumed)
+Forbindelsen røg (kan genoptages)	Connection lost (can be resumed)
+Forbindelsen røg	Connection lost
+Kunne ikke omdøbe filen	Could not rename the file
+Hentet (%lu KB)	Downloaded (%lu KB)
+Hentet	Downloaded
+Kontrolsummen passer ikke: opdateringen er ikke installeret	Checksum mismatch: the update is not installed
+Firmwaren er ugyldig (%s)	The firmware is invalid (%s)
+Kunne ikke vælge den nye firmware (%s)	Could not select the new firmware (%s)
+Firmwaren er installeret; genstarter	The firmware is installed; restarting
+Ugyldig version.txt (størrelse/SHA-256)	Invalid version.txt (size/SHA-256)
+%d:	%d:
 )DMLANG";
 static const Builtin kBuiltin[] = {
     {"en", kText_en},

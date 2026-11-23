@@ -19,6 +19,8 @@ class KeyMap {
   // Varianter for en fysisk tast (fx 'a' -> "å","æ",...). Returnerer antal.
   int variants(char key, const char* out[], int max) const;
   const char* loadedSummary() const { return summary_; }
+  // Er layoutet bygget ind i firmwaren (keyboards/*.kbd ved bygning)?
+  static bool hasBuiltin(const char* id);
 
  private:
   bool loadText(const char* text);
