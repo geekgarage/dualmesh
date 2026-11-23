@@ -1,13 +1,60 @@
-# DualMesh – firmware for the LilyGo T-Deck Plus
+# DualMesh – one handheld, both mesh networks
 
 **English** | [Dansk](README.da.md)
 
+[![Latest release](https://img.shields.io/github/v/release/geekgarage/dualmesh?label=release)](https://github.com/geekgarage/dualmesh/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 ![DualMesh](assets/logo/png/tdeck-splash-320x240.png)
 
-DualMesh is a new firmware, written from scratch, that speaks **MeshCore and Meshtastic with a
-single SX1262 radio**. A time-sharing scheduler switches between the two networks fast enough
-that both can be heard. The firmware is compatible with both networks, but it is not a product
-of MeshCore or Meshtastic. License: MIT (see `LICENSE`).
+**DualMesh turns a LilyGo T-Deck Plus into a stand-alone off-grid communicator that talks
+MeshCore *and* Meshtastic at the same time** – with a real keyboard, offline maps and GPS, and no
+phone required.
+
+**[Install in your browser](https://geekgarage.github.io/dualmesh/flash/)** ·
+[Download](https://github.com/geekgarage/dualmesh/releases/latest) ·
+[Report a bug](https://geekgarage.github.io/dualmesh/rapport/)
+
+## Why DualMesh?
+
+MeshCore and Meshtastic are the two big LoRa mesh networks, but they cannot talk to each other.
+Normally you pick one, carry two radios, or reflash your device to switch. DualMesh removes that
+choice.
+
+- **Both networks on one radio.** A scheduler switches the single SX1262 between MeshCore and
+  Meshtastic in milliseconds, so you can message people on either network from one device.
+- **No phone needed.** Read and write messages, browse contacts and channels, see where people
+  are on the map – all on the T-Deck's own keyboard, trackball and touch screen. Want your phone
+  anyway? The official MeshCore app or Meshtastic app connects over Bluetooth.
+- **Built for the outdoors.** Offline maps of whole countries, GPS tracks you can save as GPX,
+  shared locations, geocaching and an SOS that alerts both networks at once.
+- **Private by default.** Your position is never sent unless you turn it on, telemetry replies are
+  off, and keys, passwords and identities are encrypted on the SD card.
+- **Easy to install and keep current.** Install from the browser in a minute, then update over
+  WiFi from the menu. No build tools, no command line.
+- **Open source.** MIT licensed, written from scratch; the Meshtastic part is a clean-room
+  implementation from the public protocol documentation.
+
+## Features at a glance
+
+| | |
+| --- | --- |
+| **Messaging** | MeshCore channels, DMs with delivery receipts, adverts and contacts · Meshtastic channels, encrypted (PKI) DMs with ACK, signed messages · @-mentions, emoji picker, drafts · message history per conversation on the SD card |
+| **Maps & GPS** | Offline raster maps (download Denmark over WiFi or make your own) · your position and other nodes on the map · tracks (CSV/GPX) · share a location in any chat · Meshtastic waypoints · geocaching from GPX files or Opencaching |
+| **Safety** | SOS: hold the trackball for 5 s to send your position on both networks until you stop it · position sharing off by default, per network, with an "approximate" (≈ 1 km) option |
+| **Connectivity** | MeshCore app and Meshtastic app over Bluetooth · WiFi with NTP time · MQTT bridge (also TLS) to your own broker, e.g. for Home Assistant or Node-RED · Meshtastic relaying (optional) |
+| **Device** | English and Danish UI (more languages can be added) · keyboard layouts with special characters (å, ä, ñ …) · screen dimming, CPU and GPS power saving · SD encryption · profile export/import · the SD card as a USB drive |
+| **Updates** | Install from the browser · over-the-air updates from GitHub · downloadable keyboard layouts, languages and map packs · launcher friendly |
+
+**Good to know**
+- One radio means time-sharing: while it listens on one network it cannot hear the other, so a
+  small share of packets can be missed compared with a single-network device. The scheduler is
+  tuned to keep that low (simulated 2–10 % at moderate traffic).
+- Hardware: LilyGo **T-Deck Plus** (ESP32-S3 with SX1262 and GPS). Always attach an antenna before
+  using the radio.
+- DualMesh is compatible with MeshCore and Meshtastic but is not affiliated with either project.
+- Some features still wait for field testing (for example Meshtastic relaying with three or more
+  nodes); see the status table below.
 
 The project is developed in Danish: code comments, log lines and the design documents
 (`docs/spec.md`, `CLAUDE.md`) are in Danish, while the user interface defaults to English.
