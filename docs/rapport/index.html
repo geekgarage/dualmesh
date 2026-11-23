@@ -80,7 +80,12 @@
       <span class="note" id="noserial" hidden data-t="noserial"></span>
     </div>
     <p class="note" data-t="sdnote"></p>
-    <div class="row"><input type="file" id="files" multiple accept=".log,.txt,text/plain"></div>
+    <div class="row">
+      <!-- Egen knap: browserens filknap viser altid browserens sprog ("Vælg filer"). -->
+      <input type="file" id="files" multiple accept=".log,.txt,text/plain" hidden>
+      <button type="button" id="pick" data-t="choose"></button>
+      <span class="note" id="picked" data-t="nofile"></span>
+    </div>
     <div class="status" id="status1"></div>
   </section>
 
@@ -143,6 +148,7 @@ var TEXT = {
               'from the SD card below.',
     sdnote: 'Or take out the SD card and pick the files in <code>/dualmesh/logs/</code> (the newest, and ' +
             'the one before it if the T-Deck crashed):',
+    choose: 'Choose files', nofile: 'No file chosen',
     s2: 'Review the cleaned report', include: 'Include', perfile: 'per file',
     last500: 'the last 500 lines', last2000: 'the last 2000 lines', last10000: 'the last 10000 lines',
     all: 'all lines', edit: 'Edit the text yourself', showmarks: 'Show markings',
@@ -188,6 +194,7 @@ var TEXT = {
               'logfilerne fra SD-kortet herunder.',
     sdnote: 'Eller tag SD-kortet ud og vælg filerne i <code>/dualmesh/logs/</code> (den nyeste og den før ' +
             'den, hvis T-Deck\'en gik ned):',
+    choose: 'Vælg filer', nofile: 'Ingen fil valgt',
     s2: 'Gennemse den rensede rapport', include: 'Medtag', perfile: 'pr. fil',
     last500: 'de sidste 500 linjer', last2000: 'de sidste 2000 linjer', last10000: 'de sidste 10000 linjer',
     all: 'alle linjer', edit: 'Ret selv i teksten', showmarks: 'Vis markeringer',
@@ -375,9 +382,12 @@ function splitDump(bytes, text) {
 }
 
 // ---------------------------------------------------------------- filer fra SD-kortet
+$('pick').addEventListener('click', function () { $('files').click(); });
 $('files').addEventListener('change', async function (ev) {
   var list = Array.from(ev.target.files || []).sort(function (a, b) { return a.name < b.name ? -1 : 1; });
   if (!list.length) return;
+  $('picked').removeAttribute('data-t');  // filnavnene skal ikke oversættes
+  $('picked').textContent = list.map(function (f) { return f.name; }).join(', ');
   state.files = [];
   for (var i = 0; i < list.length; i++)
     state.files.push({ name: list[i].name, text: await list[i].text() });
