@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DualMesh – fejlrapport</title>
+<style>
+  :root {
+    --bg: #0f1214; --panel: #171b1e; --line: #2a3035; --text: #e6e8ea; --dim: #9aa3ab;
+    --accent: #3ddc84; --warn: #f2c14e; --bad: #ff6b6b; --mark: #2b3b52; --markt: #9cc8ff;
+    --mono: ui-monospace, "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h1 span { color: var(--accent); }
+  .lead { color: var(--dim); margin: 0 0 28px; max-width: 70ch; }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+            padding: 20px 22px; margin-bottom: 18px; }
+  section.off { opacity: .45; pointer-events: none; }
+  h2 { font-size: 16px; margin: 0 0 12px; display: flex; gap: 10px; align-items: baseline; }
+  h2 b { color: var(--accent); font-family: var(--mono); font-weight: 600; }
+  p { margin: 8px 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0; }
+  button, .btn { font: inherit; border: 1px solid var(--line); background: #222a30; color: var(--text);
+                 padding: 8px 14px; border-radius: 7px; cursor: pointer; }
+  button:hover:not(:disabled) { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: #062b16; border-color: var(--accent); font-weight: 600; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  input[type=file] { color: var(--dim); }
+  select { font: inherit; background: #222a30; color: var(--text); border: 1px solid var(--line);
+           border-radius: 6px; padding: 5px 8px; }
+  .status { font-family: var(--mono); font-size: 13px; color: var(--dim); min-height: 1.4em; }
+  .status.err { color: var(--bad); }
+  .status.ok { color: var(--accent); }
+  .note { color: var(--dim); font-size: 13.5px; }
+  .warn { color: var(--warn); }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 6px 0 0;
+       font-family: var(--mono); font-size: 13px; }
+  dt { color: var(--dim); }
+  dd { margin: 0; word-break: break-all; }
+  .stats { font-size: 13.5px; color: var(--dim); }
+  .stats b { color: var(--text); font-weight: 600; }
+  .files label { display: inline-flex; gap: 6px; align-items: center; margin-right: 14px;
+                 font-family: var(--mono); font-size: 13px; }
+  pre, textarea { width: 100%; height: 420px; overflow: auto; margin: 10px 0 0; padding: 12px;
+                  background: #0b0d0f; border: 1px solid var(--line); border-radius: 8px;
+                  color: #cfd6dc; font: 12.5px/1.5 var(--mono); white-space: pre; }
+  textarea { resize: vertical; }
+  mark { background: var(--mark); color: var(--markt); border-radius: 3px; padding: 0 2px; }
+  ol { margin: 6px 0; padding-left: 22px; }
+  a { color: var(--markt); }
+  .check { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0; }
+  .check input { margin-top: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>DualMesh <span>fejlrapport</span></h1>
+  <p class="lead">Henter loggen fra din T-Deck, renser den for navne, beskeder, positioner,
+    nøgler og adresser og hjælper dig med at oprette et issue på GitHub. Alt sker her i din
+    browser: intet sendes nogen steder hen, før du selv trækker filen ind i issuet.</p>
+
+  <section id="s1">
+    <h2><b>1</b> Hent loggen</h2>
+    <p>Sæt T-Deck'en i USB og tryk <em>Forbind</em>. Vælg porten (typisk "USB JTAG/serial debug unit").
+      T-Deck'en kan genstarte, når porten åbnes; siden venter, til den er klar.</p>
+    <div class="row">
+      <button id="connect" class="primary">Forbind T-Deck</button>
+      <span class="note" id="noserial" hidden>Din browser kan ikke tale med USB. Brug Chrome eller
+        Edge på en computer, eller vælg logfilerne fra SD-kortet herunder.</span>
+    </div>
+    <p class="note">Eller tag SD-kortet ud og vælg filerne i <code>/dualmesh/logs/</code> (den nyeste
+      og den før den, hvis T-Deck'en gik ned):</p>
+    <div class="row"><input type="file" id="files" multiple accept=".log,.txt,text/plain"></div>
+    <div class="status" id="status1"></div>
+  </section>
+
+  <section id="s2" class="off">
+    <h2><b>2</b> Gennemse den rensede rapport</h2>
+    <dl id="summary"></dl>
+    <p class="stats" id="stats"></p>
+    <div class="row files" id="filelist"></div>
+    <div class="row">
+      <label>Medtag <select id="tail">
+        <option value="500">de sidste 500 linjer</option>
+        <option value="2000" selected>de sidste 2000 linjer</option>
+        <option value="10000">de sidste 10000 linjer</option>
+        <option value="0">alle linjer</option>
+      </select> pr. fil</label>
+      <button id="edit">Ret selv i teksten</button>
+    </div>
+    <p class="note">Det, der er fjernet, står som <mark>‹…›</mark>. Node- og pakke-id'er er skiftet
+      ud med faste aliaser (<mark>!‹node1›</mark>), så man stadig kan se, hvem der svarer hvem.
+      Slet gerne linjer, du ikke vil dele.</p>
+    <pre id="preview"></pre>
+    <textarea id="editor" hidden spellcheck="false"></textarea>
+  </section>
+
+  <section id="s3" class="off">
+    <h2><b>3</b> Opret issuet</h2>
+    <label class="check"><input type="checkbox" id="reviewed">
+      <span>Jeg har læst rapporten igennem, og den indeholder intet, jeg ikke vil dele offentligt.</span></label>
+    <div class="row">
+      <button id="download" disabled>Download rapport (.txt)</button>
+      <button id="copy" disabled>Kopiér</button>
+      <button id="issue" class="primary" disabled>Opret issue på GitHub</button>
+    </div>
+    <ol class="note">
+      <li>Download rapporten.</li>
+      <li>Tryk <em>Opret issue</em>: version og nedbrud er udfyldt på forhånd.</li>
+      <li>Beskriv, hvad der skete, og træk .txt-filen ind i feltet <em>Log</em>.</li>
+    </ol>
+    <p class="note warn">Issues på GitHub er offentlige. Det rensede er fjernet automatisk, men
+      læs alligevel teksten igennem.</p>
+    <div class="status" id="status3"></div>
+  </section>
+</main>
+
+<script src="vocab.js"></script>
+<script src="scrub.js"></script>
+<script>
+'use strict';
+var REPO = 'https://github.com/geekgarage/dualmesh';
+var $ = function (id) { return document.getElementById(id); };
+
+// Indsamlet materiale: header fra 'I' (eller fra logfilerne) og filer {name, text}.
+var state = { header: {}, files: [], edited: false, report: '' };
+
+function status(id, text, kind) {
+  var el = $(id);
+  el.textContent = text;
+  el.className = 'status' + (kind ? ' ' + kind : '');
+}
+
+// ---------------------------------------------------------------- USB (WebSerial)
+if (!('serial' in navigator)) {
+  $('connect').disabled = true;
+  $('noserial').hidden = false;
+}
+
+var HEAD_RE = /\n=== DMLOG-FIL (\d{4}\.log) (\d+) ===\n/g;
+var END_RE = /\n=== DMLOG-SLUT (\d+) filer ===\n/;
+
+function latin1(bytes) {  // ét tegn pr. byte, så indeks i teksten = indeks i bytes
+  var s = '';
+  for (var i = 0; i < bytes.length; i += 8192)
+    s += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
+  return s;
+}
+function concat(chunks, total) {
+  var out = new Uint8Array(total), o = 0;
+  chunks.forEach(function (c) { out.set(c, o); o += c.length; });
+  return out;
+}
+
+$('connect').addEventListener('click', async function () {
+  var port;
+  try {
+    port = await navigator.serial.requestPort({ filters: [{ usbVendorId: 0x303a }] });
+  } catch (e) {
+    status('status1', 'Ingen port valgt.', 'err');
+    return;
+  }
+  $('connect').disabled = true;
+  try {
+    await port.open({ baudRate: 115200, bufferSize: 1 << 16 });
+    await readFromDevice(port);
+  } catch (e) {
+    status('status1', 'Fejl: ' + e.message, 'err');
+  } finally {
+    try { await port.close(); } catch (e) {}
+    $('connect').disabled = false;
+  }
+});
+
+async function readFromDevice(port) {
+  var reader = port.readable.getReader();
+  var writer = port.writable.getWriter();
+  var chunks = [], total = 0, live = '';
+  var dec = new TextDecoder();
+  var phase = 'header', lastData = Date.now(), started = Date.now(), lastPoke = 0;
+  var send = function (ch) { return writer.write(new TextEncoder().encode(ch)); };
+  var pump = (async function () {
+    for (;;) {
+      var r = await reader.read();
+      if (r.done) break;
+      lastData = Date.now();
+      if (phase === 'header') live += dec.decode(r.value, { stream: true });
+      else { chunks.push(r.value); total += r.value.length; }
+    }
+  })();
+  try {
+    // 1. Vent på opstarten, og bed om rapport-hovedet ('I'), til det kommer.
+    status('status1', 'Venter på T-Deck\'en ...');
+    while (phase === 'header') {
+      if (/monitoren er laast/.test(live))
+        throw new Error('SD-krypteringen er låst med kode. Skriv koden på T-Deck\'en, og prøv igen.');
+      var m = /=== DMRAPPORT ===\n([\s\S]*?)=== DMRAPPORT-SLUT ===/.exec(live.replace(/\r/g, ''));
+      if (m) {
+        state.header = parseHeader(m[1]);
+        phase = 'dump';
+        break;
+      }
+      if (Date.now() - started > 60000)
+        throw new Error('Intet svar på 60 s. Er firmwaren ny nok (Indst. > System > Fejlrapport)?');
+      if (Date.now() - lastPoke > 3000) {
+        lastPoke = Date.now();
+        await send('I');
+      }
+      await sleep(200);
+    }
+    // 2. De tre nyeste logfiler ('d').
+    status('status1', 'Henter logfiler ...');
+    await send('d');
+    var t0 = Date.now();
+    for (;;) {
+      await sleep(250);
+      var bytes = concat(chunks, total);
+      var text = latin1(bytes);
+      if (END_RE.test(text)) { state.files = splitDump(bytes, text); break; }
+      status('status1', 'Henter logfiler ... ' + Math.round(total / 1024) + ' KB');
+      if (Date.now() - lastData > 20000 || Date.now() - t0 > 300000)
+        throw new Error('Logfilerne kom ikke helt igennem. Prøv igen.');
+    }
+    if (!state.files.length) {
+      // Intet SD-kort: brug det, der kom over USB siden forbindelsen.
+      state.files = [{ name: 'usb-live.log', text: live }];
+      status('status1', 'Intet SD-kort: bruger loggen fra USB siden forbindelsen.', 'ok');
+    } else {
+      status('status1', state.files.length + ' logfiler hentet (' + Math.round(total / 1024) + ' KB).', 'ok');
+    }
+    build();
+  } finally {
+    try { await reader.cancel(); } catch (e) {}
+    reader.releaseLock();
+    writer.releaseLock();
+    await pump.catch(function () {});
+  }
+}
+
+function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+function parseHeader(block) {
+  var h = {};
+  block.split('\n').forEach(function (l) {
+    var m = /^(version|board|opstart|oppetid|nedbrud|backtrace|elf|sd) (.*)$/.exec(l.trim());
+    if (m) h[m[1]] = m[2];
+  });
+  return h;
+}
+
+function splitDump(bytes, text) {
+  var files = [], m, utf8 = new TextDecoder();
+  HEAD_RE.lastIndex = 0;
+  while ((m = HEAD_RE.exec(text)) !== null) {
+    var start = m.index + m[0].length, size = +m[2];
+    if (start + size > bytes.length) break;
+    files.push({ name: m[1], text: utf8.decode(bytes.subarray(start, start + size)) });
+    HEAD_RE.lastIndex = start + size;
+  }
+  return files;
+}
+
+// ---------------------------------------------------------------- filer fra SD-kortet
+$('files').addEventListener('change', async function (ev) {
+  var list = Array.from(ev.target.files || []).sort(function (a, b) { return a.name < b.name ? -1 : 1; });
+  if (!list.length) return;
+  state.files = [];
+  for (var i = 0; i < list.length; i++)
+    state.files.push({ name: list[i].name, text: await list[i].text() });
+  state.header = headerFromLogs(state.files);
+  status('status1', state.files.length + ' fil(er) indlæst.', 'ok');
+  build();
+});
+
+// Uden 'I': find version, opstart og nedbrud i selve logfilerne.
+function headerFromLogs(files) {
+  var h = {};
+  files.forEach(function (f) {
+    f.text.split('\n').forEach(function (l) {
+      var m;
+      if ((m = /\[LOG\] DualMesh (.+)$/.exec(l))) h.version = m[1].trim();
+      if ((m = /\[LOG\] logger til SD: .* \(opstart: (.*)\)\s*$/.exec(l))) h.opstart = m[1];
+      if ((m = /\[CRASH\] forrige koersel gik ned \((\w+)\): (.*)$/.exec(l))) {
+        h.opstart = m[1]; h.nedbrud = m[2].trim();
+      }
+      if ((m = /\[CRASH\] Backtrace: (.*)$/.exec(l))) h.backtrace = m[1].trim();
+      if ((m = /\[CRASH\] ELF-SHA256 (\S+)/.exec(l))) h.elf = m[1];
+    });
+  });
+  return h;
+}
+
+// ---------------------------------------------------------------- rensning og visning
+var LABELS = { beskeder: 'beskeder', navne: 'navne/tekster', ord: 'ukendte ord', positioner: 'positioner',
+               adresser: 'adresser', 'node-id': 'node-id\'er', 'samtale-id': 'samtale-id\'er',
+               'pakke-id': 'pakke-id\'er', nøgler: 'nøgler', hemmeligheder: 'koder', tal: 'lange tal' };
+
+function build() {
+  var tail = +$('tail').value;
+  var sc = DMScrub.makeScrubber(window.DM_VOCAB);
+  var h = state.header;
+  var hs = {};
+  // Med nøglen foran, så fx "elf <hash>" genkendes af rensningen (ELF-hashen skal blive).
+  Object.keys(h).forEach(function (k) { hs[k] = sc.scrubLine(k + ' ' + h[k]).slice(k.length + 1); });
+  state.cleanHeader = hs;
+
+  var chosen = state.files.filter(function (f) { return f.use !== false; });
+  var parts = ['DualMesh fejlrapport – renset i browseren ' + new Date().toLocaleString('da-DK')];
+  ['version', 'board', 'opstart', 'oppetid', 'nedbrud', 'backtrace', 'elf'].forEach(function (k) {
+    if (hs[k]) parts.push(k + ': ' + hs[k]);
+  });
+  chosen.forEach(function (f) {
+    var lines = f.text.replace(/\r\n?/g, '\n').split('\n');
+    while (lines.length && lines[lines.length - 1] === '') lines.pop();
+    var from = tail && lines.length > tail ? lines.length - tail : 0;
+    parts.push('', '=== ' + f.name + (from ? ' (de sidste ' + tail + ' af ' + lines.length + ' linjer)' : '') + ' ===');
+    parts.push(sc.scrub(lines.slice(from).join('\n')));
+  });
+  state.report = parts.join('\n') + '\n';
+  state.edited = false;
+
+  // Resumé
+  var dl = $('summary');
+  dl.innerHTML = '';
+  [['Version', hs.version], ['Opstart', hs.opstart], ['Nedbrud', hs.nedbrud], ['Backtrace', hs.backtrace],
+   ['ELF', hs.elf]].forEach(function (p) {
+    if (!p[1]) return;
+    var dt = document.createElement('dt'); dt.textContent = p[0];
+    var dd = document.createElement('dd'); dd.textContent = p[1];
+    dl.appendChild(dt); dl.appendChild(dd);
+  });
+  var st = Object.keys(sc.stats).filter(function (k) { return sc.stats[k]; }).map(function (k) {
+    return '<b>' + sc.stats[k] + '</b> ' + (LABELS[k] || k);
+  });
+  $('stats').innerHTML = st.length ? 'Fjernet: ' + st.join(', ') + '.' : 'Intet at fjerne.';
+
+  // Filvalg
+  var fl = $('filelist');
+  fl.innerHTML = '';
+  state.files.forEach(function (f) {
+    var lab = document.createElement('label');
+    var cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = f.use !== false;
+    cb.addEventListener('change', function () { f.use = cb.checked; build(); });
+    lab.appendChild(cb);
+    lab.appendChild(document.createTextNode(f.name + ' (' + Math.round(f.text.length / 1024) + ' KB)'));
+    fl.appendChild(lab);
+  });
+
+  showPreview();
+  $('s2').classList.remove('off');
+  $('s3').classList.remove('off');
+  $('reviewed').checked = false;
+  updateButtons();
+}
+
+function esc(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function showPreview() {
+  $('preview').innerHTML = esc(state.report).replace(/‹[^›\n]*›/g, function (m) { return '<mark>' + m + '</mark>'; });
+  $('editor').value = state.report;
+  $('preview').hidden = false;
+  $('editor').hidden = true;
+  $('edit').textContent = 'Ret selv i teksten';
+}
+
+$('tail').addEventListener('change', function () { if (state.files.length) build(); });
+$('edit').addEventListener('click', function () {
+  if ($('editor').hidden) {
+    $('editor').hidden = false;
+    $('preview').hidden = true;
+    $('edit').textContent = 'Vis markeringer';
+  } else {
+    state.report = $('editor').value;
+    state.edited = true;
+    $('preview').innerHTML = esc(state.report).replace(/‹[^›\n]*›/g, function (m) { return '<mark>' + m + '</mark>'; });
+    $('preview').hidden = false;
+    $('editor').hidden = true;
+    $('edit').textContent = 'Ret selv i teksten';
+  }
+});
+$('editor').addEventListener('input', function () { state.report = $('editor').value; state.edited = true; });
+
+// ---------------------------------------------------------------- send
+$('reviewed').addEventListener('change', updateButtons);
+function updateButtons() {
+  var ok = $('reviewed').checked && !!state.report;
+  ['download', 'copy', 'issue'].forEach(function (id) { $(id).disabled = !ok; });
+}
+function fileName() {
+  var d = new Date(), p = function (n) { return String(n).padStart(2, '0'); };
+  return 'dualmesh-rapport-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' +
+         p(d.getHours()) + p(d.getMinutes()) + '.txt';
+}
+$('download').addEventListener('click', function () {
+  var blob = new Blob([state.report], { type: 'text/plain;charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fileName();
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  status('status3', 'Gemt som ' + a.download + '.', 'ok');
+});
+$('copy').addEventListener('click', async function () {
+  try {
+    await navigator.clipboard.writeText(state.report);
+    status('status3', 'Rapporten er kopieret.', 'ok');
+  } catch (e) {
+    status('status3', 'Kunne ikke kopiere: ' + e.message, 'err');
+  }
+});
+$('issue').addEventListener('click', function () {
+  var h = state.cleanHeader || {};
+  var crash = [h.nedbrud, h.backtrace ? 'Backtrace: ' + h.backtrace : '', h.elf ? 'ELF ' + h.elf : '']
+    .filter(Boolean).join('\n');
+  var q = 'template=fejlrapport.yml' +
+          '&version=' + encodeURIComponent(h.version || '') +
+          '&opstart=' + encodeURIComponent(h.opstart || '') +
+          '&nedbrud=' + encodeURIComponent(crash);
+  window.open(REPO + '/issues/new?' + q, '_blank', 'noopener');
+  status('status3', 'Issuet er åbnet i en ny fane. Husk at trække rapportfilen ind i feltet "Log".', 'ok');
+});
+</script>
+</body>
+</html>

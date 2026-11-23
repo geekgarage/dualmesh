@@ -1,0 +1,9 @@
+# DualMesh tastaturlayouts. Hver linje: <id> <version> <navn>. Filen er <id>.kbd i samme mappe.
+latin 1 Latinske tegn (alle)
+da 1 Dansk
+no 1 Norsk
+sv 1 Svenska
+de 1 Deutsch
+fr 1 Français
+es 1 Español
+pl 1 Polski

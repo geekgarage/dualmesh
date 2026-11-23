@@ -1,0 +1,21 @@
+# DualMesh tastaturlayout
+id=pl
+name=Polski
+version=1
+a=ą
+A=Ą
+c=ć
+C=Ć
+e=ę
+E=Ę
+l=ł
+L=Ł
+n=ń
+N=Ń
+o=ó
+O=Ó
+s=ś
+S=Ś
+z=ź ż
+Z=Ź Ż
+$=€

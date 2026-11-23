@@ -1,0 +1,10 @@
+.pio/
+.vscode/
+build/
+
+# Claude Code: personlige indstillinger
+.claude/settings.local.json
+
+# Logfiler (indeholder bl.a. GPS-positioner og beskeder) committes aldrig
+logs/
+*.log

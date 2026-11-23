@@ -1,0 +1,19 @@
+# DualMesh tastaturlayout
+id=es
+name=Español
+version=1
+a=á
+A=Á
+e=é
+E=É
+i=í
+I=Í
+n=ñ
+N=Ñ
+o=ó
+O=Ó
+u=ú ü
+U=Ú Ü
+?=¿
+!=¡
+$=€

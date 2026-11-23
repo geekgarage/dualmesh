@@ -1,0 +1,13 @@
+# DualMesh tastaturlayout
+id=de
+name=Deutsch
+version=1
+a=ä
+A=Ä
+o=ö
+O=Ö
+u=ü
+U=Ü
+s=ß
+$=€
+"=« »

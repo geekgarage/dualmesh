@@ -1,0 +1,11 @@
+{
+  "name": "MeshCore",
+  "version": "companion-v1.18.0",
+  "description": "Udvalgte filer fra MeshCore companion-v1.18.0 (81dbae5), hentet med tools/sync_meshcore.py",
+  "license": "MIT",
+  "frameworks": "arduino",
+  "dependencies": {
+    "rweather/Crypto": "^0.4.0",
+    "densaugeo/base64": "~1.4.0"
+  }
+}

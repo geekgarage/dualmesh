@@ -1,0 +1,20 @@
+# DualMesh tastaturlayout
+id=fr
+name=Français
+version=1
+a=à â æ
+A=À Â Æ
+c=ç
+C=Ç
+e=é è ê ë
+E=É È Ê Ë
+i=î ï
+I=Î Ï
+o=ô œ
+O=Ô Œ
+u=ù û ü
+U=Ù Û Ü
+y=ÿ
+Y=Ÿ
+"=« »
+$=€

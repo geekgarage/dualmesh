@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>DualMesh – test af rensningen</title>
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; background: #0f1214; color: #e6e8ea; padding: 24px; }
+  pre { white-space: pre-wrap; font: 12px/1.45 ui-monospace, Consolas, monospace; color: #ffb3b3; }
+  .ok { color: #3ddc84; } .bad { color: #ff6b6b; }
+</style>
+</head>
+<body>
+<h1>Test af rensningen</h1>
+<p>Kører alle log-formater fra firmwaren med "kanariefugle" og en række håndskrevne linjer
+  gennem <code>scrub.js</code>. Lav korpus og ordforråd igen med
+  <code>python tools/gen_scrub_vocab.py</code>, når der kommer nye log-linjer.</p>
+<p id="result">Kører ...</p>
+<pre id="fails"></pre>
+<script src="vocab.js"></script>
+<script src="corpus.js"></script>
+<script src="scrub.js"></script>
+<script src="scrub_test.js"></script>
+<script>
+  var res = DMScrubTest.run(DMScrub, DM_VOCAB, DM_CORPUS);
+  var r = document.getElementById('result');
+  r.textContent = res.passed + ' bestået, ' + res.fails.length + ' fejlet';
+  r.className = res.fails.length ? 'bad' : 'ok';
+  document.getElementById('fails').textContent = res.fails.join('\n\n');
+  window.DM_TEST_RESULT = res;
+</script>
+</body>
+</html>

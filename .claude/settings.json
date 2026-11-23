@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pio run:*)",
+      "Bash(pio device list:*)",
+      "Bash(pio device monitor:*)",
+      "Bash(pio test:*)",
+      "Bash(~/.platformio/penv/Scripts/pio.exe run:*)",
+      "Bash(~/.platformio/penv/Scripts/pio.exe device:*)",
+      "Bash(~/.platformio/penv/Scripts/pio.exe test:*)",
+      "Bash(cmake:*)",
+      "Bash(./build/sim:*)",
+      "Bash(./build/test_phy:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(rm:*)"
+    ]
+  }
+}
