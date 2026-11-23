@@ -1,52 +1,54 @@
-# Tredjeparts-notitser
+# Third-party notices
 
-DualMesh er MIT (se `LICENSE`). Firmwaren (og repoet) indeholder eller bygger på følgende værker.
-Lægges firmwaren ud som binær fil (fx en GitHub-release), skal denne fil og licensteksterne følge
-med.
+*English | [Dansk](THIRD_PARTY_NOTICES.da.md)*
 
-## Kode i repoet
+DualMesh is MIT licensed (see `LICENSE`). The firmware (and the repository) contains or builds on
+the following works. When the firmware is distributed as a binary (e.g. a GitHub release), this
+file and the license texts must accompany it.
 
-| Værk | Licens | Hvor | Licenstekst |
+## Code in the repository
+
+| Work | License | Where | License text |
 | --- | --- | --- | --- |
-| MeshCore (udvalgte filer, companion-v1.18.0) | MIT | `lib/meshcore/` | `lib/meshcore/license.txt` |
-| ed25519 af Orson Peters (via MeshCore) | zlib | `lib/ed25519/` | `lib/ed25519/license.txt` |
+| MeshCore (selected files, companion-v1.18.0) | MIT | `lib/meshcore/` | `lib/meshcore/license.txt` |
+| ed25519 by Orson Peters (via MeshCore) | zlib | `lib/ed25519/` | `lib/ed25519/license.txt` |
 
-## Biblioteker, der hentes ved bygning (lib_deps / platform)
+## Libraries fetched at build time (lib_deps / platform)
 
-| Værk | Licens | Bemærkning |
+| Work | License | Notes |
 | --- | --- | --- |
-| LVGL 8.4 | MIT | Brugerfladen; inkl. qrcodegen (MIT) og LVGL's Montserrat-fallback (OFL 1.1) |
+| LVGL 8.4 | MIT | User interface; includes qrcodegen (MIT) and LVGL's Montserrat fallback (OFL 1.1) |
 | rweather/Crypto | MIT | AES, SHA-256, Curve25519, Ed25519 |
 | densaugeo/base64 | MIT | |
-| Arduino-ESP32 2.0.14 | LGPL-2.1 (kerne) / Apache-2.0 | Framework; linkes statisk (LGPL: kildekoden er offentlig hos Espressif, og DualMesh' kildekode er åben, så firmwaren kan genbygges med en ændret kerne) |
-| ESP-IDF 4.4.6 (FreeRTOS, lwIP, mbedtls, esp-mqtt, esp_http_client, TinyUSB, FatFs, Bluedroid) | Apache-2.0, MIT, BSD-3, FatFs-licens (BSD-agtig) | Via Arduino-ESP32; Apache-2.0-notitser i Espressifs kildekode |
+| Arduino-ESP32 2.0.14 | LGPL-2.1 (core) / Apache-2.0 | Framework; statically linked (LGPL: the source code is public at Espressif, and DualMesh's source code is open, so the firmware can be rebuilt with a modified core) |
+| ESP-IDF 4.4.6 (FreeRTOS, lwIP, mbedtls, esp-mqtt, esp_http_client, TinyUSB, FatFs, Bluedroid) | Apache-2.0, MIT, BSD-3, FatFs license (BSD-style) | Via Arduino-ESP32; Apache-2.0 notices in Espressif's source code |
 
-## Fonte (genereret ind i firmwaren)
+## Fonts (generated into the firmware)
 
-| Font | Licens | Licenstekst |
+| Font | License | License text |
 | --- | --- | --- |
 | Montserrat (Medium, SemiBold) | SIL OFL 1.1 | `fonts/montserrat/OFL.txt` |
 | JetBrains Mono | SIL OFL 1.1 | `fonts/jetbrainsmono/OFL.txt` |
 | Noto Emoji | SIL OFL 1.1 | `fonts/notoemoji/OFL.txt` |
 | Noto Color Emoji | SIL OFL 1.1 | `fonts/notocoloremoji/OFL.txt` |
 
-Fontene er omsat til bitmap-fonte (`src/ui/lv/fonts/`) med `tools/gen_lvgl_font.py` og
-`tools/gen_emoji_color.py`; de har deres oprindelige navne og licens.
+The fonts are converted to bitmap fonts (`src/ui/lv/fonts/`) with `tools/gen_lvgl_font.py` and
+`tools/gen_emoji_color.py`; they keep their original names and licenses.
 
-## Kortdata (ikke i repoet; kortpakker laves med tools/maps/make_map.py)
+## Map data (not in the repository; map packs are made with tools/maps/make_map.py)
 
-| Kilde | Licens | Krav |
+| Source | License | Requirements |
 | --- | --- | --- |
-| OpenStreetMap (via Protomaps' daglige builds) | ODbL 1.0 | Kildeangivelse "© OpenStreetMap-bidragydere" (vises på kortet); fliserne er et "produced work" |
-| Natural Earth (lave zoomniveauer) | Public domain | Ingen |
-| Protomaps' `landcover`-lag (ESA WorldCover) | CC-BY 4.0 | Bruges IKKE (tegnes ikke) |
+| OpenStreetMap (via Protomaps' daily builds) | ODbL 1.0 | Attribution "© OpenStreetMap contributors" (shown on the map); the tiles are a "produced work" |
+| Natural Earth (low zoom levels) | Public domain | None |
+| Protomaps' `landcover` layer (ESA WorldCover) | CC-BY 4.0 | NOT used (not drawn) |
 
-## Protokoller og formater (ingen kode overtaget)
+## Protocols and formats (no code taken over)
 
-- Meshtastic: skrevet ud fra den offentlige protokoldokumentation (clean room,
-  `docs/meshtastic_protokol.md`); ingen kode, `.proto`-filer eller genereret kode fra
-  Meshtastic-projektet (GPL-3.0). Se `docs/gpl_revision.md`. "Meshtastic" bruges kun til at
-  beskrive kompatibilitet.
-- PMTiles v3 (Protomaps, BSD-3-specifikation), PNG, GPX, Groundspeak-udvidelsen, u-blox UBX,
-  Opencaching OKAPI: egne implementeringer ud fra de offentlige beskrivelser.
-- MeshCores companion-protokol over Bluetooth: egen implementering efter MeshCore (MIT).
+- Meshtastic: written from the public protocol documentation (clean room,
+  `docs/meshtastic_protokol.md`); no code, `.proto` files or generated code from the Meshtastic
+  project (GPL-3.0). See `docs/gpl_revision.md`. "Meshtastic" is only used to describe
+  compatibility.
+- PMTiles v3 (Protomaps, BSD-3 specification), PNG, GPX, the Groundspeak extension, u-blox UBX,
+  Opencaching OKAPI: our own implementations based on the public descriptions.
+- MeshCore's companion protocol over Bluetooth: our own implementation following MeshCore (MIT).

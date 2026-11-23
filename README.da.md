@@ -380,7 +380,7 @@ cmake -S host -B build -G Ninja -DCMAKE_CXX_COMPILER=g++ && cmake --build build 
 
 ## Licenser og tak
 
-DualMesh er MIT. Den fulde liste med licenser står i `THIRD_PARTY_NOTICES.md`. Den bygger på:
+DualMesh er MIT. Den fulde liste med licenser står i [`THIRD_PARTY_NOTICES.da.md`](THIRD_PARTY_NOTICES.da.md). Den bygger på:
 
 - [MeshCore](https://github.com/meshcore-dev/MeshCore) (MIT) – udvalgte filer i `lib/meshcore/`
 - ed25519 af Orson Peters (zlib) – `lib/ed25519/`
