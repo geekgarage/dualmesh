@@ -3,7 +3,7 @@
 What is added, changed and fixed in each DualMesh firmware release. The newest version is at the
 top. A release is only built when its version has a section here (`tools/release.py check`).
 
-## [0.1.6] - unreleased
+## [0.1.6] - 2026-11-24
 
 ### Fixed
 - Under the T-Deck Launcher, *Restart now* after a firmware update was saved on the SD card
