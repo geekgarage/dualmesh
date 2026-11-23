@@ -81,7 +81,8 @@ Callbacks g_cb;
 bool BleSerial::begin(const char* name, uint32_t pin) {
   if (started_) return true;
   pin_ = g_pin = (pin >= 100000 && pin <= 999999) ? pin : 123456;
-  snprintf(name_, sizeof(name_), "%s", name);
+  bleName(name_, sizeof(name_), name);
+  if (std::strlen(name) > std::strlen(name_)) DLOG.printf("[BLE] navnet afkortet til %u byte\n", unsigned(kBleNameMax));
   g_rxq = xQueueCreate(kQueue, sizeof(Frame));
   BLEDevice::init(name_);
   BLEDevice::setSecurityCallbacks(&g_cb);

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include "net/mt_ble.h"
+#include "net/ble_serial.h"  // bleName
 
 #include <Arduino.h>
 #include <BLE2902.h>
@@ -93,6 +94,9 @@ bool MtBle::begin(const char* name, uint32_t pin, PopFn pop) {
   g_pin = (pin >= 100000 && pin <= 999999) ? pin : 123456;
   g_pop = pop;
   g_rxq = xQueueCreate(kQueue, sizeof(Frame));
+  char short_name[kBleNameMax + 1];
+  bleName(short_name, sizeof(short_name), name);  // for langt navn = nedbrud i Bluedroid
+  name = short_name;
   BLEDevice::init(name);
   BLEDevice::setSecurityCallbacks(&g_cb);
   BLEDevice::setMTU(517);

@@ -13,6 +13,24 @@
 
 namespace dm {
 
+// BLE-navnet står i scan-svaret: højst 31 byte, hvoraf sendeeffekten tager 3 og navnefeltets
+// hoved 2. Et navn på 31 tegn ("MeshCore-" + langt nodenavn) fik Bluedroid
+// (BTM_BleWriteScanRsp) til at skrive ud over sin stak: "Stack smashing" og bootloop.
+constexpr size_t kBleNameMax = 26;
+
+// Kopierer name afkortet til kBleNameMax byte uden at dele et UTF-8-tegn; dst skal have plads
+// til mindst kBleNameMax + 1.
+inline void bleName(char* dst, size_t cap, const char* name) {
+  size_t n = 0;
+  const size_t max = cap - 1 < kBleNameMax ? cap - 1 : kBleNameMax;
+  while (name[n] && n < max) ++n;
+  if (name[n]) {
+    while (n > 0 && (static_cast<unsigned char>(name[n]) & 0xC0) == 0x80) --n;  // midt i et tegn
+  }
+  for (size_t i = 0; i < n; ++i) dst[i] = name[i];
+  dst[n] = 0;
+}
+
 class BleSerial {
  public:
   static constexpr size_t kMaxFrame = 176;  // MeshCores MAX_FRAME_SIZE
