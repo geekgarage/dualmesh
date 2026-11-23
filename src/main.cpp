@@ -682,7 +682,7 @@ static void enterUsbDisk(const char* from) {
   dm::DLOG.printf("[SD] genstarter som USB-drev (%s); den serielle port forsvinder, indtil drevet skubbes ud\n", from);
   g_store.save();
   dm::DLOG.flush(true);
-  dm::usbdisk::rebootIntoStorage();
+  dm::usbdisk::rebootIntoStorage(setting("language", "English"));  // skærmen dér følger sprogvalget
 }
 static void onMenuSaved(bool restart);
 static void mqttSecret(const char* key, const char* value);

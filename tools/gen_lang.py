@@ -23,7 +23,8 @@ OUT = os.path.join(ROOT, "src", "ui", "lang_builtin.h")
 # Filer med tekst, der vises på skærmen.
 SOURCES = ["src/ui", "src/main.cpp", "src/net/wifi_mgr.cpp", "src/storage/profile_io.cpp",
            "src/storage/sd_crypt.cpp", "src/storage/nvs_tool.cpp", "src/storage/usb_disk.cpp",
-           "src/map/caches.cpp", "src/net/okapi.cpp", "src/hal/gps.cpp", "src/net/dl.cpp"]
+           "src/map/caches.cpp", "src/net/okapi.cpp", "src/hal/gps.cpp", "src/net/dl.cpp",
+           "src/storage/usb_disk.cpp"]
 SKIP_FILES = ("font8x16.h", "keyboards_builtin.h", "lang_builtin.h", "dualmesh_logo")
 LOG_CALL = re.compile(r"(DLOG\s*\.|Serial\s*\.|ESP_LOG|log_[ewidv]\s*\(|#\s*include|static_assert|"
                       r"\bset\s*\(\s*$|getInt\s*\(|get\s*\(\s*$|strcmp|strncmp|strstr|fopen|mkdir|"

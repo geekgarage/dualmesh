@@ -21,8 +21,10 @@ class StatusDisplay;
 
 namespace usbdisk {
 
-// Sæt flaget og genstart (vender ikke tilbage).
-[[noreturn]] void rebootIntoStorage();
+// Sæt flaget og genstart (vender ikke tilbage). language = indstillingen "language" (navn eller
+// id); skærmen i lager-tilstanden bruger det sprog (SD-kortet monteres ikke, så settings.ini kan
+// ikke læses dér; kun indbyggede sprog).
+[[noreturn]] void rebootIntoStorage(const char* language);
 // Var flaget sat ved denne opstart? Sletter det (kald én gang, tidligt i setup()).
 bool takeRequest();
 // Lager-tilstanden (vender ikke tilbage). SPI-bussen og skærmen skal være startet.

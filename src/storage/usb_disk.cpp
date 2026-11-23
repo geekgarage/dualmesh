@@ -17,6 +17,8 @@
 #include "hal/rwdt_ll.h"  // RTC-watchdoggen direkte (rtc_wdt_* er ikke med i S3-bibliotekerne)
 #include "soc/usb_serial_jtag_reg.h"
 #include "sdmmc_cmd.h"
+#include "i18n.h"
+#include "ui/lang.h"
 #include "ui/lv/lv_port.h"
 #include "ui/status_display.h"
 
@@ -26,6 +28,15 @@ namespace usbdisk {
 namespace {
 constexpr uint32_t kMagic = 0x55534244;  // "USBD"
 RTC_NOINIT_ATTR uint32_t g_flag;         // overlever esp_restart(), ikke strømsvigt
+RTC_NOINIT_ATTR char g_lang[32];         // brugerfladens sprog (indstillingen "language")
+
+// Oversæt til det valgte sprog (to skiftende buffere, så to tekster kan bruges ad gangen).
+const char* T(const char* s) {
+  static char buf[2][240];
+  static int k = 0;
+  k ^= 1;
+  return i18n::tr(s, buf[k], sizeof(buf[k]));
+}
 
 USBMSC g_msc;
 sdmmc_card_t g_card;
@@ -89,7 +100,8 @@ lv_obj_t* label(lv_obj_t* parent, const lv_font_t* font, uint32_t rgb, const cha
 }
 }  // namespace
 
-void rebootIntoStorage() {
+void rebootIntoStorage(const char* language) {
+  snprintf(g_lang, sizeof(g_lang), "%s", language ? language : "");
   g_flag = kMagic;
   delay(200);  // lad loggen nå ud
   esp_restart();
@@ -132,7 +144,10 @@ void run(spi_host_device_t host, int sd_cs, int max_khz, StatusDisplay* disp, in
     USB.begin();  // skifter USB fra Serial-JTAG til TinyUSB (den serielle port forsvinder)
   }
 
-  // Skærmen (LVGL): hvad der sker, og hvordan man kommer ud.
+  // Skærmen (LVGL): hvad der sker, og hvordan man kommer ud – i det valgte sprog (indbyggede).
+  g_lang[sizeof(g_lang) - 1] = 0;
+  lang::begin(false);
+  lang::apply(g_lang);
   lv_obj_t* st = nullptr;
   if (disp && lvport::begin(disp)) {
     lv_obj_t* scr = lv_obj_create(nullptr);
@@ -141,17 +156,17 @@ void run(spi_host_device_t host, int sd_cs, int max_khz, StatusDisplay* disp, in
     lv_obj_set_style_pad_row(scr, 8, 0);
     lv_obj_set_flex_flow(scr, LV_FLEX_FLOW_COLUMN);
     lv_obj_clear_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
-    label(scr, &dm_font_20, 0xFFE000, "SD-kort som USB-drev");
-    char t[160];
+    label(scr, &dm_font_20, 0xFFE000, T("SD-kort som USB-drev"));
+    char t[240];
     if (g_ok)
-      snprintf(t, sizeof(t), "Kortet (%llu MB) vises som et drev på PC'en. Radio og net er slukket imens.",
-               (unsigned long long)mb);
+      snprintf(t, sizeof(t), T("Kortet (%lu MB) vises som et drev på PC'en. Radio og net er slukket imens."),
+               (unsigned long)mb);
     else
-      snprintf(t, sizeof(t), "SD-kortet svarer ikke. Klik på trackballen for at genstarte.");
+      snprintf(t, sizeof(t), "%s", T("SD-kortet svarer ikke. Klik på trackballen for at genstarte."));
     label(scr, &dm_font_14, 0xFFFFFF, t);
     label(scr, &dm_font_14, 0x40FF40,
-          "Afslut: skub drevet ud på PC'en, så genstarter T-Deck'en selv. Eller klik på trackballen "
-          "(skub ud først, ellers kan filer gå tabt).");
+          T("Afslut: skub drevet ud på PC'en, så genstarter T-Deck'en selv. Eller klik på trackballen "
+            "(skub ud først, ellers kan filer gå tabt)."));
     st = label(scr, &dm_font_12, 0xA0A0A0, "");
     lv_scr_load(scr);
   }
@@ -164,8 +179,10 @@ void run(spi_host_device_t host, int sd_cs, int max_khz, StatusDisplay* disp, in
     if (st && now - last > 1000) {
       last = now;
       char t[96];
-      snprintf(t, sizeof(t), "Læst %lu KB, skrevet %lu KB%s", (unsigned long)(g_reads / 2),
-               (unsigned long)(g_writes / 2), g_errors ? ", FEJL ved læsning/skrivning" : "");
+      char err[64] = "";
+      if (g_errors) snprintf(err, sizeof(err), "%s", T(", FEJL ved læsning/skrivning"));
+      snprintf(t, sizeof(t), T("Læst %lu KB, skrevet %lu KB%s"), (unsigned long)(g_reads / 2),
+               (unsigned long)(g_writes / 2), err);
       lv_label_set_text(st, t);
     }
     // Klik: kræv 100 ms nede (mod prel), og genstart først, når det slippes.
