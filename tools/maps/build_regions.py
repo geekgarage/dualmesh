@@ -7,6 +7,7 @@
 #     --cache C:\Claude\tools\maps\src_norden [--max-mb 1850]
 # Hver pakke hedder <prefix>-NN.pmtiles; summary.txt får én linje pr. pakke (fil, byte, bbox).
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -63,7 +64,19 @@ def main():
         if line.startswith("--bbox="):
             queue.append([float(v) for v in line.split()[0][7:].split(",")])
 
-    # 2. Hver del til zoom 0-15; for stor = del i to og prøv igen.
+    # 2. Hver del til zoom 0-15; for stor = del i to og prøv igen. Hver færdig pakke skrives straks
+    # i done.txt (én JSON-linje), så den kan bruges (fx uploades), mens resten tegnes; ved en
+    # genstart springes delene i done.txt over.
+    done_path = os.path.join(a.out, "done.txt")
+    finished = {}
+    if os.path.exists(done_path):
+        with open(done_path, encoding="utf-8") as f:
+            for line in f:
+                try:
+                    j = json.loads(line)
+                    finished[j["bbox"]] = j
+                except (ValueError, KeyError):
+                    pass
     n = 0
     done = []
     while queue:
@@ -71,6 +84,11 @@ def main():
         n += 1
         name = f"{a.prefix}-{n:02d}"
         path = os.path.join(a.out, name + ".pmtiles")
+        key = ",".join(f"{v:.4f}" for v in b)
+        if key in finished and os.path.exists(os.path.join(a.out, finished[key]["file"])):
+            log(a.out, f"{name}: findes allerede ({finished[key]['file']})")
+            done.append((finished[key]["file"], finished[key]["size"], b))
+            continue
         size = make(b, "0-15", name, path, a.cache, a.out)
         if size > a.max_mb * 1e6:
             os.remove(path)
@@ -86,6 +104,9 @@ def main():
             continue
         if size:
             done.append((name + ".pmtiles", size, b))
+            with open(done_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps({"file": name + ".pmtiles", "size": size, "bbox": key, "zoom": "0-15",
+                                    "name": name}, ensure_ascii=False) + "\n")
     with open(os.path.join(a.out, "summary.txt"), "a", encoding="utf-8") as f:  # flere kørsler i samme mappe
         for fn, size, b in done:
             f.write(f"{fn} {size} {b[0]:.4f},{b[1]:.4f},{b[2]:.4f},{b[3]:.4f}\n")
