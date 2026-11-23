@@ -941,6 +941,10 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   koerer fra <partition>` ved opstart.
 - **Kortpakker:** release `kort-1` (`--latest=false`, ellers finder OTA ikke firmwaren):
   Danmark.pmtiles 1,58 GB (Accept-Ranges virker). Udgiv aldrig pakker med brugerens hjemområde.
+  Fra 23. nov 2026 release `kort-2` (lægges op automatisk fra en byggeserver): **fil- og katalognavne
+  er engelske** (Denmark, Iceland, Faroe-Islands, Greenland-…, Svalbard-NN, Nordics-NN; krav: engelsk
+  som standard). T-Deck'en viser filnavnet: PMTiles-metadata er gzip-komprimeret, så `"name"`
+  findes ikke af `PmTiles::open`. kort-1 (dansk filnavn) står ikke længere i kataloget.
 - **Afprøvet 23. nov 2026:** OTA (0.1.0 skrevet i app1, SHA-256 OK, genstart), flash-siden i
   browseren (v0.1.1) og OTA igen til v0.1.1 (a07ffda); monitor `G` henter katalog + version.txt.
   **Lærdom:** IDF 4.4's certifikatbundt fejler på Let's Encrypts krydssignerede kæde ("PK verify
