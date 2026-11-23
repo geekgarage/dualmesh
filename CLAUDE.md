@@ -944,7 +944,9 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   failed") → egne rødder (`src/net/gh_roots.h`, `tools/gen_gh_roots.py`); rødderne parset i intern
   RAM tømte den (laveste 1 KB, "ctr_drbg_seed -1", nedbrud i radio-tasken) → alle mbedtls-blokke og
   HTTP-buffere (> 4 KB, `SPIRAM_MALLOC_ALWAYSINTERNAL` = 4096) i PSRAM, start kræver 24 KB fri.
-- **Ikke set på skærmen endnu:** Hent layouts/sprog/kortpakker (kortpakken kun på rigtigt WiFi).
+- **Panelerne afprøvet samme dag:** Hent layouts (da.kbd installeret og aktiv), Hent sprog (katalog),
+  Hent kortpakker (Danmark startet og afbrudt, `.part` bevares). **Ikke afprøvet:** en hel
+  kortpakke-hentning og genoptagelse efter afbrydelse (kræver rigtigt WiFi, ikke mobildata).
 - **Senere (ønske):** DualMesh i T-Deck Launcherens firmwarekatalog (testliste b18).
 
 ## Faseplan
