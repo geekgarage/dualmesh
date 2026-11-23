@@ -2923,7 +2923,8 @@ void loop() {
                      "a = send MeshCore-advert, N = skift nodenavn, = = saet indstilling (noegle=vaerdi), k = vores Meshtastic-kanaler, "
                      "M = beskedlager-selvtest, c = skriv til #Public, T = testbesked til/fra i den sidst valgte samtale (vaelges med tandhjulet i en DM/privat kanal), "
                      "L = skriv log til SD nu, D = send SD-logs (tools/fetch_logs.py), R =nulstil DualMesh-data, "
-                     "F = formater SD-kort, U = SD-kort som USB-drev (genstart), I = rapport-hoved, d = send de 3 nyeste SD-logs (fejlrapport-siden)");
+                     "F = formater SD-kort, U = SD-kort som USB-drev (genstart), I = rapport-hoved, d = send de 3 nyeste SD-logs (fejlrapport-siden), "
+                     "G = test hentning fra GitHub (katalog + version.txt), J = gemte spor, W/w = testwaypoint paa DMtest");
   }
   static uint32_t tx_logged = 0;
   if (g_tx_done_count != tx_logged) {

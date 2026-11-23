@@ -4,7 +4,7 @@
 // tools/git_rev.py ved bygning (kort commit-hash, "+" = ændringer, der ikke er committet).
 #pragma once
 
-#define DM_FW_VERSION "0.1.0"
+#define DM_FW_VERSION "0.1.1"
 #ifndef DM_GIT_REV
 #define DM_GIT_REV "ukendt"
 #endif

@@ -138,6 +138,7 @@ er skrevet på T-Deck'en.
 | `=` + `nøgle=værdi` | Sæt en indstilling som i menuen. Radioindstillinger kræver genstart bagefter |
 | `T` | Testbesked til/fra i den sidst valgte samtale (kun DM eller privat kanal) |
 | `J` | List de gemte spor |
+| `G` | Test hentning fra GitHub (tastaturkatalog og seneste `version.txt`) |
 | `W` / `w` | Send / slet et testwaypoint (kun på kanalen DMtest) |
 | `I` | Rapport-hoved: version, opstartsårsag og seneste nedbrud |
 | `d` / `D` | Send de 3 nyeste / alle SD-logs over USB (`tools/fetch_logs.py`) |

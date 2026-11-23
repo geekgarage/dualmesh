@@ -144,6 +144,7 @@ has been entered on the T-Deck. The log lines are in Danish.
 | `=` + `key=value` | Set a setting as in the menu. Radio settings need a restart afterwards |
 | `T` | Test message on/off in the last chosen conversation (DM or private channel only) |
 | `J` | List the saved tracks |
+| `G` | Test downloading from GitHub (keyboard catalogue and the latest `version.txt`) |
 | `W` / `w` | Send / delete a test waypoint (only on the channel DMtest) |
 | `I` | Report header: version, boot reason and latest crash |
 | `d` / `D` | Send the 3 newest / all SD logs over USB (`tools/fetch_logs.py`) |
