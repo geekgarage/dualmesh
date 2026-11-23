@@ -7,3 +7,4 @@ Danmark.pmtiles 1654414029 0-15 https://github.com/geekgarage/dualmesh/releases/
 Groenland-oversigt.pmtiles 449623485 0-12 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Groenland-oversigt.pmtiles Grønland oversigt
 Groenland-Syd-01.pmtiles 133487459 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Groenland-Syd-01.pmtiles Grønland Syd 01 (59.7-62.5N 50.0W-42.0W)
 Groenland-Nuuk-01.pmtiles 173153818 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Groenland-Nuuk-01.pmtiles Grønland Nuuk 01 (62.5-67.2N 54.1W-49.0W)
+Island.pmtiles 671529955 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Island.pmtiles Island
