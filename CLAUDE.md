@@ -928,7 +928,8 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   **v0.1.0 udgivet 23. nov 2026** (rev 273b5df; kan ikke selv hente – flash v0.1.1 over USB),
   **v0.1.1** samme dag (a07ffda, hentning rettet), **v0.1.3** (3d8aaae: bootloop med Bluetooth og et
   nodenavn over 17 tegn rettet, BLE-navnet højst 26 byte; `dualmesh-licenses.zip` følger med).
-  Opdatering til v0.1.3 på T-Deck'en afprøvet af brugeren 23. nov 2026: virker.
+  Opdatering til v0.1.3 på T-Deck'en afprøvet af brugeren 23. nov 2026: virker. **v0.1.4**
+  (866d492): kortpakkernes navne fra filnavnet (set korrekt på T-Deck'en).
 - **Flash-siden** `docs/flash/` (https://geekgarage.github.io/dualmesh/flash/): ESP Web Tools 10
   fra unpkg (Apache-2.0), engelsk/dansk; ikke afprøvet med en T-Deck endnu.
 - **`net/dl.*`:** én HTTPS-hentning ad gangen i egen task (følger viderestillinger selv,
