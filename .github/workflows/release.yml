@@ -1,8 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Udgivelse: et tag "v<version>" (samme som DM_FW_VERSION i src/version.h) bygger firmwaren,
-# laver en GitHub-release med filerne fra tools/release.py og opdaterer GitHub Pages (fejlrapport-
-# siden og flash-siden med den nye firmware). T-Deck'ens "Opdatér firmware" læser
-# releases/latest/download/version.txt.
+# laver en GitHub-release med filerne fra tools/release.py og starter pages.yml, der lægger den nye
+# firmware på flash-siden. T-Deck'ens "Opdatér firmware" læser releases/latest/download/version.txt.
 #   git tag v0.1.1 && git push origin v0.1.1
 name: Release
 
@@ -12,8 +11,7 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
+  actions: write
 
 concurrency:
   group: release-${{ github.ref }}
@@ -47,25 +45,9 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" dist/*.bin dist/version.txt dist/manifest.json \
             --title "DualMesh ${GITHUB_REF_NAME}" --notes-file dist/notes.md --latest
-      - name: Byg Pages-siden (docs + firmware til flash-siden)
-        run: |
-          mkdir -p _site
-          cp -r docs/. _site/
-          mkdir -p _site/flash/firmware
-          cp dist/*.bin dist/manifest.json dist/version.txt _site/flash/firmware/
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-  pages:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    steps:
-      - id: deploy
-        uses: actions/deploy-pages@v4
+      # Pages må kun udgives fra main (miljøets beskyttelse), så Pages-workflowet startes på main;
+      # det henter firmwaren fra den release, der lige er lavet.
+      - name: Opdatér flash-siden på GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
