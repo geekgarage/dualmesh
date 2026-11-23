@@ -2,3 +2,4 @@
 Svalbard-01.pmtiles 230494798 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Svalbard-01.pmtiles Svalbard 01 (76.4-80.8N 10.3E-33.6E)
 Nordics-01.pmtiles 1549197781 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-01.pmtiles Nordics 01 (54.9-57.5N 4.5E-16.7E)
 Nordics-02.pmtiles 1370203200 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-02.pmtiles Nordics 02 (54.9N-58.2N 16.7E-26.3E)
+Nordics-03.pmtiles 1260289175 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-03.pmtiles Nordics 03 (54.9N-58.2N 26.3E-31.7E)
