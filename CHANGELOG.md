@@ -12,6 +12,10 @@ top. A release is only built when its version has a section here (`tools/release
 - Partially downloaded map packs can be deleted: click a pack marked "% downloaded" in
   *Get map packs* and choose *Resume download* or *Delete from SD card*. *Map packs* on the
   map also lists partial files, so you can delete those that are no longer in the catalog.
+- Update notice: when WiFi connects (also right after start-up), DualMesh checks GitHub for a
+  newer firmware. If there is one, a pop-up offers *Update now* (opens *Update firmware*) or
+  *Later*. If you already have the newest, nothing is shown. Checked once per start and every
+  24 hours.
 
 ### Changed
 - The map catalog is read from `maps/catalog.txt`. Firmware before 0.1.5 keeps using the old

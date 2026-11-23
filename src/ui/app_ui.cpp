@@ -5,6 +5,7 @@
 #include "geo_text.h"
 #include "net/channel_scan.h"
 #include "ui/contact_colors.h"
+#include "version.h"
 #include "ui/lv/lv_port.h"
 #include "lvgl.h"
 #include "util/wall_clock.h"
@@ -312,6 +313,11 @@ void AppUi::handleKey(char c) {
     note_ms_ = millis();
     return;
   }
+  if (upd_notice_) {  // popup om ny firmware: Enter vælger, Backspace/Esc = Senere
+    if (c == '\r' || c == '\n') updNoticeChoose(upd_sel_);
+    else if (c == 0x08 || c == 0x7F || c == 0x1B) updNoticeChoose(1);
+    return;
+  }
   if (menu_open_) {  // tandhjulsmenu: Enter udfører, Backspace/Esc lukker
     if (c == '\r' || c == '\n') menuRun();
     else if (c == 0x08 || c == 0x7F || c == 0x1B) menuClose();
@@ -585,6 +591,10 @@ void AppUi::handleTap(int x, int y) {
   tab_focus_ = false;  // touch vælger direkte; markøren i fanelinjen er til trackballen
   if (lv_panel_ && y >= lvPanelTop()) {
     const int r = lvPanelRowAt(y);
+    if (upd_notice_ && !sos_confirm_) {  // popup: række 0 = Opdatér nu, 1 = Senere
+      if (r == 0 || r == 1) updNoticeChoose(r);
+      return;
+    }
     if (r >= 0 && panelOn() && !sos_confirm_) {  // SOS bekræftes kun med taster
       panel_->tapRow(r);
       if (panel_->wantsClose()) openPanel(nullptr);
@@ -900,6 +910,18 @@ void AppUi::handleTrackball(const TrackballEvent& e) {
   }
   acc_x_ += dx;
   acc_y_ += dy;
+  if (upd_notice_ && !sos_confirm_) {  // popup om ny firmware: op/ned vælger, klik udfører
+    while (acc_y_ >= pps || acc_y_ <= -pps) {
+      const int step = acc_y_ > 0 ? 1 : -1;
+      acc_y_ -= step * pps;
+      upd_sel_ = step > 0 ? 1 : 0;
+      lockAxis(2);
+    }
+    acc_x_ = 0;
+    if (e.click) updNoticeChoose(upd_sel_);
+    dirty_ = true;
+    return;
+  }
   if (menu_open_) {  // tandhjulsmenu: op/ned vælger, klik udfører, sidelæns lukker
     while (acc_y_ >= pps || acc_y_ <= -pps) {
       const int step = acc_y_ > 0 ? 1 : -1;
@@ -1109,8 +1131,9 @@ void AppUi::draw(bool force) {
   last_draw_ms_ = millis();
   dirty_ = false;
   // Underskærm, Status eller SOS-bekræftelse: datamodellen tegnes af lvDrawPanel.
-  lv_panel_ = sos_confirm_ || scr_ == ScrStatus || panelOn();
+  lv_panel_ = sos_confirm_ || upd_notice_ || scr_ == ScrStatus || panelOn();
   if (sos_confirm_) sosConfirmView(pview_);
+  else if (upd_notice_) updNoticeView(pview_);
   else if (panelOn()) panel_->view(pview_, kPanelRows);  // også et panel over kortet
   else if (scr_ == ScrStatus) status_panel_.view(pview_, kPanelRows);
   lvDrawChat(force);
@@ -1152,6 +1175,34 @@ void AppUi::sosHold(bool down) {
 }
 
 // SOS-bekræftelsen i samme model som underskærmene (rød bjælke, forklaring, 112-advarsel).
+void AppUi::showUpdateNotice(const char* ver, UpdateOpenFn open) {
+  if (!ver || !ver[0] || !std::strcmp(ver, upd_ver_)) return;  // samme version: kun én gang
+  snprintf(upd_ver_, sizeof(upd_ver_), "%s", ver);
+  upd_open_ = open;
+  upd_sel_ = 0;
+  upd_notice_ = true;
+  dirty_ = true;
+}
+
+void AppUi::updNoticeChoose(int sel) {
+  upd_notice_ = false;
+  dirty_ = true;
+  if (sel == 0 && upd_open_) upd_open_();
+}
+
+void AppUi::updNoticeView(PanelView& v) {
+  v.clear();
+  snprintf(v.title, sizeof(v.title), "Ny firmware");
+  snprintf(v.status, sizeof(v.status), "DualMesh %s er klar på GitHub", upd_ver_);
+  v.status_fg = color::Green;
+  snprintf(v.status2, sizeof(v.status2), "Du har %s", DM_FW_VERSION);
+  PanelRow* a = v.add(PanelRow::Item, color::Green, "Opdatér nu");
+  if (a) a->sel = upd_sel_ == 0;
+  PanelRow* b = v.add(PanelRow::Item, color::White, "Senere");
+  if (b) b->sel = upd_sel_ == 1;
+  snprintf(v.hint, sizeof(v.hint), "Klik: vælg   Backspace: senere");
+}
+
 void AppUi::sosConfirmView(PanelView& v) {
   const bool on = sos_active_ && sos_active_();
   v.clear();

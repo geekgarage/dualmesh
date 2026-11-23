@@ -60,6 +60,12 @@ Kontakt	Contact
 Kort	Map
 Indst.	Settings
 SOS-bekræftelse	SOS confirmation
+Ny firmware	New firmware
+DualMesh %s er klar på GitHub	DualMesh %s is available on GitHub
+Du har %s	You have %s
+Opdatér nu	Update now
+Senere	Later
+Klik: vælg   Backspace: senere	Click: choose   Backspace: later
 SOS sendes nu hvert 5. minut.	SOS is now sent every 5 minutes.
 Enter = stop SOS	Enter = stop SOS
 Anden tast = fortsæt SOS	Other key = continue SOS

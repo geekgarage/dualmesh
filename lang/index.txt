@@ -1,2 +1,2 @@
 # DualMesh sprog til Indst. > System > Hent sprog. Hver linje: <id> <version> <navn>. Filen er <id>.txt i samme mappe (lavet af tools/gen_lang.py).
-en 363fee6e English
+en 4dd9b26c English

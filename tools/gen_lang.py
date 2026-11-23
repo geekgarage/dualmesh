@@ -172,7 +172,9 @@ def read_lang(path):
     head, tr = [], {}
     for line in open(path, encoding="utf-8-sig").read().splitlines():
         if line.startswith("#"):
-            if line.startswith(("#name:", "# DualMesh")) or not tr:
+            # Hovedet er kommentarerne før første oversættelse, men ikke afsnitslinjerne
+            # ("# --- <fil>"): dem skriver write_lang selv (før kom der én mere for hver kørsel).
+            if (line.startswith(("#name:", "# DualMesh")) or not tr) and not line.startswith("# --- "):
                 head.append(line)
             continue
         if "\t" in line:

@@ -2781,6 +2781,55 @@ void setup() {
   }
 }
 
+// Tjek for ny firmware (ønske 24. nov 2026): når WiFi er forbundet (også lige efter opstart),
+// hentes releases/latest/download/version.txt; er versionen nyere end denne, vises en popup.
+// Ellers sker intet. Én gang pr. opstart (+ hver 24. time, hvis T-Deck'en kører længe); en
+// fejlet hentning prøves igen efter 10 min. Venter, hvis en anden hentning kører.
+static void updateCheckTick() {
+  static bool pending = false;
+  static uint32_t next_ms = 0, connected_ms = 0;
+  if (pending) {
+    char m[80];
+    const dm::dl::State s = dm::dl::poll(m, sizeof(m));
+    if (s != dm::dl::State::Done && s != dm::dl::State::Failed) return;
+    pending = false;
+    char ver[24] = "";
+    if (s == dm::dl::State::Done) {
+      const char* t = std::strstr(dm::dl::text(), "version ");
+      if (t) sscanf(t + 8, "%23s", ver);
+    }
+    if (!ver[0]) {
+      dm::DLOG.printf("[OTA] opdateringstjek fejlede (%s) - proever igen om 10 min\n", m);
+      next_ms = millis() + 10 * 60 * 1000UL;
+      return;
+    }
+    next_ms = millis() + 24 * 3600 * 1000UL;
+    if (dm::OtaUi::cmp(ver, DM_FW_VERSION) > 0) {
+      dm::DLOG.printf("[OTA] ny firmware paa GitHub: %s (denne %s)\n", ver, DM_FW_VERSION);
+      g_ui.showUpdateNotice(ver, []() { g_ui.openPanel(&g_ota_ui); });
+    } else {
+      dm::DLOG.printf("[OTA] firmwaren er den nyeste (%s)\n", ver);
+    }
+    return;
+  }
+  if (WiFi.status() != WL_CONNECTED) {
+    connected_ms = 0;
+    return;
+  }
+  const uint32_t now = millis();
+  if (!connected_ms) connected_ms = now;
+  if (now - connected_ms < 15000) return;  // lad forbindelsen (NTP, MQTT) falde på plads først
+  if (next_ms && int32_t(now - next_ms) < 0) return;
+  if (dm::dl::busy()) return;
+  char url[160];
+  snprintf(url, sizeof(url), "%sversion.txt", dm::dl::kLatest);
+  if (dm::dl::startText(url)) {
+    pending = true;
+  } else {
+    next_ms = now + 10 * 60 * 1000UL;
+  }
+}
+
 void loop() {
   static uint32_t last = millis();
   {  // Opencaching: færdig hentning -> indlæs caches igen og vis beskeden
@@ -3011,6 +3060,7 @@ void loop() {
   g_dl_lang.tick();
   g_dl_maps.tick();
   g_ota_ui.tick();
+  updateCheckTick();
   if (g_restart_at && int32_t(millis() - g_restart_at) >= 0) {
     dm::DLOG.println("[MENU] genstarter (radioindstillinger, import eller firmwareopdatering)");
     dm::DLOG.flush(true);

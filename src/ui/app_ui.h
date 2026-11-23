@@ -106,6 +106,10 @@ class AppUi {
   // Åbn en underskærm (fra Indst.); nullptr lukker den.
   void openPanel(Panel* p);
   void openStatus() { openPanel(&status_panel_); }
+  // Ny firmware fundet (tjekket ved WiFi-forbindelse): popup over alt med "Opdatér nu" (kalder
+  // open, fx åbn Opdatér firmware) og "Senere". Vises én gang pr. version pr. opstart.
+  using UpdateOpenFn = void (*)();
+  void showUpdateNotice(const char* ver, UpdateOpenFn open);
   // SOS: kaldes med trackball-klikkets rå tilstand (holdes nede); se sos_*.
   using SosFn = bool (*)();          // er SOS aktiv?
   using SosSetFn = void (*)(bool on);
@@ -299,6 +303,12 @@ class AppUi {
   bool hold_fired_ = false;
   bool sos_confirm_ = false;
   uint32_t sos_confirm_ms_ = 0;
+  bool upd_notice_ = false;      // popup: ny firmware
+  int upd_sel_ = 0;              // 0 = Opdatér nu, 1 = Senere
+  char upd_ver_[24] = "";
+  UpdateOpenFn upd_open_ = nullptr;
+  void updNoticeView(PanelView& v);
+  void updNoticeChoose(int sel);
   void sosHold(bool down);
   void sosConfirmView(PanelView& v);
   // Den åbne samtale (hvor skrevet tekst sendes hen).

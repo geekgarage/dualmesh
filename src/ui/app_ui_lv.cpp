@@ -1352,7 +1352,7 @@ void AppUi::lvDrawPanel() {
   LvChat* c = lvc_;
   const PanelView& v = pview_;
   // Hvilket panel tegnes: SOS-bekræftelsen har intet, Status er AppUi's eget.
-  const Panel* p = sos_confirm_ ? nullptr : scr_ == ScrStatus ? &status_panel_ : panel_;
+  const Panel* p = (sos_confirm_ || upd_notice_) ? nullptr : scr_ == ScrStatus ? &status_panel_ : panel_;
   const char* q = p ? p->qrText() : nullptr;
   const int qs = q ? p->qrSize() : 0;
   const bool big = q && qs > 104;
