@@ -957,7 +957,11 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   ("> c/germany.txt Germany") > `maps/c/<land>.txt` (pakkelinjer); serveren skriver dem i én commit
   pr. pakke (Git Data API). `maps/index.txt` er det gamle katalog til firmware før 0.1.5 og
   udvides ikke (højst 32 pakker, 64 KB). Halvt hentede pakker kan slettes (klik i Hent kortpakker,
-  og `.part`-filer står nederst i Kortpakker på kortet).
+  og `.part`-filer står nederst i Kortpakker på kortet); afprøvet og godkendt 23. nov 2026.
+  **Launcher (bmorcelli):** installation fra SD laver altid en ny app-partition, så længe der er
+  plads (`dualme`, `dualm1` …); først ved fuld flash tilbydes en eksisterende. Det er Launcherens
+  design (issue bmorcelli/Launcher#492 foreslår "Update existing app"); firmwaren må ikke skrive i
+  launcherens partitioner (brugerens krav). Launcherens partition er kun ~12 KB større end appen.
 - **Afprøvet 23. nov 2026:** OTA (0.1.0 skrevet i app1, SHA-256 OK, genstart), flash-siden i
   browseren (v0.1.1) og OTA igen til v0.1.1 (a07ffda); monitor `G` henter katalog + version.txt.
   **Lærdom:** IDF 4.4's certifikatbundt fejler på Let's Encrypts krydssignerede kæde ("PK verify
