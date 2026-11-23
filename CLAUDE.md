@@ -931,7 +931,8 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   Opdatering til v0.1.3 på T-Deck'en afprøvet af brugeren 23. nov 2026: virker. **v0.1.4**
   (866d492): kortpakkernes navne fra filnavnet (set korrekt på T-Deck'en). **v0.1.5** (e60bcda,
   24. nov 2026): kortkatalog i lag, sletning af halvt hentede pakker, popup ved ny firmware;
-  første release med noter fra CHANGELOG.md.
+  første release med noter fra CHANGELOG.md. **v0.1.6** (f57d74b): Genstart nu under Launcher
+  starter Launcheren (deep sleep).
 - **Flash-siden** `docs/flash/` (https://geekgarage.github.io/dualmesh/flash/): ESP Web Tools 10
   fra unpkg (Apache-2.0), engelsk/dansk; ikke afprøvet med en T-Deck endnu.
 - **`net/dl.*`:** én HTTPS-hentning ad gangen i egen task (følger viderestillinger selv,
