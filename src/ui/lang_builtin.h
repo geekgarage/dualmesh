@@ -960,6 +960,7 @@ Fejl ved skrivning	Write error
 Afbrudt (kan genoptages)	Cancelled (can be resumed)
 Forbindelsen røg (kan genoptages)	Connection lost (can be resumed)
 Forbindelsen røg	Connection lost
+Kontrolsummen passer ikke: filen er slettet	Checksum mismatch: the file is deleted
 Kunne ikke omdøbe filen	Could not rename the file
 Hentet (%lu KB)	Downloaded (%lu KB)
 Hentet	Downloaded

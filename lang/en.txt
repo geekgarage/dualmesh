@@ -46,6 +46,8 @@
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
 Omkring DualMesh	About DualMesh
 DualMesh %s	
 MeshCore v1.18.0 + Meshtastic 2.x (komp.)	MeshCore v1.18.0 + Meshtastic 2.x (compat.)
@@ -1146,6 +1148,7 @@ Kan ikke skrive crypto.txt	Cannot write crypto.txt
 Kan ikke skrive %s	Cannot write %s
 # --- src/storage/nvs_tool.cpp
 anden fw	other fw
+launcher	
 # --- src/storage/usb_disk.cpp
 T-Deck SD-kort	T-Deck SD card
 DualMesh SD-kort	DualMesh SD card
@@ -1246,6 +1249,7 @@ Fejl ved skrivning	Write error
 Afbrudt (kan genoptages)	Cancelled (can be resumed)
 Forbindelsen røg (kan genoptages)	Connection lost (can be resumed)
 Forbindelsen røg	Connection lost
+Kontrolsummen passer ikke: filen er slettet	Checksum mismatch: the file is deleted
 Kunne ikke omdøbe filen	Could not rename the file
 Hentet (%lu KB)	Downloaded (%lu KB)
 Hentet	Downloaded

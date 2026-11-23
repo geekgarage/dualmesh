@@ -44,6 +44,7 @@ bool g_resume = false;
 uint64_t g_expect = 0;
 uint32_t g_ota_size = 0;
 uint8_t g_sha[32];
+bool g_file_sha = false;  // startFile med SHA-256 (fx firmware til en launcher)
 char* g_text = nullptr;
 size_t g_text_len = 0;
 volatile uint64_t g_done = 0, g_total = 0;
@@ -167,6 +168,10 @@ void task(void*) {
       } else if (!(f = fopen(part_path, offset ? "ab" : "wb"))) {
         snprintf(msg, sizeof(msg), "Kan ikke skrive på SD-kortet");
         setup = false;
+      } else if (g_file_sha) {
+        mbedtls_sha256_init(&sha);
+        mbedtls_sha256_starts_ret(&sha, 0);
+        sha_on = true;
       }
     } else if (g_sink == Sink::Mem) {
       if (!g_text) g_text = static_cast<char*>(heap_caps_malloc(kTextMax, MALLOC_CAP_SPIRAM));
@@ -217,6 +222,7 @@ void task(void*) {
       bool wrote = true;
       if (g_sink == Sink::File) {
         wrote = fwrite(buf, 1, size_t(r), f) == size_t(r);
+        if (wrote && sha_on) mbedtls_sha256_update_ret(&sha, buf, size_t(r));
         if (wrote && g_done + r - synced >= 1024 * 1024) {  // FatFs opdaterer først størrelsen ved sync
           fflush(f);
           fsync(fileno(f));
@@ -260,6 +266,14 @@ void task(void*) {
   // Afslut og ryd op.
   if (f) {
     fclose(f);
+    if (ok && g_file_sha && sha_on) {  // firmware til en launcher: kun gemt, hvis SHA-256 passer
+      uint8_t got[32];
+      mbedtls_sha256_finish_ret(&sha, got);
+      if (std::memcmp(got, g_sha, 32) != 0) {
+        ok = false;
+        snprintf(msg, sizeof(msg), "Kontrolsummen passer ikke: filen er slettet");
+      }
+    }
     if (!ok && !g_resume) remove(part_path);
   }
   if (g_sink == Sink::File && ok) {
@@ -337,13 +351,25 @@ bool launch(Sink s, const char* url) {
 }
 }  // namespace
 
-bool startText(const char* url) { return launch(Sink::Mem, url); }
+bool startText(const char* url) {
+  if (g_state == State::Busy) return false;
+  g_file_sha = false;
+  return launch(Sink::Mem, url);
+}
 
-bool startFile(const char* url, const char* path, bool resume, uint64_t expect) {
+bool startFile(const char* url, const char* path, bool resume, uint64_t expect, const char* sha256_hex) {
   if (g_state == State::Busy) return false;
   snprintf(g_path, sizeof(g_path), "%s", path);
   g_resume = resume;
   g_expect = expect;
+  g_file_sha = false;
+  if (sha256_hex && !resume) {
+    if (!hexToBytes(sha256_hex, g_sha, 32)) {
+      finish(State::Failed, "Ugyldig version.txt (størrelse/SHA-256)");
+      return false;
+    }
+    g_file_sha = true;
+  }
   return launch(Sink::File, url);
 }
 
@@ -356,6 +382,7 @@ bool startOta(const char* url, uint32_t size, const char* sha256_hex) {
   g_ota_size = size;
   g_expect = size;
   g_resume = false;
+  g_file_sha = false;
   return launch(Sink::Ota, url);
 }
 

@@ -151,7 +151,7 @@ class OtaUi : public Panel {
     if (launcher_) {
       char p[128];
       snprintf(p, sizeof(p), "/sd/dualmesh/firmware/%s", file_);
-      ok = dl::startFile(url, p, false, size_);
+      ok = dl::startFile(url, p, false, size_, sha_);  // SHA-256 tjekkes, før filen gemmes
     } else {
       ok = dl::startOta(url, uint32_t(size_), sha_);
     }

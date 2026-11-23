@@ -22,7 +22,8 @@ constexpr const char* kLatest = "https://github.com/geekgarage/dualmesh/releases
 bool startText(const char* url);
 // Fil til SD-kortet (path = fuld sti under /sd). resume = genoptag fra <path>.part.
 // expect = forventet størrelse (0 = ukendt); for lidt plads på kortet afvises.
-bool startFile(const char* url, const char* path, bool resume, uint64_t expect = 0);
+// sha256_hex (kun uden resume): filen gemmes kun, hvis SHA-256 passer (fx firmware til en launcher).
+bool startFile(const char* url, const char* path, bool resume, uint64_t expect = 0, const char* sha256_hex = nullptr);
 // Firmwareopdatering: billedet skrives i den næste app-partition; sha256_hex skal passe.
 bool startOta(const char* url, uint32_t size, const char* sha256_hex);
 
