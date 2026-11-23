@@ -57,7 +57,7 @@ class PmTiles {
 
   FILE* f_ = nullptr;
   char path_[96] = "";
-  char name_[48] = "";
+  char name_[64] = "";
   uint32_t file_size_ = 0;
   uint64_t root_off_ = 0, root_len_ = 0, leaf_off_ = 0, data_off_ = 0;
   uint8_t internal_comp_ = 0, tile_comp_ = 0, tile_type_ = 0;

@@ -3,7 +3,10 @@
 // kortpakker (Indst. > Kort). Kataloget hentes, når panelet åbnes (<mappe>/index.txt i repoet);
 // hver linje er én fil:
 //   keyboards/index.txt, lang/index.txt:  <id> <version> <navn ...>
-//   maps/index.txt:                       <fil> <byte> <zoom> <url> <navn ...>
+//   maps/catalog.txt og undermapper:      <fil> <byte> <zoom> <url> <navn ...>
+//                                         > <underkatalog> <navn ...>   (fx "> c/germany.txt Germany")
+// Kortkataloget er i lag (verdensdel > land > pakker); Backspace går et lag op. maps/index.txt er
+// det gamle katalog uden lag til firmware før 0.1.5.
 // Klik = hent (kortpakker: to klik, de er store; en afbrudt hentning genoptages). Klik på en
 // installeret = "Hent igen" eller "Slet" (to klik). Hentningen fortsætter, hvis panelet lukkes.
 // Installerede versioner står i <mappe på SD>/installed.txt ("<id> <version>").
@@ -38,6 +41,7 @@ class DownloadsUi : public Panel {
 
   void onOpen() override {
     sel_ = top_ = 0;
+    if (!dl::busy()) depth_ = 0;  // start i toppen (under en hentning: bliv, hvor den er)
     act_ = -1;
     armed_ = false;
     if (dl::busy()) {  // en hentning kører stadig (vores vises i listen)
@@ -98,7 +102,7 @@ class DownloadsUi : public Panel {
       snprintf(v.hint, sizeof(v.hint), "Klik: afbryd   Backspace: tilbage (hentningen fortsætter)");
       return;
     }
-    if (act_ >= 0 && act_ < n_) {  // valg for en installeret
+    if (act_ >= 0 && act_ < n_ && !items_[act_].group) {  // valg for en installeret
       const Item& it = items_[act_];
       snprintf(v.status, sizeof(v.status), "%.60s", it.name);
       snprintf(v.status2, sizeof(v.status2), "%s", stateText(act_));
@@ -113,6 +117,7 @@ class DownloadsUi : public Panel {
       return;
     }
     if (msg_[0]) snprintf(v.status, sizeof(v.status), "%s", msg_);
+    else if (depth_ > 0) snprintf(v.status, sizeof(v.status), "%s", pname_[depth_ - 1]);
     else snprintf(v.status, sizeof(v.status), "%d i kataloget på GitHub", n_);
     if (kind_ == Kind::Maps) {
       const uint64_t fri = dl::sdFree();
@@ -135,7 +140,7 @@ class DownloadsUi : public Panel {
       }
     }
     if (kind_ == Kind::Maps) snprintf(v.note, sizeof(v.note), "© OpenStreetMap-bidragydere (ODbL)");
-    if (armed_ && sel_ < n_)
+    if (armed_ && sel_ < n_ && !items_[sel_].group)
       snprintf(v.note, sizeof(v.note), "Klik igen: hent %lu MB (brug WiFi, ikke mobildata)",
                (unsigned long)((items_[sel_].bytes + 524288u) >> 20));
     snprintf(v.hint, sizeof(v.hint), "Klik: hent   Backspace: tilbage");
@@ -162,8 +167,15 @@ class DownloadsUi : public Panel {
     if (c == '\r' || c == '\n') {
       click();
     } else if (c == 0x08 || c == 0x7F || c == 0x1B) {
-      if (act_ >= 0) act_ = -1;
-      else requestClose();
+      if (act_ >= 0) {
+        act_ = -1;
+      } else if (depth_ > 0 && !(dl::busy() && owner() == this)) {  // et lag op
+        --depth_;
+        sel_ = top_ = 0;
+        loadIndex();
+      } else {
+        requestClose();
+      }
       armed_ = false;
     }
   }
@@ -199,6 +211,16 @@ class DownloadsUi : public Panel {
       return;
     }
     if (sel_ >= n_) return;
+    if (items_[sel_].group) {  // underkatalog
+      if (depth_ >= kDepth) return;
+      snprintf(path_[depth_], sizeof(path_[0]), "%s", items_[sel_].id);
+      snprintf(pname_[depth_], sizeof(pname_[0]), "%s", items_[sel_].name);
+      ++depth_;
+      sel_ = top_ = 0;
+      armed_ = false;
+      loadIndex();
+      return;
+    }
     if (onSd(sel_) == 2) {  // installeret: valg
       act_ = sel_;
       asel_ = 0;
@@ -218,14 +240,16 @@ class DownloadsUi : public Panel {
  private:
   enum class Phase : uint8_t { Index, List };
   struct Item {
-    char id[32];      // id (layouts/sprog) eller filnavn (kortpakker)
+    char id[64];      // id (layouts/sprog), filnavn (kortpakker) eller underkatalog
+    bool group;       // underkatalog ("> sti navn")
     char ver[16];
     char name[48];
     char zoom[8];
     char url[200];
     uint64_t bytes;
   };
-  static constexpr int kMax = 32;
+  static constexpr int kMax = 200;   // lande i en verdensdel, pakker i et stort land
+  static constexpr int kDepth = 3;  // verdensdel > land
 
   static DownloadsUi*& owner() {
     static DownloadsUi* o = nullptr;
@@ -242,8 +266,9 @@ class DownloadsUi : public Panel {
   void loadIndex() {
     msg_[0] = 0;
     n_ = 0;
-    char url[160];
-    snprintf(url, sizeof(url), "%s%s/index.txt", dl::kRaw, dir());
+    char url[200];
+    if (kind_ != Kind::Maps) snprintf(url, sizeof(url), "%s%s/index.txt", dl::kRaw, dir());
+    else snprintf(url, sizeof(url), "%smaps/%s", dl::kRaw, depth_ > 0 ? path_[depth_ - 1] : "catalog.txt");
     phase_ = Phase::Index;
     if (dl::startText(url)) {
       owner() = this;
@@ -271,9 +296,13 @@ class DownloadsUi : public Panel {
       Item& it = items_[n_];
       it = Item{};
       int pos = 0;
-      if (kind_ == Kind::Maps) {
+      if (kind_ == Kind::Maps && line[0] == '>') {
+        if (sscanf(line, "> %63s %n", it.id, &pos) < 1) continue;
+        if (it.id[0] == '/' || std::strstr(it.id, "..") || std::strstr(it.id, "://")) continue;
+        it.group = true;
+      } else if (kind_ == Kind::Maps) {
         unsigned long long b = 0;
-        if (sscanf(line, "%31s %llu %7s %199s %n", it.id, &b, it.zoom, it.url, &pos) < 4) continue;
+        if (sscanf(line, "%63s %llu %7s %199s %n", it.id, &b, it.zoom, it.url, &pos) < 4) continue;
         it.bytes = b;
       } else {
         if (sscanf(line, "%31s %15s %n", it.id, it.ver, &pos) < 2) continue;
@@ -281,13 +310,14 @@ class DownloadsUi : public Panel {
       }
       snprintf(it.name, sizeof(it.name), "%s", pos ? line + pos : it.id);
       if (!it.name[0]) snprintf(it.name, sizeof(it.name), "%s", it.id);
-      if (std::strchr(it.id, '/') || std::strstr(it.id, "..")) continue;  // kun filnavne
+      if (!it.group && (std::strchr(it.id, '/') || std::strstr(it.id, ".."))) continue;  // kun filnavne
       ++n_;
     }
   }
 
   // 0 = ikke på SD, 1 = delvis hentet (.part), 2 = installeret.
   int onSd(int i) const {
+    if (items_[i].group) return 0;
     char p[128];
     sdPath(i, p, sizeof(p));
     struct stat st;
@@ -306,6 +336,7 @@ class DownloadsUi : public Panel {
 
   const char* stateText(int i) {
     static char s[40];
+    if (items_[i].group) return ">";
     const int sd = onSd(i);
     if (kind_ == Kind::Maps) {
       const unsigned long mb = (unsigned long)((items_[i].bytes + 524288u) >> 20);
@@ -328,6 +359,7 @@ class DownloadsUi : public Panel {
     return s;
   }
   uint16_t stateColor(int i) {
+    if (items_[i].group) return color::White;
     const int sd = onSd(i);
     if (sd == 2) return color::Green;
     if (sd == 1) return color::Yellow;
@@ -364,16 +396,16 @@ class DownloadsUi : public Panel {
   // installed.txt: "<id> <version>" pr. linje.
   void installedVer(const char* id, char* out, size_t n) const {
     out[0] = 0;
-    char p[96], line[96], vid[40], ver[24];
+    char p[96], line[128], vid[72], ver[24];
     snprintf(p, sizeof(p), "/sd/dualmesh/%s/installed.txt", dir());
     FILE* f = fopen(p, "r");
     if (!f) return;
     while (fgets(line, sizeof(line), f))
-      if (sscanf(line, "%39s %23s", vid, ver) == 2 && !std::strcmp(vid, id)) snprintf(out, n, "%s", ver);
+      if (sscanf(line, "%71s %23s", vid, ver) == 2 && !std::strcmp(vid, id)) snprintf(out, n, "%s", ver);
     fclose(f);
   }
   void setInstalled(const char* id, const char* ver) {
-    char p[96], tmp[100], line[96], vid[40];
+    char p[96], tmp[100], line[128], vid[72];
     snprintf(p, sizeof(p), "/sd/dualmesh/%s/installed.txt", dir());
     snprintf(tmp, sizeof(tmp), "%s.tmp", p);
     FILE* in = fopen(p, "r");
@@ -384,7 +416,7 @@ class DownloadsUi : public Panel {
     }
     if (in) {
       while (fgets(line, sizeof(line), in))
-        if (sscanf(line, "%39s", vid) == 1 && std::strcmp(vid, id) != 0) fputs(line, out);
+        if (sscanf(line, "%71s", vid) == 1 && std::strcmp(vid, id) != 0) fputs(line, out);
       fclose(in);
     }
     if (ver && ver[0]) fprintf(out, "%s %s\n", id, ver);
@@ -398,7 +430,9 @@ class DownloadsUi : public Panel {
   BuiltinFn builtin_ = nullptr;
   Phase phase_ = Phase::List;
   Item* items_ = nullptr;
-  int n_ = 0, sel_ = 0, top_ = 0, act_ = -1, asel_ = 0, job_ = -1;
+  int n_ = 0, sel_ = 0, top_ = 0, act_ = -1, asel_ = 0, job_ = -1, depth_ = 0;
+  char path_[kDepth][64] = {};   // stien til hvert underkatalog
+  char pname_[kDepth][48] = {};  // og dets navn (vises øverst)
   bool armed_ = false;
   char msg_[80] = "";
   char job_name_[48] = "";

@@ -1,0 +1,9 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Greenland-overview.pmtiles 449623485 0-12 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-overview.pmtiles Greenland overview
+Greenland-South-01.pmtiles 133487459 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-South-01.pmtiles Greenland South 01 (59.7-62.5N 50.0W-42.0W)
+Greenland-Nuuk-01.pmtiles 173153818 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Nuuk-01.pmtiles Greenland Nuuk 01 (62.5-67.2N 54.1W-49.0W)
+Greenland-Disko-01.pmtiles 151108635 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Disko-01.pmtiles Greenland Disko 01 (67.2-71.5N 55.6W-49.5W)
+Greenland-Upernavik-01.pmtiles 40467027 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Upernavik-01.pmtiles Greenland Upernavik 01 (71.5-74.0N 57.5W-54.0W)
+Greenland-Qaanaaq-01.pmtiles 59351112 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Qaanaaq-01.pmtiles Greenland Qaanaaq 01 (76.0-78.0N 72.5W-65.9W)
+Greenland-Tasiilaq-01.pmtiles 41203711 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Tasiilaq-01.pmtiles Greenland Tasiilaq 01 (65.5-66.5N 39.0W-35.9W)
+Greenland-Scoresbysund-01.pmtiles 14371633 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Scoresbysund-01.pmtiles Greenland Scoresbysund 01 (70-71N 25W-21W)

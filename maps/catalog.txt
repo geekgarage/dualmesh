@@ -1,0 +1,4 @@
+# DualMesh map packs (firmware 0.1.5+): "> <file> <name>" opens a sub-catalog.
+# Map data © OpenStreetMap contributors (ODbL) and Natural Earth (public domain).
+> europe.txt Europe
+> north-america.txt North America

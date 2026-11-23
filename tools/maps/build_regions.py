@@ -85,8 +85,8 @@ def main():
         name = f"{a.prefix}-{n:02d}"
         path = os.path.join(a.out, name + ".pmtiles")
         key = ",".join(f"{v:.4f}" for v in b)
-        if key in finished and os.path.exists(os.path.join(a.out, finished[key]["file"])):
-            log(a.out, f"{name}: findes allerede ({finished[key]['file']})")
+        if key in finished:  # lavet før (filen kan være lagt op og slettet igen)
+            log(a.out, f"{name}: lavet før ({finished[key]['file']})")
             done.append((finished[key]["file"], finished[key]["size"], b))
             continue
         size = make(b, "0-15", name, path, a.cache, a.out)

@@ -1,0 +1,7 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+> c/denmark.txt Denmark
+> c/norway.txt Norway
+> c/sweden.txt Sweden
+> c/finland.txt Finland
+> c/faroe-islands.txt Faroe Islands
+> c/iceland.txt Iceland
