@@ -945,8 +945,9 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   Danmark.pmtiles 1,58 GB (Accept-Ranges virker). Udgiv aldrig pakker med brugerens hjemområde.
   Fra 23. nov 2026 release `kort-2` (lægges op automatisk fra en byggeserver): **fil- og katalognavne
   er engelske** (Denmark, Iceland, Faroe-Islands, Greenland-…, Svalbard-NN, Nordics-NN; krav: engelsk
-  som standard). T-Deck'en viser filnavnet: PMTiles-metadata er gzip-komprimeret, så `"name"`
-  findes ikke af `PmTiles::open`. kort-1 (dansk filnavn) er slettet 23. nov 2026.
+  som standard). T-Deck'en viser filnavnet med '-' som mellemrum (`PmTiles::open`, efter v0.1.3);
+  metadataens `"name"` bruges ikke (JSON-escapes: "Færøerne" blev vist som "FÃ¦r…", og
+  ældre pakker har danske navne). kort-1 (dansk filnavn) er slettet 23. nov 2026.
 - **Afprøvet 23. nov 2026:** OTA (0.1.0 skrevet i app1, SHA-256 OK, genstart), flash-siden i
   browseren (v0.1.1) og OTA igen til v0.1.1 (a07ffda); monitor `G` henter katalog + version.txt.
   **Lærdom:** IDF 4.4's certifikatbundt fejler på Let's Encrypts krydssignerede kæde ("PK verify

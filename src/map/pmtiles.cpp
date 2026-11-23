@@ -163,7 +163,6 @@ bool PmTiles::open(const char* path) {
   }
   root_off_ = rd64(h + 8);
   root_len_ = rd64(h + 16);
-  const uint64_t meta_off = rd64(h + 24), meta_len = rd64(h + 32);
   leaf_off_ = rd64(h + 40);
   data_off_ = rd64(h + 56);
   internal_comp_ = h[97];
@@ -194,25 +193,14 @@ bool PmTiles::open(const char* path) {
     close();
     return false;
   }
-  // Navnet fra metadata (JSON: "name":"..."); ellers filnavnet.
+  // Navnet er filnavnet uden ".pmtiles" og med '-' som mellemrum ("Faroe-Islands" -> "Faroe
+  // Islands"), så det passer med kataloget (engelske filnavne). Metadataens "name" bruges ikke:
+  // den er JSON med \u-escapes (æøå blev vist som "Ã¦") og var dansk i ældre pakker.
   const char* base = strrchr(path, '/');
   snprintf(name_, sizeof(name_), "%s", base ? base + 1 : path);
   if (char* dot = strrchr(name_, '.')) *dot = 0;
-  if (meta_len && meta_len < 8192) {
-    uint8_t* m = readBlock(meta_off, uint32_t(meta_len), n);
-    if (m) {
-      const char* s = strstr(reinterpret_cast<const char*>(m), "\"name\"");
-      // m er ikke nul-afsluttet: læs højst n tegn.
-      if (s && size_t(s - reinterpret_cast<const char*>(m)) < n) {
-        const char* q = strchr(s + 6, '"');
-        const char* e = q ? strchr(q + 1, '"') : nullptr;
-        if (q && e && e - q - 1 < int(sizeof(name_))) {
-          memcpy(name_, q + 1, size_t(e - q - 1));
-          name_[e - q - 1] = 0;
-        }
-      }
-      free(m);
-    }
+  for (char* c = name_; *c; ++c) {
+    if (*c == '-' || *c == '_') *c = ' ';
   }
   return true;
 }

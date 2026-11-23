@@ -549,9 +549,9 @@ def main():
             },
             {
                 "name": a.name,
-                "attribution": "© OpenStreetMap-bidragydere (ODbL, openstreetmap.org/copyright); "
+                "attribution": "© OpenStreetMap contributors (ODbL, openstreetmap.org/copyright); "
                                "Natural Earth (public domain)",
-                "description": f"DualMesh-kortpakke, zoom {z0}-{z1}, tegnet ud fra Protomaps-build {key}",
+                "description": f"DualMesh map pack, zoom {z0}-{z1}, rendered from Protomaps build {key}",
                 "format": "png",
                 "generator": "DualMesh tools/maps/make_map.py",
             },
