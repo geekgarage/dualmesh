@@ -950,7 +950,17 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
 - **Panelerne afprøvet samme dag:** Hent layouts (da.kbd installeret og aktiv), Hent sprog (katalog),
   Hent kortpakker (Danmark startet og afbrudt, `.part` bevares). **Ikke afprøvet:** en hel
   kortpakke-hentning og genoptagelse efter afbrydelse (kræver rigtigt WiFi, ikke mobildata).
-- **Senere (ønske):** DualMesh i T-Deck Launcherens firmwarekatalog (testliste b18).
+- **Senere (ønske):** DualMesh i T-Deck Launcherens firmwarekatalog (testliste b18). Kataloget
+  (LauncherHub, bmorcelli/M5Stack-json-fw) får man ved et issue på bmorcelli/Launcher ("Add new app
+  to the Catalog"): kategori `t-deck`, app-billedet `dualmesh-tdeck_plus.bin` fra releases.
+- **Under bmorcelli's Launcher (afprøvet 23. nov 2026):** Launcher ligger i `app0` (subtype
+  **test**, 1,5 MB), DualMesh i `dualme` (ota_0, størrelsen tilpasset appen: 3648 KB til 3,7 MB),
+  `coredump` findes. DualMesh kører, finder SD-data og kortpakken. Launcher genkendes nu
+  (`nvstool::launcher`: factory/test-partition eller kørsel fra en partition ≠ app0/app1;
+  projektnavnet er "arduino-lib-builder" for alle Arduino-apps og kan ikke bruges). **Lærdom:**
+  efter Launchers USB-drev-tilstand starter appen uden seriel USB (PHY-valget overlever en
+  software-genstart) – reset-knappen hjælper. Udvikling under Launcher: `esptool write_flash
+  0x1a0000 firmware.bin` bevarer layoutet (tjek at appen passer i partitionen).
 
 ## Faseplan
 

@@ -89,24 +89,33 @@ const Launcher& launcher() {
   if (run) snprintf(l.running, sizeof(l.running), "%s", run->label);
   esp_app_desc_t self{};
   if (run) esp_ota_get_partition_description(run, &self);
-  // En anden app i factory-partitionen, eller en app med "launch" i navnet i en af
-  // de andre app-partitioner (nogle launchere bruger OTA-partitioner), regnes for en
-  // launcher. En gammel DualMesh/anden firmware efter en OTA tæller ikke.
+  // En anden app i en factory- eller test-partition (bmorcelli's Launcher ligger i app0 med
+  // subtype test, målt 23. nov 2026), eller en app med "launch" i navnet i en anden app-
+  // partition, regnes for en launcher. Projektnavnet kan ikke bruges til at skelne: alle
+  // Arduino-byggede apps (også DualMesh og Launcher) hedder "arduino-lib-builder". En gammel
+  // DualMesh i den anden OTA-partition (app0/app1) tæller ikke.
   esp_partition_iterator_t it = esp_partition_find(ESP_PARTITION_TYPE_APP, ESP_PARTITION_SUBTYPE_ANY, nullptr);
   for (; it && !l.found; it = esp_partition_next(it)) {
     const esp_partition_t* p = esp_partition_get(it);
     esp_app_desc_t d{};
     if (p == run || esp_ota_get_partition_description(p, &d) != ESP_OK) continue;
-    if (!strcmp(d.project_name, self.project_name)) continue;
     char low[33];
     snprintf(low, sizeof(low), "%s", d.project_name);
     for (char* c = low; *c; ++c) *c = char(tolower(*c));
-    if (p->subtype == ESP_PARTITION_SUBTYPE_APP_FACTORY || strstr(low, "launch")) {
+    const bool special = p->subtype == ESP_PARTITION_SUBTYPE_APP_FACTORY || p->subtype == ESP_PARTITION_SUBTYPE_APP_TEST;
+    if (special || strstr(low, "launch")) {
       l.found = true;
-      snprintf(l.name, sizeof(l.name), "%s", d.project_name);
+      const bool generic = !strcmp(d.project_name, self.project_name) || strstr(low, "arduino");
+      snprintf(l.name, sizeof(l.name), "%s", generic ? p->label : d.project_name);
     }
   }
   if (it) esp_partition_iterator_release(it);
+  // Kører vi fra en partition, der ikke er vores egen tabels app0/app1 (fx "dualme", som
+  // Launcher kalder den), har en launcher lagt os dér.
+  if (!l.found && run && strcmp(run->label, "app0") && strcmp(run->label, "app1")) {
+    l.found = true;
+    snprintf(l.name, sizeof(l.name), "launcher");
+  }
   return l;
 }
 
