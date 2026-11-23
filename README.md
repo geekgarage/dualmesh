@@ -23,7 +23,8 @@ The project is developed in Danish: code comments, log lines and the design docu
 | MeshCore app and Meshtastic app over Bluetooth | Works (one app at a time, pairing with a PIN) |
 | WiFi, NTP, GPS, SOS, SD encryption, profile export/import | Works |
 | MQTT bridge (also TLS) | Tested both ways |
-| Offline maps, tracks, shared locations, geocaching | Works; downloading map packs on the T-Deck is missing |
+| Offline maps, tracks, shared locations, geocaching | Works; map packs can be downloaded over WiFi |
+| Firmware updates (OTA), layouts and languages from GitHub | Releases are built by GitHub Actions |
 
 The full requirements are in `docs/spec.md` and the detailed status in `CLAUDE.md` (Danish).
 
@@ -35,6 +36,24 @@ firmware sends to the display and SD card in small chunks, so the radio never wa
 
 **Never transmit without an antenna attached.** Respect your region's power limit and duty
 cycle (e.g. EU 869.4–869.65 MHz: 10 %, 27 dBm); the firmware enforces 10 % itself.
+
+## Install
+
+No build tools needed:
+
+- **In the browser:** open the [flash page](https://geekgarage.github.io/dualmesh/flash/) in Chrome
+  or Edge, connect the T-Deck Plus by USB and press *Install DualMesh*.
+- **Update:** Settings > System > *Update firmware* installs the newest release over WiFi (the
+  SHA-256 is checked before the new firmware is selected). Under a launcher, the firmware is saved to
+  `/dualmesh/firmware/` on the SD card instead, for the launcher to install.
+- **Launcher or esptool:** download the files from the
+  [latest release](https://github.com/geekgarage/dualmesh/releases/latest); the release notes have
+  the esptool command.
+
+Over WiFi the T-Deck can also fetch keyboard layouts (Settings > Keyboard and trackball > *Get
+layouts*), languages (Settings > System > *Get languages*) and map packs (Settings > Map > *Get map
+packs*; Denmark is 1.58 GB, so use WiFi rather than mobile data). An interrupted map download
+resumes where it stopped.
 
 ## Build and flash
 
@@ -48,6 +67,12 @@ pio device monitor -e tdeck_plus      # serial log, 115200
 
 If the upload fails: hold the trackball down, press reset, release the trackball (boot mode)
 and try again. Opening the COM port restarts the T-Deck.
+
+**Releases:** raise `DM_FW_VERSION` in `src/version.h`, commit, and push a tag with the same
+version (`git tag v0.1.1 && git push origin v0.1.1`). GitHub Actions
+(`.github/workflows/release.yml`) builds the firmware, creates the release with `tools/release.py`
+and puts the new firmware on the flash page. Map packs live in their own releases (`kort-N`,
+created with `--latest=false`) and are listed in `maps/index.txt`.
 
 ## Usage
 
@@ -303,7 +328,9 @@ your browser before anything is shared.
 | `tools/` | Generators (fonts, emojis, keyboard layouts, languages), map packs (`tools/maps/`) and log fetching |
 | `assets/logo/` | The DualMesh logo (SVG, PNG, firmware headers) |
 | `fonts/` | Source fonts with licenses |
-| `docs/rapport/` | The bug report page (GitHub Pages) |
+| `docs/rapport/`, `docs/flash/` | The bug report page and the flash page (GitHub Pages) |
+| `.github/workflows/` | Release build (tag `v*`) and GitHub Pages |
+| `keyboards/`, `lang/`, `maps/` | Catalogues (`index.txt`) the T-Deck downloads from |
 
 Simulator and tests on a PC:
 

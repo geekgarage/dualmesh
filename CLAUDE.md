@@ -914,6 +914,32 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   (derfor siger QR-siden "Åbner GitHub-appen: tryk på Bug report"; skabelonen hedder "Bug report"
   og er på engelsk siden 23. nov 2026, filnavn, felt-id'er og labelen `fejlrapport` er uændrede).
 
+## Udgivelser og hent fra GitHub (23. nov 2026)
+
+- **Builds til brugerne (krav: ingen skal bygge selv):** tag `v<version>` (= `DM_FW_VERSION` i
+  `src/version.h`) → `.github/workflows/release.yml` bygger på GitHub Actions, `tools/release.py`
+  pakker (`dualmesh-tdeck_plus.bin` = app til OTA/launcher, bootloader/partitions/boot_app0,
+  `version.txt` med size+sha256, `manifest.json`, `notes.md`) og laver releasen; derefter startes
+  `pages.yml` på main (Pages-miljøet tillader kun main), der lægger `docs/` + seneste release på
+  GitHub Pages (build_type = workflow). Intet samlet billede fra 0x0: det ville overskrive NVS.
+  **v0.1.0 udgivet 23. nov 2026** (rev 273b5df).
+- **Flash-siden** `docs/flash/` (https://geekgarage.github.io/dualmesh/flash/): ESP Web Tools 10
+  fra unpkg (Apache-2.0), engelsk/dansk; ikke afprøvet med en T-Deck endnu.
+- **`net/dl.*`:** én HTTPS-hentning ad gangen i egen task (følger viderestillinger selv,
+  `buffer_size_tx` 2048 til GitHubs lange signerede adresser, Range-genoptagelse til `<sti>.part`,
+  fsync hver MB, ledig plads via `f_getfree` på `sdfw::pdrv()`), til hukommelse (katalog, 64 KB),
+  SD eller OTA (`OTA_WITH_SEQUENTIAL_WRITES`, SHA-256 skal passe før `esp_ota_set_boot_partition`).
+- **`ui/downloads_ui.h`:** kataloger i repoet (`keyboards/index.txt`, `lang/index.txt` fra
+  `gen_lang.py`, `maps/index.txt`), Indst. > Tastatur "Hent layouts", System "Hent sprog", Kort
+  "Hent kortpakker"; `installed.txt` pr. mappe; hentede layouts lægges i `keyboard_layouts`.
+- **`ui/ota_ui.h`:** System > "Opdatér firmware" (`releases/latest/download/version.txt`); under
+  en launcher (`nvstool::launcher().found`) gemmes .bin i `/dualmesh/firmware/` i stedet. `[OTA]
+  koerer fra <partition>` ved opstart.
+- **Kortpakker:** release `kort-1` (`--latest=false`, ellers finder OTA ikke firmwaren):
+  Danmark.pmtiles 1,58 GB (Accept-Ranges virker). Udgiv aldrig pakker med brugerens hjemområde.
+- **Ikke afprøvet på T-Deck'en endnu:** panelerne, OTA over WiFi, kortpakke-hentning.
+- **Senere (ønske):** DualMesh i T-Deck Launcherens firmwarekatalog (testliste b18).
+
 ## Faseplan
 
 1. Radio på hardware: mål skiftetid, finjustér CAD, løs SPI-deling med skærmen. Kriterium: målt tab

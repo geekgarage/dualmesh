@@ -20,7 +20,8 @@ Meshtastic. Licens: MIT (se `LICENSE`).
 | MeshCore-appen og Meshtastic-appen over Bluetooth | Virker (én app ad gangen, parring med PIN) |
 | WiFi, NTP, GPS, SOS, SD-kryptering, profil-eksport/-import | Virker |
 | MQTT-bro (også TLS) | Afprøvet begge veje |
-| Kort (offline), spor, delte lokationer, geocaching | Virker; hent af kortpakker på T-Deck'en mangler |
+| Kort (offline), spor, delte lokationer, geocaching | Virker; kortpakker kan hentes over WiFi |
+| Firmwareopdatering (OTA), layouts og sprog fra GitHub | Udgivelser bygges af GitHub Actions |
 
 Den fulde kravspecifikation står i `docs/spec.md`, og den detaljerede status i `CLAUDE.md`.
 
@@ -32,6 +33,23 @@ firmwaren sender til skærmen og SD-kortet i små bidder, så radioen aldrig ven
 
 **Send aldrig med radioen uden antenne monteret.** Overhold regionens effektgrænse og duty
 cycle (fx EU 869,4–869,65 MHz: 10 %, 27 dBm); firmwaren håndhæver selv 10 %.
+
+## Installér
+
+Ingen byggeværktøjer nødvendige:
+
+- **I browseren:** åbn [flash-siden](https://geekgarage.github.io/dualmesh/flash/?lang=da) i Chrome
+  eller Edge, forbind T-Deck Plus med USB, og tryk *Installér DualMesh*.
+- **Opdatér:** Indst. > System > *Opdatér firmware* installerer den nyeste udgivelse over WiFi
+  (SHA-256 tjekkes, før den nye firmware vælges). Under en launcher gemmes firmwaren i stedet i
+  `/dualmesh/firmware/` på SD-kortet, så launcheren kan installere den.
+- **Launcher eller esptool:** hent filerne fra den
+  [seneste udgivelse](https://github.com/geekgarage/dualmesh/releases/latest); udgivelsesnoterne har
+  esptool-kommandoen.
+
+Over WiFi kan T-Deck'en også hente tastaturlayouts (Indst. > Tastatur og trackball > *Hent layouts*),
+sprog (Indst. > System > *Hent sprog*) og kortpakker (Indst. > Kort > *Hent kortpakker*; Danmark fylder
+1,58 GB, så brug WiFi frem for mobildata). En afbrudt korthentning fortsætter, hvor den slap.
 
 ## Byg og flash
 
@@ -45,6 +63,12 @@ pio device monitor -e tdeck_plus      # seriel log, 115200
 
 Fejler upload: hold trackballen nede, tryk reset, slip trackballen (boot-tilstand), og prøv
 igen. At åbne COM-porten genstarter T-Deck'en.
+
+**Udgivelser:** hæv `DM_FW_VERSION` i `src/version.h`, commit, og push et tag med samme version
+(`git tag v0.1.1 && git push origin v0.1.1`). GitHub Actions (`.github/workflows/release.yml`) bygger
+firmwaren, laver udgivelsen med `tools/release.py` og lægger den nye firmware på flash-siden.
+Kortpakker ligger i egne udgivelser (`kort-N`, oprettet med `--latest=false`) og står i
+`maps/index.txt`.
 
 ## Brug
 
@@ -297,7 +321,9 @@ i din browser, før noget deles.
 | `tools/` | Generatorer (fonte, emojis, tastaturlayouts, sprog), kortpakker (`tools/maps/`) og loghentning |
 | `assets/logo/` | DualMesh-logoet (SVG, PNG, firmware-headere) |
 | `fonts/` | Kildefonte med licenser |
-| `docs/rapport/` | Fejlrapport-siden (GitHub Pages) |
+| `docs/rapport/`, `docs/flash/` | Fejlrapport-siden og flash-siden (GitHub Pages) |
+| `.github/workflows/` | Udgivelsesbyg (tag `v*`) og GitHub Pages |
+| `keyboards/`, `lang/`, `maps/` | Kataloger (`index.txt`), som T-Deck'en henter fra |
 
 Simulator og test på PC:
 
