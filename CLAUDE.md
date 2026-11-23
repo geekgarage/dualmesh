@@ -941,7 +941,10 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   "Hent kortpakker"; `installed.txt` pr. mappe; hentede layouts lægges i `keyboard_layouts`.
 - **`ui/ota_ui.h`:** System > "Opdatér firmware" (`releases/latest/download/version.txt`); under
   en launcher (`nvstool::launcher().found`) gemmes .bin i `/dualmesh/firmware/` i stedet. `[OTA]
-  koerer fra <partition>` ved opstart.
+  koerer fra <partition>` ved opstart. **Opdateringstjek (ønske 24. nov 2026, `updateCheckTick`
+  i main.cpp):** 15 s efter WiFi forbinder hentes version.txt; nyere version = popup over alt
+  (`AppUi::showUpdateNotice`, "Opdatér nu" åbner Opdatér firmware / "Senere"), ellers intet. Én gang
+  pr. opstart + hver 24. time, fejl = nyt forsøg om 10 min. Set og godkendt 24. nov 2026.
 - **Kortpakker:** release `kort-1` (`--latest=false`, ellers finder OTA ikke firmwaren):
   Danmark.pmtiles 1,58 GB (Accept-Ranges virker). Udgiv aldrig pakker med brugerens hjemområde.
   Fra 23. nov 2026 release `kort-2` (lægges op automatisk fra en byggeserver): **fil- og katalognavne
