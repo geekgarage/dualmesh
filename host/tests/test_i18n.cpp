@@ -75,6 +75,12 @@ int main() {
     expect("Beskeder", "Messages", en);
     expect("Brug MeshCore", "Use MeshCore", en);
     expect("Sendt til Public", "Sent to Public", en);
+    // USB-drev-skærmen: tal sat ind før oversættelsen, også et tomt %s til sidst.
+    expect("Kortet (3781 MB) vises som et drev på PC'en. Radio og net er slukket imens.",
+           "The card (3781 MB) shows up as a drive on the PC. Radio and networks are off meanwhile.", en);
+    expect("Læst 565 KB, skrevet 0 KB", "Read 565 KB, written 0 KB", en);
+    expect(", FEJL ved læsning/skrivning", ", ERROR reading/writing", en);
+    expect("NULSTIL", "RESET", en);
     break;
   }
 

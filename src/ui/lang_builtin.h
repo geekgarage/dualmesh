@@ -913,8 +913,8 @@ SD-kort som USB-drev	SD card as USB drive
 Kortet (%lu MB) vises som et drev på PC'en. Radio og net er slukket imens.	The card (%lu MB) shows up as a drive on the PC. Radio and networks are off meanwhile.
 SD-kortet svarer ikke. Klik på trackballen for at genstarte.	The SD card does not respond. Click the trackball to restart.
 Afslut: skub drevet ud på PC'en, så genstarter T-Deck'en selv. Eller klik på trackballen (skub ud først, ellers kan filer gå tabt).	Finish: eject the drive on the PC, and the T-Deck restarts by itself. Or click the trackball (eject first, or files may be lost).
+Læst %lu KB, skrevet %lu KB	Read %lu KB, written %lu KB
 , FEJL ved læsning/skrivning	, ERROR reading/writing
-Læst %lu KB, skrevet %lu KB%s	Read %lu KB, written %lu KB%s
 %s=	%s=
 NØ	NE
 SØ	SE

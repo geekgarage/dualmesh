@@ -157,13 +157,14 @@ void run(spi_host_device_t host, int sd_cs, int max_khz, StatusDisplay* disp, in
     lv_obj_set_flex_flow(scr, LV_FLEX_FLOW_COLUMN);
     lv_obj_clear_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
     label(scr, &dm_font_20, 0xFFE000, T("SD-kort som USB-drev"));
+    // Tallene sættes ind først og teksten oversættes bagefter (oversættelsen genkender "%lu" som tal).
     char t[240];
     if (g_ok)
-      snprintf(t, sizeof(t), T("Kortet (%lu MB) vises som et drev på PC'en. Radio og net er slukket imens."),
+      snprintf(t, sizeof(t), "Kortet (%lu MB) vises som et drev på PC'en. Radio og net er slukket imens.",
                (unsigned long)mb);
     else
-      snprintf(t, sizeof(t), "%s", T("SD-kortet svarer ikke. Klik på trackballen for at genstarte."));
-    label(scr, &dm_font_14, 0xFFFFFF, t);
+      snprintf(t, sizeof(t), "SD-kortet svarer ikke. Klik på trackballen for at genstarte.");
+    label(scr, &dm_font_14, 0xFFFFFF, T(t));
     label(scr, &dm_font_14, 0x40FF40,
           T("Afslut: skub drevet ud på PC'en, så genstarter T-Deck'en selv. Eller klik på trackballen "
             "(skub ud først, ellers kan filer gå tabt)."));
@@ -179,11 +180,12 @@ void run(spi_host_device_t host, int sd_cs, int max_khz, StatusDisplay* disp, in
     if (st && now - last > 1000) {
       last = now;
       char t[96];
-      char err[64] = "";
-      if (g_errors) snprintf(err, sizeof(err), "%s", T(", FEJL ved læsning/skrivning"));
-      snprintf(t, sizeof(t), T("Læst %lu KB, skrevet %lu KB%s"), (unsigned long)(g_reads / 2),
-               (unsigned long)(g_writes / 2), err);
-      lv_label_set_text(st, t);
+      // To dele hver for sig (oversættelsen kan ikke matche et tomt %s til sidst).
+      snprintf(t, sizeof(t), "Læst %lu KB, skrevet %lu KB", (unsigned long)(g_reads / 2),
+               (unsigned long)(g_writes / 2));
+      char line[160];
+      snprintf(line, sizeof(line), "%s%s", T(t), g_errors ? T(", FEJL ved læsning/skrivning") : "");
+      lv_label_set_text(st, line);
     }
     // Klik: kræv 100 ms nede (mod prel), og genstart først, når det slippes.
     if (digitalRead(click_pin) == LOW) {
