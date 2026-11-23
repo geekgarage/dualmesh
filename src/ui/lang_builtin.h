@@ -305,6 +305,7 @@ Henter %.40s	Downloading %s
 %u %%  %lu KB/s	%u %%  %lu KB/s
 Afbryd hentningen	Cancel the download
 Klik: afbryd   Backspace: tilbage (hentningen fortsætter)	Click: cancel   Backspace: back (keeps downloading)
+Fortsæt hentningen	Resume download
 Hent igen	Download again
 Bekræft: slet	Confirm: delete
 Slet fra SD-kortet	Delete from SD card
@@ -317,8 +318,10 @@ Klik igen: hent %lu MB (brug WiFi, ikke mobildata)	Click again: get %lu MB (use 
 Klik: hent   Backspace: tilbage	Click: download   Backspace: back
 En anden hentning kører allerede	Another download is already running
 %s%s/index.txt	%s%s/index.txt
+%smaps/%s	%smaps/%s
 Kataloget kunne ikke hentes	Could not get the catalogue
-%31s %llu %7s %199s %n	%31s %llu %7s %199s %n
+> %63s %n	> %63s %n
+%63s %llu %7s %199s %n	%63s %llu %7s %199s %n
 %s%s/%s%s	%s%s/%s%s
 %s.part	%s.part
 installeret, %lu MB	installed, %lu MB
@@ -357,6 +360,10 @@ til	on
 MANGLER	MISSING
 %s/%s	%s/%s
 %s/%s.txt	%s/%s.txt
+halvt hentet, %lu MB	partial, %lu MB
+Stop hentningen først	Stop the download first
+Bekræft: slet filen	Confirm: delete file
+Slet den halvt hentede fil	Delete partial file
 zoom %u-%u, %lu MB	zoom %u-%u, %lu MB
 Gå til	Go to
 Bekræft: slet pakken	Confirm: delete the pack

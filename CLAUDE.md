@@ -949,6 +949,15 @@ ingen server: brugeren opretter selv issuet med sin egen GitHub-konto (også af 
   som standard). T-Deck'en viser filnavnet med '-' som mellemrum (`PmTiles::open`, efter v0.1.3);
   metadataens `"name"` bruges ikke (JSON-escapes: "Færøerne" blev vist som "FÃ¦r…", og
   ældre pakker har danske navne). kort-1 (dansk filnavn) er slettet 23. nov 2026.
+  **Hele verden (ønske 23. nov 2026):** `tools/maps/world_jobs.py` laver ét job pr. sammenhængende
+  landområde ud fra Natural Earths landegrænser (295 jobs, nærmeste til København først; Antarktis
+  kun zoom 0-10). Byggeserveren laver dem i en kø, lægger hver pakke op (kort-N; ny release ved 950
+  filer) og **sletter den lokalt bagefter**, kildedata slettes efter hvert land. Kataloget er i lag
+  (firmware 0.1.5+, `DownloadsUi`): `maps/catalog.txt` ("> europe.txt Europe") > `maps/<verdensdel>.txt`
+  ("> c/germany.txt Germany") > `maps/c/<land>.txt` (pakkelinjer); serveren skriver dem i én commit
+  pr. pakke (Git Data API). `maps/index.txt` er det gamle katalog til firmware før 0.1.5 og
+  udvides ikke (højst 32 pakker, 64 KB). Halvt hentede pakker kan slettes (klik i Hent kortpakker,
+  og `.part`-filer står nederst i Kortpakker på kortet).
 - **Afprøvet 23. nov 2026:** OTA (0.1.0 skrevet i app1, SHA-256 OK, genstart), flash-siden i
   browseren (v0.1.1) og OTA igen til v0.1.1 (a07ffda); monitor `G` henter katalog + version.txt.
   **Lærdom:** IDF 4.4's certifikatbundt fejler på Let's Encrypts krydssignerede kæde ("PK verify
@@ -1078,6 +1087,11 @@ klik-forsinkelse 150 ms, vend akser; gemmes og virker med det samme. Se spec.
   med dansk besked), og **push ved større ændringer** som nye funktioner, uden at spørge. Commit
   aldrig ikke-fungerende kode uden at sige det i beskeden. `logs/` committes ikke.
 - Lav små, testbare skridt: byg → flash → læs log → justér.
+- **Release-noter (krav 23. nov 2026):** hver firmware-release skal sige, hvad der er tilføjet,
+  ændret og løst. Skriv det løbende i `CHANGELOG.md` (engelsk, `## [x.y.z] - unreleased` med
+  `### Added/Changed/Fixed`) for hver ændring, brugeren kan mærke; ved udgivelse sættes datoen.
+  `tools/release.py check` afviser et tag uden afsnit (eller med "unreleased"), og `package`
+  sætter afsnittet ind i release-noterne. Gælder ikke kortpakke-releases (kort-N).
 - **Offentlige sider er på engelsk med dansk som valg (krav 23. nov 2026):** `README.md` (engelsk)
   og `README.da.md` (dansk) holdes ens; fejlrapport-siden (`docs/rapport/index.html`) har begge
   sprog i `TEXT` (standard engelsk, `?lang=da` eller sprogknappen). Nye tekster skal med i begge.

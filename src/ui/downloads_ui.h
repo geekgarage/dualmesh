@@ -8,7 +8,8 @@
 // Kortkataloget er i lag (verdensdel > land > pakker); Backspace går et lag op. maps/index.txt er
 // det gamle katalog uden lag til firmware før 0.1.5.
 // Klik = hent (kortpakker: to klik, de er store; en afbrudt hentning genoptages). Klik på en
-// installeret = "Hent igen" eller "Slet" (to klik). Hentningen fortsætter, hvis panelet lukkes.
+// installeret = "Hent igen" eller "Slet" (to klik); på en halvt hentet = "Fortsæt hentningen" eller
+// "Slet" (sletter .part-filen). Hentningen fortsætter, hvis panelet lukkes.
 // Installerede versioner står i <mappe på SD>/installed.txt ("<id> <version>").
 #pragma once
 #include <Arduino.h>
@@ -106,7 +107,7 @@ class DownloadsUi : public Panel {
       const Item& it = items_[act_];
       snprintf(v.status, sizeof(v.status), "%.60s", it.name);
       snprintf(v.status2, sizeof(v.status2), "%s", stateText(act_));
-      PanelRow* a = v.add(PanelRow::Item, color::White, "Hent igen");
+      PanelRow* a = v.add(PanelRow::Item, color::White, onSd(act_) == 1 ? "Fortsæt hentningen" : "Hent igen");
       if (a) a->sel = asel_ == 0;
       PanelRow* b = v.add(PanelRow::Item, color::Red, armed_ ? "Bekræft: slet" : "Slet fra SD-kortet");
       if (b) {
@@ -221,7 +222,7 @@ class DownloadsUi : public Panel {
       loadIndex();
       return;
     }
-    if (onSd(sel_) == 2) {  // installeret: valg
+    if (onSd(sel_) != 0) {  // installeret eller halvt hentet: valg (fortsæt/hent igen eller slet)
       act_ = sel_;
       asel_ = 0;
       armed_ = false;

@@ -92,10 +92,24 @@ def licenses(out):
     print(f"licenser -> {path}")
 
 
+def changelog(ver):
+    """Afsnittet '## [ver] ...' fra CHANGELOG.md (uden overskriften), eller None."""
+    text = open(os.path.join(ROOT, "CHANGELOG.md"), encoding="utf-8").read()
+    m = re.search(rf"^## \[{re.escape(ver)}\][^\n]*\n(.*?)(?=^## |\Z)", text, re.M | re.S)
+    if not m or "### " not in m.group(1):
+        return None
+    return m.group(1).strip()
+
+
 def check(tag):
     ver = fw_version()
     if tag.lstrip("v") != ver:
         sys.exit(f"Tagget {tag} passer ikke med DM_FW_VERSION {ver} i src/version.h")
+    if not changelog(ver):
+        sys.exit(f"CHANGELOG.md mangler '## [{ver}]' med Added/Changed/Fixed")
+    text = open(os.path.join(ROOT, "CHANGELOG.md"), encoding="utf-8").read()
+    if re.search(rf"^## \[{re.escape(ver)}\][^\n]*unreleased", text, re.M | re.I):
+        sys.exit(f"CHANGELOG.md: {ver} står stadig som 'unreleased' (sæt datoen)")
     print(f"OK: {tag} = {ver}")
 
 
@@ -127,8 +141,11 @@ def package(out):
     with open(os.path.join(out, "manifest.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump(manifest, f, indent=2)
         f.write("\n")
+    changes = changelog(ver) or "See CHANGELOG.md."
     with open(os.path.join(out, "notes.md"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""DualMesh {ver} ({rev}) for the LilyGo T-Deck Plus – MeshCore and Meshtastic on one radio.
+
+{changes}
 
 **Install**
 - **In the browser (easiest):** open the [flash page]({PAGES}/flash/) in Chrome or Edge, connect the T-Deck by USB and press *Install*.

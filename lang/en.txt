@@ -50,6 +50,8 @@
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
 # --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
+# --- src/ui/about_ui.h
 Omkring DualMesh	About DualMesh
 DualMesh %s	
 MeshCore v1.18.0 + Meshtastic 2.x (komp.)	MeshCore v1.18.0 + Meshtastic 2.x (compat.)
@@ -387,6 +389,7 @@ Henter %.40s	Downloading %s
 %u %%  %lu KB/s	
 Afbryd hentningen	Cancel the download
 Klik: afbryd   Backspace: tilbage (hentningen fortsætter)	Click: cancel   Backspace: back (keeps downloading)
+Fortsæt hentningen	Resume download
 Hent igen	Download again
 Bekræft: slet	Confirm: delete
 Slet fra SD-kortet	Delete from SD card
@@ -402,8 +405,10 @@ keyboards
 lang	
 maps	
 %s%s/index.txt	
+%smaps/%s	
 Kataloget kunne ikke hentes	Could not get the catalogue
-%31s %llu %7s %199s %n	
+> %63s %n	
+%63s %llu %7s %199s %n	
 %s%s/%s%s	
 %s.part	
 installeret, %lu MB	installed, %lu MB
@@ -451,6 +456,10 @@ Dansk
 %s/%s	
 %s/%s.txt	
 # --- src/ui/maps_ui.h
+halvt hentet, %lu MB	partial, %lu MB
+Stop hentningen først	Stop the download first
+Bekræft: slet filen	Confirm: delete file
+Slet den halvt hentede fil	Delete partial file
 zoom %u-%u, %lu MB	zoom %u-%u, %lu MB
 Gå til	Go to
 Bekræft: slet pakken	Confirm: delete the pack
