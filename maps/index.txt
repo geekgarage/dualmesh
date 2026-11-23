@@ -4,3 +4,4 @@
 # stadig finder firmwaren under releases/latest). Lavet med tools/maps/make_map.py.
 # Kortdata © OpenStreetMap-bidragydere (ODbL) og Natural Earth (public domain).
 Danmark.pmtiles 1654414029 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-1/Danmark.pmtiles Danmark
+Groenland-oversigt.pmtiles 449623485 0-12 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Groenland-oversigt.pmtiles Grønland oversigt
