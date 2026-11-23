@@ -11,3 +11,4 @@ Greenland-Upernavik-01.pmtiles 40467027 0-15 https://github.com/geekgarage/dualm
 Iceland.pmtiles 671529955 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Iceland.pmtiles Iceland
 Faroe-Islands.pmtiles 26260433 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Faroe-Islands.pmtiles Faroe Islands
 Denmark.pmtiles 1654414029 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Denmark.pmtiles Denmark
+Greenland-Qaanaaq-01.pmtiles 59351112 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Greenland-Qaanaaq-01.pmtiles Greenland Qaanaaq 01 (76.0-78.0N 72.5W-65.9W)
