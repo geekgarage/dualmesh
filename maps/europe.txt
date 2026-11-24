@@ -8,3 +8,4 @@
 > c/germany.txt Germany
 > c/poland.txt Poland
 > c/netherlands.txt Netherlands
+> c/russia.txt Russia
