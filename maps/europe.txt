@@ -6,3 +6,4 @@
 > c/faroe-islands.txt Faroe Islands
 > c/iceland.txt Iceland
 > c/germany.txt Germany
+> c/poland.txt Poland
