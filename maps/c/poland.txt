@@ -2,3 +2,4 @@
 Poland-01.pmtiles 1025316523 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Poland-01.pmtiles Poland 01 (48.9N-50.3N 14.1E-19.1E)
 Poland-02.pmtiles 872282297 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Poland-02.pmtiles Poland 02 (50.3N-51.6N 14.1E-19.1E)
 Poland-03.pmtiles 1843429967 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Poland-03.pmtiles Poland 03 (48.9N-51.6N 19.1E-24.2E)
+Poland-04.pmtiles 1713578776 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Poland-04.pmtiles Poland 04 (51.6N-54.9N 14.1E-20.0E)
