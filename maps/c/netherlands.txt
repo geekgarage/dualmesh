@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Netherlands-01.pmtiles 1687406131 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Netherlands-01.pmtiles Netherlands 01 (50.7N-53.7N 3.3E-7.3E)
