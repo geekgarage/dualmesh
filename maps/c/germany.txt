@@ -5,3 +5,4 @@ Germany-03.pmtiles 1375511161 0-15 https://github.com/geekgarage/dualmesh/releas
 Germany-04.pmtiles 1185399543 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Germany-04.pmtiles Germany 04 (48.9N-50.6N 10.5E-15.1E)
 Germany-05.pmtiles 1360879010 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Germany-05.pmtiles Germany 05 (50.6N-52.3N 5.8E-9.9E)
 Germany-06.pmtiles 1148156600 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Germany-06.pmtiles Germany 06 (50.6N-52.3N 9.9E-15.1E)
+Germany-07.pmtiles 1121250997 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Germany-07.pmtiles Germany 07 (52.3N-55.1N 5.8E-10.2E)
