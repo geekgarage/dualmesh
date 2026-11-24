@@ -11,3 +11,4 @@
 > c/russia.txt Russia
 > c/czech-republic.txt Czech Republic
 > c/lithuania.txt Lithuania
+> c/france.txt France
