@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Lithuania-01.pmtiles 1477015196 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Lithuania-01.pmtiles Lithuania 01 (53.8N-56.5N 20.8E-26.9E)
