@@ -14,3 +14,4 @@ Nordics-12.pmtiles 1472030987 0-15 https://github.com/geekgarage/dualmesh/releas
 Nordics-13.pmtiles 1326535556 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-13.pmtiles Nordics 13 (65.3N-67.7N 4.5E-20.7E)
 Nordics-14.pmtiles 1363976970 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-14.pmtiles Nordics 14 (65.3N-67.7N 20.7E-31.7E)
 Nordics-15.pmtiles 1357825786 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-15.pmtiles Nordics 15 (67.7N-69.2N 4.5E-31.7E)
+Nordics-16.pmtiles 1362585228 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Nordics-16.pmtiles Nordics 16 (69.2N-71.2N 4.5E-31.7E)
