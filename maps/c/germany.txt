@@ -1,3 +1,4 @@
 # DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
 Germany-01.pmtiles 1345450438 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Germany-01.pmtiles Germany 01 (47.2N-48.9N 5.8E-10.5E)
 Germany-02.pmtiles 1212284431 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Germany-02.pmtiles Germany 02 (47.2N-48.9N 10.5E-15.1E)
+Germany-03.pmtiles 1375511161 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Germany-03.pmtiles Germany 03 (48.9N-50.6N 5.8E-10.5E)
