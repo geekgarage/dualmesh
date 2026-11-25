@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Ukraine-01.pmtiles 1113944181 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Ukraine-01.pmtiles Ukraine 01 (45.2N-48.8N 22.1E-26.1E)

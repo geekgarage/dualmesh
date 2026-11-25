@@ -15,3 +15,4 @@
 > c/belgium.txt Belgium
 > c/belarus.txt Belarus
 > c/united-kingdom.txt United Kingdom
+> c/ukraine.txt Ukraine
