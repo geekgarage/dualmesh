@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Slovakia-01.pmtiles 1491809018 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Slovakia-01.pmtiles Slovakia 01 (47.7N-49.7N 16.8E-22.7E)

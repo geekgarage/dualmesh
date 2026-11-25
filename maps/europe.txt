@@ -17,3 +17,4 @@
 > c/united-kingdom.txt United Kingdom
 > c/ukraine.txt Ukraine
 > c/luxembourg.txt Luxembourg
+> c/slovakia.txt Slovakia
