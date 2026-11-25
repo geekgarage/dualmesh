@@ -1,2 +1,3 @@
 # DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
 > c/afghanistan.txt Afghanistan
+> c/akrotiri-and-dhekelia.txt Akrotiri-and-Dhekelia
