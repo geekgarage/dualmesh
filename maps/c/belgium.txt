@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Belgium-01.pmtiles 1385482476 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Belgium-01.pmtiles Belgium 01 (49.4N-51.6N 2.5E-6.4E)

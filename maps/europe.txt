@@ -12,3 +12,4 @@
 > c/czech-republic.txt Czech Republic
 > c/lithuania.txt Lithuania
 > c/france.txt France
+> c/belgium.txt Belgium
