@@ -18,3 +18,4 @@
 > c/ukraine.txt Ukraine
 > c/luxembourg.txt Luxembourg
 > c/slovakia.txt Slovakia
+> c/austria.txt Austria
