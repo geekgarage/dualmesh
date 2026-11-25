@@ -2,3 +2,4 @@
 Belarus-01.pmtiles 960493917 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Belarus-01.pmtiles Belarus 01 (51.2N-54.0N 23.1E-27.6E)
 Belarus-02.pmtiles 874675644 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Belarus-02.pmtiles Belarus 02 (51.2N-54.0N 27.6E-32.8E)
 Belarus-03.pmtiles 936043118 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Belarus-03.pmtiles Belarus 03 (54.0N-56.2N 23.1E-27.4E)
+Belarus-04.pmtiles 864336985 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Belarus-04.pmtiles Belarus 04 (54.0N-56.2N 27.4E-32.8E)
