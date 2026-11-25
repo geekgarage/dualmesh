@@ -2,3 +2,4 @@
 # Map data © OpenStreetMap contributors (ODbL) and Natural Earth (public domain).
 > europe.txt Europe
 > north-america.txt North America
+> countries.txt Countries
