@@ -5,3 +5,4 @@ Ukraine-03.pmtiles 1013574311 0-15 https://github.com/geekgarage/dualmesh/releas
 Ukraine-04.pmtiles 1043246903 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Ukraine-04.pmtiles Ukraine 04 (45.2N-49.3N 35.4E-40.3E)
 Ukraine-05.pmtiles 1132231459 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Ukraine-05.pmtiles Ukraine 05 (48.8N-50.5N 22.1E-30.4E)
 Ukraine-06.pmtiles 1114696503 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Ukraine-06.pmtiles Ukraine 06 (50.5N-52.4N 22.1E-30.4E)
+Ukraine-07.pmtiles 997473096 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Ukraine-07.pmtiles Ukraine 07 (49.3N-52.4N 30.4E-35.6E)
