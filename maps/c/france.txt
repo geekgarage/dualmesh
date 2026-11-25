@@ -4,3 +4,4 @@ France-02.pmtiles 306442288 0-15 https://github.com/geekgarage/dualmesh/releases
 France-03.pmtiles 1587465071 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/France-03.pmtiles France 03 (43.2N-45.2N 2.4E-9.7E)
 France-04.pmtiles 1767047479 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/France-04.pmtiles France 04 (43.5N-46.9N 4.8W-2.4E)
 France-05.pmtiles 980592554 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/France-05.pmtiles France 05 (45.2N-46.9N 2.4E-6.0E)
+France-06.pmtiles 935020277 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/France-06.pmtiles France 06 (45.2N-46.9N 6.0E-9.7E)
