@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+United-Kingdom-01.pmtiles 1204926044 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/United-Kingdom-01.pmtiles United Kingdom 01 (50.0N-53.3N 8.3W-1.9W)
