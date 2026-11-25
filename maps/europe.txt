@@ -20,3 +20,4 @@
 > c/slovakia.txt Slovakia
 > c/austria.txt Austria
 > c/hungary.txt Hungary
+> c/switzerland.txt Switzerland
