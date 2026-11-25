@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Albania-01.pmtiles 382761796 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Albania-01.pmtiles Albania 01 (39.6N-42.7N 19.0E-21.1E)
