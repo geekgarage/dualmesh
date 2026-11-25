@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Antigua-and-Barbuda-01.pmtiles 5789577 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Antigua-and-Barbuda-01.pmtiles Antigua and Barbuda 01 (16.7N-17.8N 62.6W-61.6W)

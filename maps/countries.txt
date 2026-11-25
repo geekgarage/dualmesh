@@ -6,3 +6,4 @@
 > c/andorra.txt Andorra
 > c/angola.txt Angola
 > c/anguilla.txt Anguilla
+> c/antigua-and-barbuda.txt Antigua-and-Barbuda
