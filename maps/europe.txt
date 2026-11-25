@@ -13,3 +13,4 @@
 > c/lithuania.txt Lithuania
 > c/france.txt France
 > c/belgium.txt Belgium
+> c/belarus.txt Belarus
