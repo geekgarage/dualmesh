@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Anguilla-01.pmtiles 3005760 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Anguilla-01.pmtiles Anguilla 01 (18.0N-18.6N 63.5W-62.8W)
