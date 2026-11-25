@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Algeria-01.pmtiles 939471463 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Algeria-01.pmtiles Algeria 01 (18.9N-33.9N 8.7W-0.0E)
