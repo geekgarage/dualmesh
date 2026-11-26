@@ -1,2 +1,0 @@
-# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
-Russia-Part-3-01.pmtiles 235728336 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Russia-Part-3-01.pmtiles Russia Part 3 01 (54.3N-55.4N 19.5E-22.9E)
