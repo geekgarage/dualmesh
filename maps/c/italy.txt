@@ -1,3 +1,0 @@
-# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
-Italy-01.pmtiles 1744555981 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Italy-01.pmtiles Italy 01 (36.6N-42.5N 6.5E-18.5E)
-Italy-02.pmtiles 1748063565 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Italy-02.pmtiles Italy 02 (42.5N-44.7N 6.5E-18.5E)
