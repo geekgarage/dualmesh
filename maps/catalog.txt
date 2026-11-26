@@ -4,3 +4,4 @@
 > north-america.txt North America
 > countries.txt Countries
 > south-america.txt South America
+> asia.txt Asia

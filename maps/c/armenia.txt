@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Armenia-01.pmtiles 377093887 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Armenia-01.pmtiles Armenia 01 (38.8N-41.3N 43.4E-46.7E)
