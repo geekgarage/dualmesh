@@ -1,3 +1,0 @@
-# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
-Czech-Republic-01.pmtiles 1322508064 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Czech-Republic-01.pmtiles Czech Republic 01 (48.5N-51.1N 12.0E-15.3E)
-Czech-Republic-02.pmtiles 1295388605 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Czech-Republic-02.pmtiles Czech Republic 02 (48.5N-51.1N 15.3E-18.9E)
