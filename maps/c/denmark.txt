@@ -1,2 +1,0 @@
-# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
-Denmark.pmtiles 1654414029 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Denmark.pmtiles Denmark
