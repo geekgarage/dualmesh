@@ -1,2 +1,3 @@
 # DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
 > c/armenia.txt Armenia
+> c/afghanistan.txt Afghanistan

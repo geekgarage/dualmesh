@@ -4,3 +4,6 @@
 > south-america.txt South America
 > asia.txt Asia
 > oceania.txt Oceania
+> africa.txt Africa
+> europe.txt Europe
+> north-america.txt North America
