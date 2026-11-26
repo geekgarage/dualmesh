@@ -1,2 +1,0 @@
-# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
-> c/greenland.txt Greenland
