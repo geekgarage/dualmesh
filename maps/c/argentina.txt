@@ -6,3 +6,4 @@ Argentina-04.pmtiles 969919998 0-15 https://github.com/geekgarage/dualmesh/relea
 Argentina-05.pmtiles 919426612 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Argentina-05.pmtiles Argentina 05 (33.4S-28.9S 73.6W-60.0W)
 Argentina-06.pmtiles 896290341 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Argentina-06.pmtiles Argentina 06 (33.4S-27.6S 60.0W-53.6W)
 Argentina-07.pmtiles 924291998 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Argentina-07.pmtiles Argentina 07 (28.9S-21.8S 73.6W-60.0W)
+Argentina-08.pmtiles 956539378 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Argentina-08.pmtiles Argentina 08 (27.6S-21.8S 60.0W-53.6W)
