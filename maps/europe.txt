@@ -1,4 +1,4 @@
 # DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
-> c/akrotiri-and-dhekelia.txt Akrotiri And Dhekelia
+> c/akrotiri-and-dhekelia.txt Akrotiri-and-Dhekelia
 > c/albania.txt Albania
 > c/andorra.txt Andorra
