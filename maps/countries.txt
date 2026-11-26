@@ -9,3 +9,4 @@
 > c/antigua-and-barbuda.txt Antigua-and-Barbuda
 > c/argentina.txt Argentina
 > c/armenia.txt Armenia
+> c/australia.txt Australia

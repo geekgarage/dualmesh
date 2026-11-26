@@ -1,0 +1,2 @@
+# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
+Australia-01.pmtiles 1247301 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-3/Australia-01.pmtiles Australia 01 (55.1S-35.2S 72.5E-134.7E)
