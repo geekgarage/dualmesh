@@ -1,2 +1,0 @@
-# DualMesh map packs. Map data © OpenStreetMap contributors (ODbL).
-Faroe-Islands.pmtiles 26260433 0-15 https://github.com/geekgarage/dualmesh/releases/download/kort-2/Faroe-Islands.pmtiles Faroe Islands
